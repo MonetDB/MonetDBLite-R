@@ -1,5 +1,4 @@
 [submodule "src/monetdblite"]
 	path = src/monetdblite
 	url = https://github.com/hannesmuehleisen/MonetDBLite-C
-[submodule "monetdblite"]
 	shallow = true
