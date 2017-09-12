@@ -1,0 +1,12 @@
+^\.hgeol
+^\.travis\.yml
+^hgimport\.sh
+^buildandtest\.sh
+^appveyor\.yml
+^\.git
+.*\.sql
+.*\.mal
+.*\.ag
+.*\.msc
+^speed_comparisons\.png
+^src/build
