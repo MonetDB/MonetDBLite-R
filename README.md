@@ -14,16 +14,17 @@ MonetDBLite works seamlessly with [the dplyr grammar of data manipulation](https
 
 ## Installation
 
-* the latest released version from [CRAN](https://CRAN.R-project.org/package=MonetDBLite) with
+* the latest released version from [CRAN](https://CRAN.R-project.org/package=MonetDBLite-R) with
 
     ```R
     install.packages("MonetDBLite")
     ````
 
-* the latest development version from github with
+* the latest development version from github on the command line
 
-    ```R
-    devtools::install_github("hannesmuehleisen/MonetDBLite")
+    ```
+    git clone https://github.com/hannesmuehleisen/MonetDBLite-R.git --depth 1 --recursive
+    R CMD INSTALL MonetDBLite-R
     ```
 
 If you encounter a bug, please file a minimal reproducible example on [github](https://github.com/hannesmuehleisen/MonetDBLite/issues). For questions and other discussion, please use [stack overflow](http://stackoverflow.com/questions/tagged/monetdblite) with the tag `monetdblite`.  The development version of MonetDBLite endures [sisyphean perpetual testing](https://sisyphus.project.cwi.nl/) on both unix and windows machines.
