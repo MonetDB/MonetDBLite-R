@@ -1,4 +1,4 @@
-# MonetDBLite
+# MonetDBLite for R
 
 [![Build Status](https://travis-ci.org/hannesmuehleisen/MonetDBLite-R.svg?branch=master)](https://travis-ci.org/hannesmuehleisen/MonetDBLite-R)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/hannesmuehleisen/MonetDBLite-R?branch=master&svg=true)](https://ci.appveyor.com/project/hannesmuehleisen/MonetDBLite)
