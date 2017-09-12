@@ -1,7 +1,7 @@
 # MonetDBLite for R
 
 [![Build Status](https://travis-ci.org/hannesmuehleisen/MonetDBLite-R.svg?branch=master)](https://travis-ci.org/hannesmuehleisen/MonetDBLite-R)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/hannesmuehleisen/MonetDBLite-R?branch=master&svg=true)](https://ci.appveyor.com/project/hannesmuehleisen/MonetDBLite)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/hannesmuehleisen/MonetDBLite-R?branch=master&svg=true)](https://ci.appveyor.com/project/hannesmuehleisen/MonetDBLite-R)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MonetDBLite)](https://CRAN.R-project.org/package=MonetDBLite) 
 [![](http://cranlogs.r-pkg.org/badges/MonetDBLite)](https://dgrtwo.shinyapps.io/cranview/)
 
