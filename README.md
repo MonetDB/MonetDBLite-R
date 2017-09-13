@@ -14,7 +14,7 @@ MonetDBLite works seamlessly with [the dplyr grammar of data manipulation](https
 
 ## Installation
 
-* the latest released version from [CRAN](https://CRAN.R-project.org/package=MonetDBLite-R) with
+* the latest released version from [CRAN](https://CRAN.R-project.org/package=MonetDBLite) with
 
     ```R
     install.packages("MonetDBLite")
