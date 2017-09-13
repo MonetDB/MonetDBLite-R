@@ -7,12 +7,15 @@ init:
         Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
         Import-Module '..\appveyor-tool.ps1'
 
-install:
-  - git submodule update --init --recursive --depth 1
-  - ps: Bootstrap
+clone_script:
+- cmd: >-
+    git clone --depth 10 -q --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+    cd %APPVEYOR_BUILD_FOLDER%
+    git checkout -qf %APPVEYOR_REPO_COMMIT%
+    git submodule update --init --recursive --depth 1
 
-# Adapt as necessary starting from here
-shallow_clone: true
+install:
+  - ps: Bootstrap
 
 branches:
   only:
