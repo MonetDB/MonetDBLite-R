@@ -1,4 +1,11 @@
-DBItest::make_context(MonetDBLite::MonetDBLite(), tempdir(), tweaks=DBItest::tweaks(
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "yes") {
+	dbfolder <- ":memory:"
+} else {
+	dbfolder <- file.path(tempdir(), "dbidir")
+}
+message("test_03: using ", dbfolder)
+
+DBItest::make_context(MonetDBLite::MonetDBLite(), dbfolder, tweaks=DBItest::tweaks(
 	date_cast=function(x) paste0("CAST('", x, "' AS DATE)"),
 	time_cast=function(x) paste0("CAST('", x, "' AS TIME)"),
 	timestamp_cast=function(x) paste0("CAST('", x, "' AS TIMESTAMP)"),

@@ -4,19 +4,24 @@ monetdb_embedded_env$started_dir <- ""
 
 classname <- "monetdb_embedded_connection"
 
-monetdb_embedded_startup <- function(dir=tempdir(), quiet=TRUE, sequential=TRUE) {
+monetdb_embedded_startup <- function(dir=":memory:", quiet=TRUE, sequential=TRUE) {
 	quiet <- as.logical(quiet)
 	dir <- as.character(dir)
 	if (length(dir) != 1) {
 		stop("Need a single directory name as parameter.")
 	}
-	if (!dir.exists(dir) && !dir.create(dir, recursive=T)) {
-		stop("Cannot create ", dir)
+	if (dir == "file::memory:") {
+		dir <- ":memory:"
 	}
-	if (file.access(dir, mode=2) < 0) {
-		stop("Cannot write to ", dir)
+	if (dir != ":memory:") {
+		if (!dir.exists(dir) && !dir.create(dir, recursive=T)) {
+			stop("Cannot create ", dir)
+		}
+		if (file.access(dir, mode=2) < 0) {
+			stop("Cannot write to ", dir)
+		}
+		dir <- normalizePath(dir, mustWork=T)
 	}
-	dir <- normalizePath(dir, mustWork=T)
 	if (!monetdb_embedded_env$is_started) {
 		res <- .Call(monetdb_startup_R, dir, quiet, 
 			getOption('monetdb.squential', sequential))
@@ -45,7 +50,7 @@ monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE
 	if (!monetdb_embedded_env$is_started) {
 		stop("Call monetdb_embedded_startup() first")
 	}
-	if (!dir.exists(file.path(monetdb_embedded_env$started_dir, "bat"))) {
+	if (monetdb_embedded_env$started_dir != ":memory:" && !dir.exists(file.path(monetdb_embedded_env$started_dir, "bat"))) {
 		stop("Someone killed all the BATs! Call Brigitte Bardot!")
 	}
 	execute <- as.logical(execute)
@@ -93,7 +98,7 @@ monetdb_embedded_append <- function(conn, table, tdata, schema="sys") {
 	if (!monetdb_embedded_env$is_started) {
 		stop("Call monetdb_embedded_startup() first")
 	}
-	if (!dir.exists(file.path(monetdb_embedded_env$started_dir, "bat"))) {
+	if (monetdb_embedded_env$started_dir != ":memory:" && !dir.exists(file.path(monetdb_embedded_env$started_dir, "bat"))) {
 		stop("Someone killed all the BATs! Call Brigitte Bardot!")
 	}
 	if (length(table) != 1) {
@@ -132,11 +137,7 @@ monetdb_embedded_disconnect <- function(conn) {
 }
 
 monetdb_embedded_shutdown <- monetdblite_shutdown <- function() {
-    gc()	
-        
-	if (monetdb_embedded_env$started_dir != "" && !dir.exists(monetdb_embedded_env$started_dir)) {
-		stop("Somehow the database directory went missing ", monetdb_embedded_env$started_dir)
-	}
+    gc()
 	.Call(monetdb_shutdown_R)
 
 	monetdb_embedded_env$is_started <- FALSE

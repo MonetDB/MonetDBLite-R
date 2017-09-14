@@ -1,14 +1,21 @@
 library(testthat)
 library(dplyr)
 
-dbdir <- file.path(tempdir(), "dplyrdir")
+
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "yes") {
+	dbdir <- ":memory:"
+} else {
+	dbdir <- file.path(tempdir(), "dplyrdir")
+}
+message("test_04: using ", dbdir)
+
 my_db_sqlite <- FALSE
 my_db_monetdb <- FALSE
 flights_sqlite <- FALSE
 flights_monetdb <- FALSE
 
 test_that("we can connect", {
-	my_db_sqlite <<- src_sqlite(tempfile(), create = T)
+	my_db_sqlite <<- src_sqlite(":memory:", create = T)
 	my_db_monetdb <<- MonetDBLite::src_monetdblite(dbdir)
 })
 
@@ -17,13 +24,11 @@ flights$time_hour <- as.numeric( flights$time_hour )
 
 
 test_that("dplyr copy_to()", {
-
 	flights_sqlite <<- copy_to(my_db_sqlite, flights, temporary = FALSE, indexes = list(
 	  c("year", "month", "day"), "carrier", "tailnum"))
 
 	flights_monetdb <<- copy_to(my_db_monetdb, flights, temporary = FALSE, indexes = list(
 	  c("year", "month", "day"), "carrier", "tailnum"))
-
 })
 
 

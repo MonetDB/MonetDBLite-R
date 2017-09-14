@@ -154,9 +154,6 @@ test_that("the garbage collector closes connections", {
 })
 
 
-
-
-
 test_that("the logger does not misbehave", {
 	con <- MonetDBLite:::monetdb_embedded_connect()
 	MonetDBLite:::monetdb_embedded_query(con, "CREATE TABLE foo(i INTEGER, j INTEGER)")
@@ -186,6 +183,19 @@ test_that("starting up in same dir again works", {
 	MonetDBLite:::monetdb_embedded_shutdown()
 })
 
+test_that("in-memory mode works", {
+	MonetDBLite:::monetdb_embedded_startup(":memory:")
+	con <- MonetDBLite:::monetdb_embedded_connect()
+	MonetDBLite:::monetdb_embedded_query(con, "CREATE TABLE foo1(a1 INTEGER)")
+	MonetDBLite:::monetdb_embedded_query(con, "INSERT INTO foo1 VALUES(42)")
+	res <- MonetDBLite:::monetdb_embedded_query(con, "SELECT a1 FROM foo1")
+	expect_equal(nrow(res$tuples), 1)
+	expect_equal(ncol(res$tuples), 1)
+	expect_equal(res$tuples$a1, 42)
+
+	MonetDBLite:::monetdb_embedded_disconnect(con)
+	MonetDBLite:::monetdb_embedded_shutdown()
+})
 
 
 test_that("connections from shut down db's dont work", {

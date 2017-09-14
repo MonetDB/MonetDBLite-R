@@ -3,7 +3,14 @@ library(DBI)
 library(MonetDBLite)
 library(survey)
 
-dbfolder <- file.path(tempdir(), "svydir")
+
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "yes") {
+	dbfolder <- ":inmemory:"
+} else {
+	dbfolder <- file.path(tempdir(), "svydir")
+}
+message("test_05: using ", dbfolder)
+
 
 test_that("db allows database-backed survey designs", {
 

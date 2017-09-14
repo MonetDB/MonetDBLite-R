@@ -3,7 +3,13 @@ library(DBI)
 
 con <- FALSE
 tname <- "monetdbtest"
-dbfolder <- file.path(tempdir(), "dbidir")
+
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "yes") {
+	dbfolder <- ":memory:"
+} else {
+	dbfolder <- file.path(tempdir(), "dbidir")
+}
+message("test_02: using ", dbfolder)
 
 data(iris)
 

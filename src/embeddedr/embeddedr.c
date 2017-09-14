@@ -185,7 +185,7 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 
 SEXP monetdb_startup_R(SEXP dbdirsexp, SEXP silentsexp, SEXP sequentialsexp) {
 	char* res = NULL;
-
+	char* dbdir = (char*) CHAR(STRING_ELT(dbdirsexp, 0));
 	char* locale = setlocale(LC_ALL, NULL);
 	if (locale && (strstr(locale, "UTF-8") != 0 || strstr(locale, "UTF8") != 0 ||
 			strstr(locale, "utf-8") != 0 || strstr(locale, "utf8") != 0)) {
@@ -193,13 +193,16 @@ SEXP monetdb_startup_R(SEXP dbdirsexp, SEXP silentsexp, SEXP sequentialsexp) {
 		monetdb_progress_boxchar = "\xE2\x96\x88";
 		monetdb_progress_barchar = "\xE2\x96\x91";
 	}
+	if (strcmp(dbdir, ":memory:") == 0) {
+		dbdir = NULL;
+	}
 
 	if (monetdb_is_initialized()) {
 		error("MonetDBLite already initialized");
 	}
 
 	GetRNGstate();
-	res = monetdb_startup((char*) CHAR(STRING_ELT(dbdirsexp, 0)),
+	res = monetdb_startup(dbdir,
 		LOGICAL(silentsexp)[0], LOGICAL(sequentialsexp)[0]);
 	PutRNGstate();
 	if (!res) {

@@ -1,2 +1,5 @@
 library(testthat)
+Sys.setenv("MONETDBLITE_INMEMORY" = "yes")
+test_check("MonetDBLite")
+Sys.setenv("MONETDBLITE_INMEMORY" = "no")
 test_check("MonetDBLite")
