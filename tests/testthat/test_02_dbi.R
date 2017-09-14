@@ -181,6 +181,7 @@ test_that("various parameters to dbWriteTable work as expected", {
 
 
 test_that("select * from table never uses parallelization", {
+	expect_true(dbIsValid(con))
 	dbBegin(con)
 	dbWriteTable(con, tname, data.frame(a=1:10^7))
 	expect_true(dbExistsTable(con, tname))
@@ -210,7 +211,8 @@ like_match <- function(pattern, data, case_insensitive) {
 }
 
 test_that("LIKE queries work", {
-	
+	expect_true(dbIsValid(con))
+
 	expect_true(like_match("%", "", 0))
 	expect_true(like_match("%", "asdf", 0))
 	expect_true(like_match("a%f", "asdf", 0))

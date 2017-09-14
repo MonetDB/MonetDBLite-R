@@ -5,7 +5,7 @@ library(survey)
 
 
 if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "yes") {
-	dbfolder <- ":inmemory:"
+	dbfolder <- ":memory:"
 } else {
 	dbfolder <- file.path(tempdir(), "svydir")
 }

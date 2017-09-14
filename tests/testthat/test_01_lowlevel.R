@@ -1,8 +1,14 @@
 library(testthat)
 
-dbdir <- file.path(tempdir(), "db1")
-dbdir2 <- file.path(tempdir(), "db2")
-dbdir3 <- file.path(tempdir() , "space MonetDB" )
+
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "yes") {
+	dbdir <- ":memory:"
+} else {
+	dbdir <- file.path(tempdir(), "db1")
+	dbdir2 <- file.path(tempdir(), "db2")
+	dbdir3 <- file.path(tempdir() , "space MonetDB" )
+}
+message("test_01: using ", dbdir)
 
 test_that("db starts up", {
 	dbdir <- tempdir()
@@ -183,20 +189,6 @@ test_that("starting up in same dir again works", {
 	MonetDBLite:::monetdb_embedded_shutdown()
 })
 
-test_that("in-memory mode works", {
-	MonetDBLite:::monetdb_embedded_startup(":memory:")
-	con <- MonetDBLite:::monetdb_embedded_connect()
-	MonetDBLite:::monetdb_embedded_query(con, "CREATE TABLE foo1(a1 INTEGER)")
-	MonetDBLite:::monetdb_embedded_query(con, "INSERT INTO foo1 VALUES(42)")
-	res <- MonetDBLite:::monetdb_embedded_query(con, "SELECT a1 FROM foo1")
-	expect_equal(nrow(res$tuples), 1)
-	expect_equal(ncol(res$tuples), 1)
-	expect_equal(res$tuples$a1, 42)
-
-	MonetDBLite:::monetdb_embedded_disconnect(con)
-	MonetDBLite:::monetdb_embedded_shutdown()
-})
-
 
 test_that("connections from shut down db's dont work", {
 	MonetDBLite:::monetdb_embedded_startup(dbdir)
@@ -206,6 +198,8 @@ test_that("connections from shut down db's dont work", {
 	MonetDBLite:::monetdb_embedded_disconnect(con)
 })
 
+
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "no") {
 
 test_that("db starts up in other directory", {
 	MonetDBLite:::monetdb_embedded_startup(dbdir2)
@@ -242,6 +236,7 @@ test_that("connections from previous run cannot be reused", {
 	MonetDBLite:::monetdb_embedded_disconnect(con)
 	MonetDBLite:::monetdb_embedded_shutdown()
 })
+}
 
 test_that("running transactions connections dont prevent restart", {
 	MonetDBLite:::monetdb_embedded_startup(dbdir)
@@ -258,7 +253,7 @@ test_that("running transactions connections dont prevent restart", {
 # https://www.monetdb.org/bugzilla/show_bug.cgi?id=3925
 test_that("dynamic NULL AS statements translate cleanly", {
 
-	MonetDBLite:::monetdb_embedded_startup(dbdir3)
+	MonetDBLite:::monetdb_embedded_startup(dbdir)
 	con <- MonetDBLite:::monetdb_embedded_connect()
 		
 	expect_equal( MonetDBLite:::monetdb_embedded_query( con , "SELECT CAST(NULL AS INTEGER) AS col1" )$tuples$col1 , as.integer(NA) )
@@ -273,13 +268,15 @@ test_that("dynamic NULL AS statements translate cleanly", {
 
 test_that("we can restart without exhausting scenarios", {
 	for (i in 1:10) {
-		MonetDBLite:::monetdb_embedded_startup(dbdir3)
+		MonetDBLite:::monetdb_embedded_startup(dbdir)
 		con <- MonetDBLite:::monetdb_embedded_connect()
 		MonetDBLite:::monetdb_embedded_query(con, "SELECT * FROM tables")
 		MonetDBLite:::monetdb_embedded_disconnect(con)
 		MonetDBLite:::monetdb_embedded_shutdown()
 	}
 })
+
+
 
 test_that("check for database corruption at the conclusion of all other tests", {
 
@@ -292,6 +289,7 @@ test_that("check for database corruption at the conclusion of all other tests", 
 	expect_equal(0, nrow( cs$tuples ))
 	MonetDBLite:::monetdb_embedded_shutdown()
 
+if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "no") {
 	MonetDBLite:::monetdb_embedded_startup(dbdir2)
 	con <- MonetDBLite:::monetdb_embedded_connect()
 	cs <- MonetDBLite:::monetdb_embedded_query( con , corruption_sniff )
@@ -306,6 +304,7 @@ test_that("check for database corruption at the conclusion of all other tests", 
 	expect_equal(0, nrow( cs$tuples))
 	MonetDBLite:::monetdb_embedded_disconnect(con)
 	MonetDBLite:::monetdb_embedded_shutdown()
+}
 	expect_false(MonetDBLite:::monetdb_embedded_env$is_started)
 	expect_equal(MonetDBLite:::monetdb_embedded_env$started_dir, "")
 	gc()
