@@ -12,7 +12,6 @@
 
 #include "monetdb_config.h"
 
-#include "monet_options.h"
 #include "mal.h"
 #include "mmath.h"
 #include "mal_client.h"

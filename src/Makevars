@@ -18,7 +18,6 @@ PKG_CFLAGS += -Imonetdblite/src/ -Imonetdblite/src/common  \
 -Imonetdblite/src/sql/include -Imonetdblite/src/sql/common -Imonetdblite/src/sql/server -Imonetdblite/src/sql/storage -Imonetdblite/src/sql/storage/bat
 
 OBJECTS=\
-$(OBJDIR)/monetdblite/common/monet_options.o \
 $(OBJDIR)/monetdblite/common/stream.o \
 $(OBJDIR)/monetdblite/common/mutils.o \
 $(OBJDIR)/monetdblite/embedded/embedded.o \
