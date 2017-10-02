@@ -123,6 +123,16 @@ test_that("csv import works", {
 	expect_false(dbExistsTable(con, tname3))
 })
 
+test_that("dbwritetable takes file connections too", {
+	tf <- tempfile()
+	write.table(iris, tf, sep=",", row.names=FALSE)
+	dbWriteTable(con, tname, file(tf))
+	expect_true(dbExistsTable(con, tname))
+	dbRemoveTable(con, tname)
+	expect_false(dbExistsTable(con, tname))
+})
+
+
 test_that("fwf import works", {
 	tf <- tempfile()
 	gdata::write.fwf(mtcars, tf, colnames = FALSE)

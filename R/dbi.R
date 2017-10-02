@@ -498,6 +498,12 @@ setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character"
     .Deprecated("Setting parameter transaction to dbWriteTable is deprecated.")
   }
 
+  if (inherits(value, "file")) {
+    fname <- summary(value)$description
+    if (file.exists(fname)) {
+      value <- as.character(fname)
+    }
+  }
 
   if (is.character(value)) {
     monetdb.read.csv(conn=conn, files=value, tablename=name, ...)
