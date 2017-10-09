@@ -303,7 +303,8 @@ static SEXP bat_to_sexp(BAT* b, sql_subtype *subtype, int *unfix) {
 		if (!varvalue) {
 			return NULL;
 		}
-	    setAttrib(varvalue, R_ClassSymbol, mkString("Date"));
+	    setAttrib(varvalue, R_ClassSymbol, PROTECT(mkString("Date")));
+	    UNPROTECT(1);
 	} else if (battype == TYPE_timestamp && ATOMstorage(battype) == TYPE_lng) {
 		BUN j, n = BATcount(b);
 		const timestamp *t = (const timestamp *) Tloc(b, 0);
@@ -317,11 +318,12 @@ static SEXP bat_to_sexp(BAT* b, sql_subtype *subtype, int *unfix) {
 		}
 
 		valptr = NUMERIC_POINTER(varvalue);
-	    SET_STRING_ELT(class, 0, mkChar("POSIXct"));
-	    SET_STRING_ELT(class, 1, mkChar("POSIXt"));
+	    SET_STRING_ELT(class, 0, PROTECT(mkChar("POSIXct")));
+	    SET_STRING_ELT(class, 1, PROTECT(mkChar("POSIXt")));
 		SET_CLASS(varvalue, class);
+		UNPROTECT(3);
+		setAttrib(varvalue, install("tzone"), PROTECT(mkString("UTC")));
 		UNPROTECT(1);
-		setAttrib(varvalue, install("tzone"), mkString("UTC"));
 
 		for (j = 0; j < n; j++, t++) {
 			if (ts_isnil(*t)) {
@@ -361,8 +363,9 @@ static SEXP bat_to_sexp(BAT* b, sql_subtype *subtype, int *unfix) {
 		if (!varvalue) {
 			return NULL;
 		}
-		SET_CLASS(varvalue, mkString("difftime"));
-		setAttrib(varvalue, install("units"), mkString("hours"));
+		SET_CLASS(varvalue, PROTECT(mkString("difftime")));
+		setAttrib(varvalue, install("units"), PROTECT(mkString("hours")));
+		UNPROTECT(2);
 
 		valptr = NUMERIC_POINTER(varvalue);
 		for (j = 0; j < n; j++, t++) {

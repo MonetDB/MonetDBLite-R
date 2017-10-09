@@ -167,9 +167,11 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 				BBPunfix(b->batCacheid);
 			}
 		}
-		SET_ATTR(retlist, install("__rows"), Rf_ScalarReal(nrows));
+		SET_ATTR(retlist, install("__rows"), PROTECT(Rf_ScalarReal(nrows)));
+		UNPROTECT(1);
 		if (prepare_id > 0) {
-			SET_ATTR(retlist, install("__prepare"), Rf_ScalarReal(prepare_id));
+			SET_ATTR(retlist, install("__prepare"), PROTECT(Rf_ScalarReal(prepare_id)));
+			UNPROTECT(1);
 		}
 
 		monetdb_cleanup_result(R_ExternalPtrAddr(connsexp), output);
