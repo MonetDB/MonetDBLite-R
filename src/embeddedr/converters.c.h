@@ -273,10 +273,12 @@ static SEXP bat_to_sexp(BAT* b, sql_subtype *subtype, int *unfix) {
 			GDKfree(sexp_ptrs);
 		}
 		else {
+
 			if (b->tnonil) {
 				for (j = 0; j < n; j++) {
-					SET_STRING_ELT(varvalue, j, RSTR(
-						(const char *) BUNtvar(li, j)));
+					SET_STRING_ELT(varvalue, j, PROTECT(RSTR(
+						(const char *) BUNtvar(li, j))));
+					UNPROTECT(1);
 				}
 			}
 			else {
@@ -285,7 +287,8 @@ static SEXP bat_to_sexp(BAT* b, sql_subtype *subtype, int *unfix) {
 					if (strcmp(t, str_nil) == 0) {
 						SET_STRING_ELT(varvalue, j, NA_STRING);
 					} else {
-						SET_STRING_ELT(varvalue, j, RSTR(t));
+						SET_STRING_ELT(varvalue, j, PROTECT(RSTR(t)));
+						UNPROTECT(1);
 					}
 				}
 			}
