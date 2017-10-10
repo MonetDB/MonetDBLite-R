@@ -374,6 +374,8 @@ test_that("we can read sql-specific types", {
 	# TIMESTAMP
 	res <- dbGetQuery(con, "select cast(d as string) as s, d from (select cast('0050-05-24 00:00:00' as timestamp) as d union all select cast('1960-10-20 23:59:00+01:00' as timestamptz) union all select cast('1984-04-24 14:42:10' as timestamp)  union all select cast('2020-01-15 12:01' as timestamp) union all select cast('1997-07-21 09:45' as timestamp)  union all select cast(NULL as timestamp)) as ds")
 	res$d1 <- as.POSIXct(res$s, tz="UTC")
+	gc()
+	expect_equal(class(res$d), c("POSIXct", "POSIXt"))
 	expect_equal(as.character(res$d), as.character(res$d1))
 
 	# BLOB

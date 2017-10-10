@@ -306,28 +306,29 @@ static SEXP bat_to_sexp(BAT* b, sql_subtype *subtype, int *unfix) {
 		if (!varvalue) {
 			return NULL;
 		}
-	    setAttrib(varvalue, R_ClassSymbol, PROTECT(mkString("Date")));
+		SET_CLASS(varvalue, PROTECT(mkString("Date")));
 	    UNPROTECT(1);
 	} else if (battype == TYPE_timestamp && ATOMstorage(battype) == TYPE_lng) {
 		BUN j, n = BATcount(b);
 		const timestamp *t = (const timestamp *) Tloc(b, 0);
 		double *valptr = NULL;
-	    SEXP class = PROTECT(NEW_STRING(2));
+	    SEXP class = NULL;
 		timestamp epoch;
 
 		varvalue = PROTECT(NEW_NUMERIC(n));
+	    class = PROTECT(NEW_STRING(2));
+
 		if (!varvalue || !class || MTIMEunix_epoch(&epoch) != MAL_SUCCEED) {
 			return NULL;
 		}
 
-		valptr = NUMERIC_POINTER(varvalue);
 	    SET_STRING_ELT(class, 0, PROTECT(mkChar("POSIXct")));
 	    SET_STRING_ELT(class, 1, PROTECT(mkChar("POSIXt")));
 		SET_CLASS(varvalue, class);
-		UNPROTECT(3);
 		setAttrib(varvalue, install("tzone"), PROTECT(mkString("UTC")));
-		UNPROTECT(1);
+		UNPROTECT(4);
 
+		valptr = NUMERIC_POINTER(varvalue);
 		for (j = 0; j < n; j++, t++) {
 			if (ts_isnil(*t)) {
 				valptr[j] = NA_REAL;
