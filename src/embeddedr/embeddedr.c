@@ -129,7 +129,7 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 		int i = 0, ncols = output->ncols;
 		ssize_t nrows = -1;
 		SEXP retlist = NULL, names = NULL;
-		PROTECT(retlist = allocVector(VECSXP, ncols));
+		PROTECT(retlist = NEW_LIST(ncols));
 		if (!retlist) {
 			UNPROTECT(1);
 			return monetdb_error_R("Memory allocation failed");
@@ -166,6 +166,7 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 			if (unfix) {
 				BBPunfix(b->batCacheid);
 			}
+			UNPROTECT(2); /* varname, varvalue */
 		}
 		SET_ATTR(retlist, install("__rows"), PROTECT(Rf_ScalarReal(nrows)));
 		UNPROTECT(1);
@@ -176,8 +177,8 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 
 		monetdb_cleanup_result(R_ExternalPtrAddr(connsexp), output);
 		SET_NAMES(retlist, names);
-		UNPROTECT(ncols * 2 + 2);
 		PutRNGstate();
+		UNPROTECT(2); /* names, retlist */
 		return retlist;
 	}
 	PutRNGstate();
