@@ -152,11 +152,11 @@ test_that("the garbage collector closes connections", {
 	expect_error(MonetDBLite:::monetdb_embedded_connect())
 
 	rm(conns)
-	gc()
+	expect_warning(gc())
 
 	conns <- lapply(1:128, function(x) MonetDBLite:::monetdb_embedded_connect())
 	rm(conns)
-	gc()
+	expect_warning(gc())
 })
 
 
@@ -169,7 +169,7 @@ test_that("the logger does not misbehave", {
 })
 
 
-test_that("shutdown does work", {
+test_that("shutdown does work, also repeatedly", {
 	MonetDBLite:::monetdb_embedded_shutdown()
 	MonetDBLite:::monetdb_embedded_shutdown()
 })
@@ -277,7 +277,6 @@ test_that("we can restart without exhausting scenarios", {
 })
 
 
-
 test_that("check for database corruption at the conclusion of all other tests", {
 
 	corruption_sniff <- "select tables.name, columns.name, location from tables inner join columns on tables.id=columns.table_id left join storage on tables.name=storage.table and columns.name=storage.column where location is null and tables.name not in ('tables', 'columns', 'users', 'querylog_catalog', 'querylog_calls', 'querylog_history', 'tracelog', 'sessions', 'optimizers', 'environment', 'queue', 'rejects', 'storage', 'storagemodel', 'tablestoragemodel')"
@@ -287,6 +286,7 @@ test_that("check for database corruption at the conclusion of all other tests", 
 	cs <- MonetDBLite:::monetdb_embedded_query( con , corruption_sniff )
 	expect_equal(as.character(cs$type), "1")
 	expect_equal(0, nrow( cs$tuples ))
+	MonetDBLite:::monetdb_embedded_disconnect(con)
 	MonetDBLite:::monetdb_embedded_shutdown()
 
 if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "no") {
@@ -295,6 +295,7 @@ if (Sys.getenv("MONETDBLITE_INMEMORY", unset="no") == "no") {
 	cs <- MonetDBLite:::monetdb_embedded_query( con , corruption_sniff )
 	expect_equal( as.character(cs$type), "1" )
 	expect_equal(0, nrow( cs$tuples ))
+	MonetDBLite:::monetdb_embedded_disconnect(con)
 	MonetDBLite:::monetdb_embedded_shutdown()
 
 	MonetDBLite:::monetdb_embedded_startup(dbdir3)

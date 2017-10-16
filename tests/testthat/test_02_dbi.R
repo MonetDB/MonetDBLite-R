@@ -126,8 +126,10 @@ test_that("csv import works", {
 test_that("dbwritetable takes file connections too", {
 	tf <- tempfile()
 	write.table(iris, tf, sep=",", row.names=FALSE)
-	dbWriteTable(con, tname, file(tf))
+	fc <- file(tf)
+	dbWriteTable(con, tname, fc)
 	expect_true(dbExistsTable(con, tname))
+	close(fc)
 	dbRemoveTable(con, tname)
 	expect_false(dbExistsTable(con, tname))
 })

@@ -35,6 +35,8 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
+  - travis-tool.sh github_package rstats-db/DBI
+  - travis-tool.sh github_package rstats-db/DBItest
 
 test_script:
   - travis-tool.sh run_tests

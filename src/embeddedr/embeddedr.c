@@ -1,4 +1,3 @@
-
 #ifdef HAVE_EMBEDDED_R
 #include "embeddedr.h"
 #include "R_ext/Random.h"
@@ -283,10 +282,10 @@ SEXP monetdb_append_R(SEXP connsexp, SEXP schemasexp, SEXP namesexp, SEXP tabled
 
 static SEXP monetdb_finalize_R(SEXP connsexp) {
 	void* addr = R_ExternalPtrAddr(connsexp);
-	if (R_ExternalPtrAddr(connsexp)) {
+	if (addr) {
 		warning("Connection is garbage-collected, use dbDisconnect() to avoid this.");
-		monetdb_disconnect(addr);
 		R_ClearExternalPtr(connsexp);
+		monetdb_disconnect(addr);
 	}
 	return R_NilValue;
 }
@@ -299,10 +298,8 @@ SEXP monetdb_connect_R(void) {
 		error("Could not create connection.");
 	}
 	monetdb_register_progress(llconn, monetdb_progress_R, NULL);
-
 	conn = PROTECT(R_MakeExternalPtr(llconn, R_NilValue, R_NilValue));
 	R_RegisterCFinalizer(conn, (void (*)(SEXP)) monetdb_finalize_R);
-
 	UNPROTECT(1);
 	return conn;
 }
@@ -310,8 +307,8 @@ SEXP monetdb_connect_R(void) {
 SEXP monetdb_disconnect_R(SEXP connsexp) {
 	void* addr = R_ExternalPtrAddr(connsexp);
 	if (addr) {
-		monetdb_disconnect(addr);
 		R_ClearExternalPtr(connsexp);
+		monetdb_disconnect(addr);
 	} else {
 		warning("Connection was already disconnected.");
 	}
