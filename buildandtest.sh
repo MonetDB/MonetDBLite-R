@@ -1,6 +1,8 @@
 #!/bin/bash
-export MAKEFLAGS="-j"
-export MONETDBLITE_DEBUG=42
+
+export MAKEFLAGS=-j
+export CFLAGS="-O0 -g -Wall -Wextra -Werror -Wmissing-prototypes -Wold-style-definition -Wpedantic"
+
 rm MonetDBLite_*
 git submodule update --recursive --remote --depth 1 && \
 R CMD build . && \
