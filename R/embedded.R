@@ -10,6 +10,9 @@ monetdb_embedded_startup <- function(dir=":memory:", quiet=TRUE, sequential=TRUE
 	if (length(dir) != 1) {
 		stop("Need a single directory name as parameter.")
 	}
+	if (.Machine$sizeof.pointer < 8) {
+		message("Running MonetDBLite on a 32-bit version of R is not recommended. Maximum database size is limited to around 3 GB.")
+	}
 	if (dir == "file::memory:") {
 		dir <- ":memory:"
 	}
