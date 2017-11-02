@@ -871,7 +871,7 @@ setMethod("dbBind", "MonetDBEmbeddedResult", def = function(res, params, ...) {
     }
     , "character")
     
-    exec_str <- sprintf("EXEC %d(%s)", res@env$resp$prepare, paste0(quoted_params, collapse=","))
+    exec_str <- sprintf("EXECUTE %d(%s)", res@env$resp$prepare, paste0(quoted_params, collapse=","))
     invisible(dbSendQuery(res@env$conn, exec_str))
 })
 
