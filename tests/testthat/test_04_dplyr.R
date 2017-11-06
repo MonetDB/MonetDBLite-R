@@ -175,6 +175,16 @@ test_that("dplyr summarise 2", {
 })
 
 
+test_that("limit and case work", {
+	data(iris)
+	names(iris) <- tolower(sub("\\.", "_", names(iris)))
+	copy_to(my_db_monetdb, iris, "iris_table")
+	copy_to(my_db_sqlite, iris, "iris_table")
+	res1 <- tbl(my_db_monetdb, "iris_table") %>% mutate(sepal_category = case_when(sepal_length>5.5~"long", sepal_length>5~"medium", TRUE~"short")) %>% collect()
+	res2 <- tbl(my_db_sqlite, "iris_table") %>% mutate(sepal_category = case_when(sepal_length>5.5~"long", sepal_length>5~"medium", TRUE~"short")) %>% collect()
+	expect_equal(res1, res2)
+})
+
 
 test_that("shutdown", {
 	MonetDBLite::monetdblite_shutdown()
