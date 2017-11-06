@@ -335,6 +335,12 @@ test_that("we can have empty result sets", {
 })
 
 
+
+test_that("CASE and LIMIT work together correctly", {
+	res <- dbGetQuery(con, "select name, CASE WHEN (id > 1000) THEN ('A') WHEN (id > 100) THEN ('B') WHEN (TRUE) THEN ('C') END AS category  from _tables limit 10")
+	expect_true(all(vapply(res, length, integer(1)) == 10))
+})
+
 test_that("NA's survive bulk appends", {
 	dbBegin(con)
 	tdata <- as.logical(c(NA, TRUE, FALSE))
