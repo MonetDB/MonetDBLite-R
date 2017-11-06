@@ -42,7 +42,6 @@ test_that("raw table creation and inserts work", {
 	expect_equal(dbReadTable(con, tname)[[1]], c("one", "two"))
 	expect_equal(dbReadTable(con, tname)[[2]], c(1, 2))
 
- # TODO: blob/date/time/decimal handling
 	dbRemoveTable(con, tname)
 	expect_false(dbExistsTable(con, tname))
 	expect_equal(length(dbListTables(con)), 0L)
@@ -587,6 +586,8 @@ test_that("we can disconnect", {
 	con <<- NULL
 	gc()
 })
+
+
 
 MonetDBLite:::monetdb_embedded_shutdown()
 
