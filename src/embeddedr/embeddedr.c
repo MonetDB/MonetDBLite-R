@@ -180,6 +180,9 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 		UNPROTECT(2); /* names, retlist */
 		return retlist;
 	}
+	if (output) {
+		monetdb_cleanup_result(R_ExternalPtrAddr(connsexp), output);
+	}
 	PutRNGstate();
 	return ScalarReal(affected_rows);
 }
