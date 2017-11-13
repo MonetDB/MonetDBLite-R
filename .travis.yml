@@ -6,10 +6,9 @@ r:
   - release
   - devel
 
-r_github_packages:
-  - rstats-db/DBI
-  - rstats-db/DBItest
-
+#r_github_packages:
+#  - rstats-db/DBI
+#  - rstats-db/DBItest
 #   - hadley/testthat
 #   - hadley/dplyr
 #   - hadley/dbplyr
