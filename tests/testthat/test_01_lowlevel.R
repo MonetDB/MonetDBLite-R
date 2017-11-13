@@ -246,8 +246,8 @@ test_that("running transactions connections dont prevent restart", {
 	MonetDBLite:::monetdb_embedded_query(con, "INSERT INTO foo VALUES (42)")
 	MonetDBLite:::monetdb_embedded_shutdown()
 	MonetDBLite:::monetdb_embedded_startup(dbdir)
-	con <- MonetDBLite:::monetdb_embedded_connect()
 	MonetDBLite:::monetdb_embedded_shutdown()
+	MonetDBLite:::monetdb_embedded_disconnect(con)
 })
 
 # https://www.monetdb.org/bugzilla/show_bug.cgi?id=3925
