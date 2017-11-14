@@ -8,3 +8,4 @@
 .*\.mal
 ^speed_comparisons\.png
 ^src/build
+^src/monetdblite/tests

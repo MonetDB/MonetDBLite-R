@@ -1,12 +1,12 @@
 Package: MonetDBLite
 Version: 0.5.0
-Title: In-Process Version of MonetDB for R
-Author: Hannes Muehleisen [aut, cre], Anthony Damico [ctb], Mark Raasveldt [ctb], Thomas Lumley [ctb], MonetDB Development Team [ctb]
+Title: In-Process Version of 'MonetDB'
+Author: Hannes Muehleisen [aut, cre], Anthony Damico [ctb], Mark Raasveldt [ctb], Thomas Lumley [ctb], MonetDB B.V. [cph], CWI [cph], The Regents of the University of California [cph], Kungliga Tekniska Hogskolan [cph], Free Software Foundation, Inc. [cph]
 Maintainer: Hannes Muehleisen <hannes@cwi.nl>
-Description: An in-process version of MonetDB, a relational database focused on analytical tasks. Similar to SQLite, the database runs entirely inside the R shell, with the main difference that queries complete much faster thanks to MonetDB's columnar architecture.
+Description: An in-process version of 'MonetDB', a SQL database designed for analytical tasks. Similar to 'SQLite', the database runs entirely inside the 'R' shell.
 License: MPL (== 2.0)
-URL: https://github.com/hannesmuehleisen/MonetDBLite
-BugReports: https://github.com/hannesmuehleisen/MonetDBLite/issues
+URL: https://github.com/hannesmuehleisen/MonetDBLite-R
+BugReports: https://github.com/hannesmuehleisen/MonetDBLite-R/issues
 SystemRequirements: GNU make
 Depends: R (>= 3.2.0)
 Imports: DBI (>= 0.6), digest (>= 0.6.4), methods, codetools
