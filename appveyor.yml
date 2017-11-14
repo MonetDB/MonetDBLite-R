@@ -27,8 +27,10 @@ environment:
   matrix:
   - R_VERSION: devel
     R_ARCH: x64
+    PKGTYPE: source
 
   - R_VERSION: devel
+    PKGTYPE: source
 
   - R_VERSION: release
 
