@@ -6,7 +6,8 @@ r:
   - release
   - devel
 
-#r_github_packages:
+r_github_packages:
+  - r-lib/covr
 #  - rstats-db/DBI
 #  - rstats-db/DBItest
 #   - hadley/testthat
@@ -22,5 +23,9 @@ addons:
   apt_packages:
     - pandoc
 
+after_success:
+  - Rscript -e 'covr::codecov()'
+
 after_failure:
   - ./travis-tool.sh dump_logs
+
