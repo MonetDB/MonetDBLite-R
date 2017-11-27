@@ -209,6 +209,11 @@ test_that("select * from table never uses parallelization", {
 })
 
 
+test_that("PLAN works", {
+	res <- dbGetQuery(con, "PLAN SELECT * FROM tables")
+	expect_true(length(res$plan) > 0)
+})
+
 
 like_match <- function(pattern, data, case_insensitive) {
 	dbBegin(con)
