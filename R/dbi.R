@@ -148,7 +148,7 @@ setMethod("dbConnect", "MonetDBDriver", def=function(drv, dbname="demo", user="m
   connenv$autocommit <- TRUE
   connenv$params <- list(drv=drv, host=host, port=port, timeout=timeout, dbname=dbname, user=user, password=password, language=language)
   connenv$socket <- .mapiConnect(host, port, timeout) 
-  .mapiAuthenticate(connenv$socket, dbname, user, password, language=language)
+  connenv$socket <- .mapiAuthenticate(connenv$socket, dbname, user, password, language=language)
   
   conn <- new("MonetDBConnection", connenv=connenv)
   if (getOption("monetdb.sequential", FALSE)) {

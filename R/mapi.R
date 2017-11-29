@@ -39,9 +39,6 @@ REPLY_SIZE    <- 100 # Apparently, -1 means unlimited, but we will start with a 
 # otherwise, we could have issues with finalizers
 
 .mapiRequest <- function(conObj, msg, async=FALSE) {
-  # call finalizers on disused objects. At least avoids concurrent access to socket.
-  #gc()
-  
   if (!identical(class(conObj)[[1]], "MonetDBConnection"))
     stop("I can only be called with a MonetDBConnection as parameter, not a socket.")
   
@@ -119,7 +116,6 @@ REPLY_SIZE    <- 100 # Apparently, -1 means unlimited, but we will start with a 
   resp <- raw()
 
   repeat {
-
     if (.mapiIsProt10(con)) {
       unpacked <- readBin(con, "integer", n=2, size=4, signed=TRUE, endian="little")
       if (length(unpacked) == 0 || unpacked[2] != 0) {
@@ -132,9 +128,8 @@ REPLY_SIZE    <- 100 # Apparently, -1 means unlimited, but we will start with a 
     else {
       unpacked <- readBin(con, "integer", n=1, size=2, signed=FALSE, endian="little")
       if (length(unpacked) == 0) {
-        stop(TIMEOUT_MSG, "aaah")
+        stop(TIMEOUT_MSG)
       }
-
       length <- bitwShiftR(unpacked, 1)
       final  <- bitwAnd(unpacked, 1)
     }
@@ -466,7 +461,7 @@ findString <- function(resp, start_idx) {
   }
   attr(con, "protocol") <- PROTOCOL_v9
 
-  if (grepl("PROT10", algos) && !getOption('monetdb.disable.prot10', FALSE)) {
+  if (grepl("PROT10", algos) && getOption('monetdb.enable.prot10', FALSE)) {
     protocolVersion <- PROTOCOL_v10
   }
 
