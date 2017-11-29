@@ -266,7 +266,10 @@ findString <- function(resp, start_idx) {
           SMALLINT = integer(env$rows),
           INT =      integer(env$rows),
           VARCHAR =  character(env$rows),
+          BIGINT   = numeric(env$rows),
           DECIMAL =  numeric(env$rows),
+          DOUBLE  =  numeric(env$rows),
+          FLOAT   =  numeric(env$rows),
           DATE    =  rep(as.Date(NA), env$rows),
           rep(as.logical(NA), env$rows))
     }
