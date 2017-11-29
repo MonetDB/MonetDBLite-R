@@ -942,10 +942,10 @@ setMethod("dbFetch", signature(res="MonetDBResult", n="numeric"), def=function(r
   }
   if(.mapiIsProt10(res@env$conn@connenv$socket)) {
     e <- res@env$info
-     while (length(e$data_df[[1]]) < n) {
+     while (e$index < n) {
 
       e <- .mapiParseResponse(res@env$conn, .mapiRequest(res@env$conn, paste0("Xexport ", .mapiLongInt(info$id), 
-        " ", .mapiLongInt(e$index), " ", .mapiLongInt(n-length(e$data_df[[1]])))), e)
+        " ", .mapiLongInt(e$index), " ", .mapiLongInt(n-e$index))), e)
 
       }
       res@env <- e

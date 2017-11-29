@@ -261,15 +261,14 @@ findString <- function(resp, start_idx) {
       idx <- idx + 24
 
       env$data_df[[c]] <- switch(env$types[c],
-          BOOLEAN =  logical(0),
-          TINYINT =  integer(0),
-          SMALLINT = integer(0),
-          INT =      integer(0),
-          VARCHAR =  character(0),
-          DECIMAL =  numeric(0),
-          DATE    =  Sys.Date()[FALSE],
-          as.logical(NA))
-
+          BOOLEAN =  logical(env$rows),
+          TINYINT =  integer(env$rows),
+          SMALLINT = integer(env$rows),
+          INT =      integer(env$rows),
+          VARCHAR =  character(env$rows),
+          DECIMAL =  numeric(env$rows),
+          DATE    =  rep(as.Date(NA), env$rows),
+          rep(as.logical(NA), env$rows))
     }
     close(dd)
     env$data_df_empty <- env$data_df
@@ -305,8 +304,8 @@ findString <- function(resp, start_idx) {
       } else { # constant-length types
         clen <- rows * env$internal_size[i]
       }
-
-      env$data_df[[i]] <- c(env$data_df[[i]], switch(env$types[i],
+# TODO: implememt timetstamp etc.
+      env$data_df[[i]][(env$index+1):(env$index+rows)] <-  switch(env$types[i],
         BOOLEAN =  readBin(dd, "logical", rows, size=1),
         TINYINT =  readBin(dd, "integer", rows, size=1),
         SMALLINT = readBin(dd, "integer", rows, size=2),
@@ -320,12 +319,13 @@ findString <- function(resp, start_idx) {
           ),
         DATE    =  as.Date(structure(.Call(mapi_read_long_dbl, readBin(dd, "raw", clen, 1))/1000, class = c("POSIXct", "POSIXt"), tzone = "UTC"))
           ,
-        VARCHAR = .Call(mapi_read_null_string, readBin(dd, "raw", clen, 1), rows), {
+        VARCHAR = .Call(mapi_read_null_string, readBin(dd, "raw", clen, 1), rows), 
+        { # default action
            r <- readBin(dd, "raw", clen, 1)
            as.logical(rep(NA, rows))
         }
         )
-      )
+      
 
       idx <- idx + clen
     }
