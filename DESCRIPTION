@@ -1,5 +1,5 @@
 Package: MonetDBLite
-Version: 0.5.0
+Version: 0.5.1
 Title: In-Process Version of 'MonetDB'
 Author: Hannes Muehleisen [aut, cre], Mark Raasveldt [ctb], Thomas Lumley [ctb], MonetDB B.V. [cph], CWI [cph], The Regents of the University of California [cph], Kungliga Tekniska Hogskolan [cph], Free Software Foundation, Inc. [cph]
 Maintainer: Hannes Muehleisen <hannes@cwi.nl>
