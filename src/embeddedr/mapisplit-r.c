@@ -58,48 +58,89 @@ SEXP mapi_split(SEXP mapiLinesVector, SEXP numCols) {
 }
 
 
-SEXP mapi_read_null_string(SEXP raw_vec, SEXP rowsR) {
-	const int rows = INTEGER_POINTER(AS_INTEGER(rowsR))[0];
-	SEXP colVec = PROTECT(NEW_STRING(rows));
-	char* start = (char *) RAW_POINTER(raw_vec);
-	int cRow = 0;
-	if (!colVec) {
-		error("Memory allocation failure");
-	}
+// TODO: NULLs
+#define READ_NUMERIC(dtype, rtype, ptrfun)								\
+	do {																\
+		dtype* raw_cast = (dtype*) raw_vec; \
+		rtype* out_ptr = ptrfun(target_vec_sexp) + target_vec_offset; \
+				for (size_t i = 0; i < nrows; i++) { \
+					*out_ptr = (rtype) raw_cast[i]; \
+					out_ptr++; \
+				}			\
+	} while (0)
 
-	while (cRow < rows) {
-		SEXP s = mkChar(start);
-		if (!s) {
-			error("Memory allocation failure");
+
+#define READ_DECIMAL(dtype)								\
+	do {																\
+		dtype* raw_cast = (dtype*) raw_vec; \
+		for (size_t i = 0; i < nrows; i++) { \
+			*out_ptr = ((double) raw_cast[i])/ divider; \
+			out_ptr++; \
+		} \
+	} while (0)
+
+
+SEXP mapi_read_into_vec(SEXP raw_vec_sexp, SEXP raw_vec_offset_sexp,
+		SEXP db_type_sexp, SEXP internal_size_sexp, SEXP scale_sexp,
+		SEXP target_vec_sexp, SEXP target_vec_offset_sexp, SEXP nrows_sexp) {
+	char* raw_vec = (char *) RAW_POINTER(raw_vec_sexp);
+	int raw_vec_offset = INTEGER_POINTER(AS_INTEGER(raw_vec_offset_sexp))[0];
+	// TODO: check types and lengths (esp. for raw
+	raw_vec += raw_vec_offset;
+	size_t nrows = (size_t) NUMERIC_POINTER(AS_NUMERIC(nrows_sexp))[0];
+	int target_vec_offset = INTEGER_POINTER(AS_INTEGER(target_vec_offset_sexp))[0];
+
+	char* type = (char*)CHAR(STRING_ELT(db_type_sexp, 0));
+	if (strcmp("BOOLEAN", type) == 0) {
+		READ_NUMERIC(int8_t, int32_t, INTEGER_POINTER);
+	} else if (strcmp("TINYINT", type) == 0) {
+		READ_NUMERIC(int8_t, int32_t, INTEGER_POINTER);
+	} else if (strcmp("SMALLINT", type) == 0) {
+		READ_NUMERIC(int16_t, int32_t, INTEGER_POINTER);
+	} else if (strcmp("INT", type) == 0) {
+		READ_NUMERIC(int32_t, int32_t, INTEGER_POINTER);
+	} else if (strcmp("FLOAT", type) == 0) {
+		READ_NUMERIC(float, double, NUMERIC_POINTER);
+	} else if (strcmp("DOUBLE", type) == 0) {
+		READ_NUMERIC(double, double, NUMERIC_POINTER);
+	} else if (strcmp("BIGINT", type) == 0) {
+		READ_NUMERIC(int64_t, double, NUMERIC_POINTER);
+	} else if (strcmp("DECIMAL", type) == 0) {
+		int internal_size = INTEGER_POINTER(AS_INTEGER(internal_size_sexp))[0];
+		int scale = INTEGER_POINTER(AS_INTEGER(scale_sexp))[0];
+
+		double* out_ptr = NUMERIC_POINTER(target_vec_sexp) + target_vec_offset;
+		double divider = pow(10, scale);
+		switch(internal_size) {
+		case 1: READ_DECIMAL(int8_t); break;
+		case 2: READ_DECIMAL(int16_t); break;
+		case 4: READ_DECIMAL(int32_t); break;
+		case 8: READ_DECIMAL(int64_t); break;
+//		case 16: READ_DECIMAL(int128_t); break;
+		default: error("unknown type length for decimal");
 		}
-		SET_STRING_ELT(colVec, cRow++, s);
-		while (*start != 0) {
-			start++;
+	} else if (strcmp("DATE", type) == 0) {
+		int64_t* raw_cast = (int64_t*) raw_vec;
+		double* out_ptr = NUMERIC_POINTER(target_vec_sexp) + target_vec_offset;
+		for (size_t i = 0; i < nrows; i++) {
+			*out_ptr = (double) raw_cast[i]/86400000;
+			out_ptr++;
 		}
-		start++;
+	} else if (strcmp("VARCHAR", type) == 0) {
+		size_t cRow = target_vec_offset;
+		while (cRow < target_vec_offset + nrows) {
+			SEXP s = mkChar(raw_vec);
+			if (!s) {
+				error("Memory allocation failure");
+			}
+			SET_STRING_ELT(target_vec_sexp, cRow++, s);
+			while (*raw_vec != 0) {
+				raw_vec++;
+			}
+			raw_vec++;
+		}
 	}
-
-	UNPROTECT(1);
-	return colVec;
-}
-
-
-SEXP mapi_read_long_dbl(SEXP raw_vec) {
-	const int rows = LENGTH(raw_vec)/8;
-	SEXP colVec = PROTECT(NEW_NUMERIC(rows));
-	long long * start = (long long *) RAW_POINTER(raw_vec);
-	int cRow = 0;
-
-	if (!colVec) {
-		error("Memory allocation failure");
-	}
-	while (cRow < rows) {
-		NUMERIC_POINTER(colVec)[cRow] = start[cRow];
-		cRow++;
-	}
-	// TODO: NULLs
-	UNPROTECT(1);
-	return colVec;
+	return target_vec_sexp;
 }
 
 #endif

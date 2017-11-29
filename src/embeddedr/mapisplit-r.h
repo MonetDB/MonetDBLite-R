@@ -2,7 +2,8 @@
 #include <R.h>
 
 extern SEXP mapi_split(SEXP mapiLinesVector, SEXP numCols);
-extern SEXP mapi_read_null_string(SEXP raw_vec, SEXP rowsR);
-extern SEXP mapi_read_long_dbl(SEXP raw_vec);
+extern SEXP mapi_read_into_vec(SEXP raw_vec_sexp, SEXP raw_vec_offset_sexp,
+		SEXP db_type_sexp, SEXP internal_size_sexp, SEXP scale_sexp,
+		SEXP target_vec_sexp, SEXP target_vec_offset_sexp, SEXP nrows_sexp);
 
 #endif

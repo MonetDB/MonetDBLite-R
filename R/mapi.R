@@ -305,29 +305,11 @@ findString <- function(resp, start_idx) {
         clen <- rows * env$internal_size[i]
       }
 # TODO: implememt timetstamp etc.
-      env$data_df[[i]][(env$index+1):(env$index+rows)] <-  switch(env$types[i],
-        BOOLEAN =  readBin(dd, "logical", rows, size=1),
-        TINYINT =  readBin(dd, "integer", rows, size=1),
-        SMALLINT = readBin(dd, "integer", rows, size=2),
-        INT =      readBin(dd, "integer", rows, size=4),
-        DECIMAL =  switch(as.character(env$internal_size[i]), 
-          "1" = readBin(dd, "integer", rows, size=1)/10^env$scale[i],
-          "2" = readBin(dd, "integer", rows, size=2)/10^env$scale[i],
-          "4" = readBin(dd, "integer", rows, size=4)/10^env$scale[i],
-          "8" = .Call(mapi_read_long_dbl, readBin(dd, "raw", clen, 1))/10^env$scale[i],
-          stop("can't convert decimal of length ", env$internal_size[i])
-          ),
-        DATE    =  as.Date(structure(.Call(mapi_read_long_dbl, readBin(dd, "raw", clen, 1))/1000, class = c("POSIXct", "POSIXt"), tzone = "UTC"))
-          ,
-        VARCHAR = .Call(mapi_read_null_string, readBin(dd, "raw", clen, 1), rows), 
-        { # default action
-           r <- readBin(dd, "raw", clen, 1)
-           as.logical(rep(NA, rows))
-        }
-        )
-      
+      .Call(mapi_read_into_vec, response, idx, env$types[i], env$internal_size[i], env$scale[i], env$data_df[[i]],  env$index, rows)
 
       idx <- idx + clen
+      seek(dd, idx)
+
     }
     close(dd)
     env$index <- env$index + rows
