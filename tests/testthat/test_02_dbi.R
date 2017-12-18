@@ -462,6 +462,13 @@ test_that("pk violations throw errors", {
 	expect_false(dbExistsTable(con, tname))
 })
 
+test_that("unions of various NULL works", {
+	dbBegin(con)
+	dbGetQuery(con, "SELECT NULL AS j UNION ALL SELECT NULL AS j UNION ALL SELECT FALSE AS j")
+	dbRollback(con)
+})
+
+
 test_that("sql errrors get cleaned after borked appends", {
 	tf <- tempfile()
 	qq <- paste0("COPY INTO ", tname, " FROM '", tf, "' USING DELIMITERS ','")
