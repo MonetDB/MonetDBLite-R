@@ -8,7 +8,7 @@ MONETDBLITE_CFLAGS = $(PKG_CFLAGS) $(CFLAGS) $(R_XTRA_CPPFLAGS) $(CPICFLAGS) -DL
 -Imonetdblite/src/sql/include -Imonetdblite/src/sql/common -Imonetdblite/src/sql/server -Imonetdblite/src/sql/storage -Imonetdblite/src/sql/storage/bat
 
 ifeq "$(WIN)" "32"
-MONETDBLITE_CFLAGS += -Wno-format
+MONETDBLITE_CFLAGS += -Wno-attributes -Wno-format
 endif
 
 OBJECTS=\
