@@ -1,7 +1,7 @@
 OBJDIR=build/objects
 DEPSDIR=build/deps
 
-MONETDBLITE_CFLAGS = $(PKG_CFLAGS) $(CFLAGS) $(R_XTRA_CPPFLAGS) $(CPICFLAGS) -DLIBGDK -DLIBMAL -DLIBOPTIMIZER -DLIBSTREAM -DHAVE_EMBEDDED_R -DMONETDBLITE_COMPILE \
+MONETDBLITE_CFLAGS = $(PKG_CFLAGS) $(CFLAGS) $(R_XTRA_CPPFLAGS) $(CPICFLAGS) -std=c11 -DLIBGDK -DLIBMAL -DLIBOPTIMIZER -DLIBSTREAM -DHAVE_EMBEDDED_R -DMONETDBLITE_COMPILE \
 -Imonetdblite/src/ -Imonetdblite/src/common  \
 -Imonetdblite/src/embedded -Imonetdblite/src/gdk \
 -Imonetdblite/src/mal/mal -Imonetdblite/src/mal/modules -Imonetdblite/src/mal/optimizer -Imonetdblite/src/mal/sqlbackend \
