@@ -20,7 +20,7 @@ branches:
   only:
     - master
 
-#environment:
+environment:
 #  global:
 #    WARNINGS_ARE_ERRORS: 1
 
