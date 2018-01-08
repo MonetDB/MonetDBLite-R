@@ -535,7 +535,7 @@ static BAT* sexp_to_bat(SEXP s, int type) {
 		if (IS_INTEGER(s)) {
 			SXP_TO_BAT(int, INTEGER_POINTER, *p==NA_INTEGER);
 		} else {
-			SXP_TO_BAT(int, NUMERIC_POINTER, ISNA(*p));
+			SXP_TO_BAT(int, NUMERIC_POINTER, ISNA(NUMERIC_POINTER(s)[j]));
 		}
 		b = BATcalcaddcst(b, &val, NULL, TYPE_int, 1);
 		b->ttype = TYPE_date;
