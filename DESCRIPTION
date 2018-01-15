@@ -7,7 +7,6 @@ Description: An in-process version of 'MonetDB', a SQL database designed for ana
 License: MPL (== 2.0)
 URL: https://github.com/hannesmuehleisen/MonetDBLite-R
 BugReports: https://github.com/hannesmuehleisen/MonetDBLite-R/issues
-SystemRequirements: GNU make
 Depends: R (>= 3.2.0)
 Imports: DBI (>= 0.6), digest (>= 0.6.4), methods, codetools
 Suggests: assertthat, testthat, survey, nycflights13, RSQLite, dbplyr, dplyr, gdata, callr, devtools, DBItest

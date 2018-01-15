@@ -9,3 +9,5 @@
 ^speed_comparisons\.png
 ^src/build
 ^src/monetdblite/tests
+^src/monetdblite/Makefile
+^src/monetdblite/src/sql/scripts
