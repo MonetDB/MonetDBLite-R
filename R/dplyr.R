@@ -25,7 +25,8 @@ dplyr_sql_translate_env <- function(con) {
       n = function() dbplyr::sql("COUNT(*)"),
       sd =  dbplyr::sql_prefix("STDDEV_SAMP"),
       var = dbplyr::sql_prefix("VAR_SAMP"),
-      median = dbplyr::sql_prefix("MEDIAN")
+      median = dbplyr::sql_prefix("MEDIAN"),
+      cor = dbplyr::sql_prefix("CORR")
     ),
     window = dbplyr::sql_translator(.parent = dbplyr::base_no_win,
       row_number   = dbplyr::win_rank("ROW_NUMBER"),
