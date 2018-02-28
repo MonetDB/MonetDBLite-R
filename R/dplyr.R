@@ -34,7 +34,8 @@ dplyr_sql_translate_env <- function(con) {
       rank         = dbplyr::win_rank("RANK"),
       dense_rank   = dbplyr::win_rank("DENSE_RANK"),
       percent_rank = dbplyr::win_rank("PERCENT_RANK"),
-      cume_dist    = dbplyr::win_rank("CUME_DIST")
+      cume_dist    = dbplyr::win_rank("CUME_DIST"),
+      median       = dbplyr::win_absent("MEDIAN")
     )
   )
 }
