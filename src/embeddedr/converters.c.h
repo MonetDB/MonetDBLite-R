@@ -444,7 +444,7 @@ static BAT* sexp_to_bat(SEXP s, int type) {
 		if (!IS_NUMERIC(s)) {
 			return NULL;
 		}
-		SXP_TO_BAT(dbl, NUMERIC_POINTER, (ISNA(*p) || MNisnan(*p) || MNisinf(*p)));
+		SXP_TO_BAT(dbl, NUMERIC_POINTER, (ISNA(*p) || isnan(*p) || isinf(*p)));
 		break;
 	}
 	case TYPE_str: {
@@ -513,7 +513,7 @@ static BAT* sexp_to_bat(SEXP s, int type) {
 			} else {
 				b->tnil = 1;
 				b->tnonil = 0;
-				ele_blob = BLOBnull();
+				ele_blob = (blob *) BLOBnull();
 			}
 			BLOBput(b->tvheap, &bun_offset, ele_blob);
 			if (BUNappend(b, ele_blob, FALSE) != GDK_SUCCEED) {
