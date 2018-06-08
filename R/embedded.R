@@ -67,7 +67,6 @@ monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE
 	# make sure the query is terminated
 	query <- paste(query, "\n;", sep="")
 	res <- .Call(monetdb_query_R, conn, query, execute, resultconvert, interactive() && getOption("monetdb.progress", FALSE))
-
 	resp <- list()
 	if (is.character(res)) { # error
 		resp$type <- "!" # MSG_MESSAGE
