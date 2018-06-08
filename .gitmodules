@@ -1,5 +1,5 @@
 [submodule "src/monetdblite"]
 	path = src/monetdblite
 	url = https://github.com/hannesmuehleisen/MonetDBLite-C
-	shallow = true
+	depth = 100
 	branch = mar
