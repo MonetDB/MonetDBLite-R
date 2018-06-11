@@ -1,6 +1,6 @@
 #define RSTR(somestr) mkCharCE(somestr, CE_UTF8)
 
-#define BAT_TO_SXP(bat,n,tpe,retsxp,newfun,ptrfun,ctype,naval,memcopy)\
+#define BAT_TO_SXP(bat,n,tpe,retsxp,newfun,ptrfun,ctype,naval,memcopy,nacheck)\
 	do {													\
 		tpe v; BUN j;     								\
 		ctype *valptr = NULL;                               \
@@ -20,7 +20,7 @@
 		} else {                                            \
 		for (j = 0; j < n; j++) {		                    \
 			v = p[j];                                       \
-			if (v == tpe##_nil)							\
+			if (nacheck)							\
 				valptr[j] = naval;	                        \
 			else											\
 				valptr[j] = (ctype) v;	                    \
@@ -28,10 +28,10 @@
 	} while (0)
 
 #define BAT_TO_INTSXP(bat,n,tpe,retsxp,memcopy)						\
-	BAT_TO_SXP(bat,n,tpe,retsxp,NEW_INTEGER,INTEGER_POINTER,int,NA_INTEGER,memcopy)\
+	BAT_TO_SXP(bat,n,tpe,retsxp,NEW_INTEGER,INTEGER_POINTER,int,NA_INTEGER,memcopy,v == tpe##_nil)\
 
 #define BAT_TO_REALSXP(bat,n,tpe,retsxp,memcopy)						\
-	BAT_TO_SXP(bat,n,tpe,retsxp,NEW_NUMERIC,NUMERIC_POINTER,double,NA_REAL,memcopy)\
+	BAT_TO_SXP(bat,n,tpe,retsxp,NEW_NUMERIC,NUMERIC_POINTER,double,NA_REAL,memcopy,isnan(v))\
 
 #define SXP_TO_BAT(tpe,access_fun,na_check)								\
 	do {																\
@@ -202,7 +202,7 @@ static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix) {
 			LOGICAL_POINTER(varvalue)[i] = NA_LOGICAL;
 		}
 	} else if (battype == TYPE_bit) {
-		BAT_TO_SXP(b, n, bte, varvalue, NEW_LOGICAL, LOGICAL_POINTER, int, NA_LOGICAL, 0);
+		BAT_TO_SXP(b, n, bte, varvalue, NEW_LOGICAL, LOGICAL_POINTER, int, NA_LOGICAL, 0, v == bit_nil);
 	} else if (battype == TYPE_sht) {
 		BAT_TO_INTSXP(b, n, sht, varvalue, 0);
 	} else if (battype == TYPE_int) {
