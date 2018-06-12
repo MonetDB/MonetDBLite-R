@@ -22,9 +22,9 @@ dplyr_sql_translate_env <- function(con) {
       `!=` = dbplyr::sql_infix("<>")
     ),
     aggregate = dbplyr::sql_translator(.parent = dbplyr::base_agg, 
-      n = function() dbplyr::sql("COUNT(*)"),
-      sd =  dbplyr::sql_prefix("STDDEV_SAMP"),
-      var = dbplyr::sql_prefix("VAR_SAMP"),
+      n = function()  dbplyr::sql("COUNT(*)"),
+      sd =     dbplyr::sql_prefix("STDDEV_SAMP"),
+      var =    dbplyr::sql_prefix("VAR_SAMP"),
       median = dbplyr::sql_prefix("MEDIAN")
     ),
     window = dbplyr::sql_translator(.parent = dbplyr::base_no_win,
@@ -38,6 +38,7 @@ dplyr_sql_translate_env <- function(con) {
   )
 }
 
+# remove once sampple support in dbplyr is on CRAN
 dplyr_sample_n <- function(x, size, replace = FALSE, weight = NULL) {
   if (replace || !is.null(weight)) {
     stop("Sorry, replace and weight are not supported for MonetDB tables. \
