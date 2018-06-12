@@ -17,8 +17,6 @@ matrix:
         - RVERSION=devel _R_SAN_=TRUE _R_CHECK_FULL_=TRUE
     - os: osx
       r: release
-    - os: osx
-      r: devel
 
 # r:
 #   - oldrel
