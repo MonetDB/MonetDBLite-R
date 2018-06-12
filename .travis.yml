@@ -1,13 +1,31 @@
 language: r
 sudo: false
 cache: packages
-r:
-  - oldrel
-  - release
-  - devel
 
-r_github_packages:
-  - r-lib/covr
+matrix:
+  include:
+    - os: linux
+      r: oldrel
+    - os: linux
+      r: release
+    - os: linux
+      r: devel
+    - os: linux
+      r: devel
+      dist: trusty
+      env:
+        - RVERSION=devel _R_SAN_=TRUE _R_CHECK_FULL_=TRUE
+    - os: osx
+      r: release
+    - os: osx
+      r: devel
+
+# r:
+#   - oldrel
+#   - release
+#   - devel
+#r_github_packages:
+#  - r-lib/covr
 #  - rstats-db/DBI
 #  - rstats-db/DBItest
 #   - hadley/testthat
@@ -23,8 +41,8 @@ addons:
   apt_packages:
     - pandoc
 
-after_success:
-  - travis_wait Rscript -e 'covr::codecov()'
+# after_success:
+#   - travis_wait Rscript -e 'covr::codecov()'
 
 after_failure:
   - ./travis-tool.sh dump_logs
