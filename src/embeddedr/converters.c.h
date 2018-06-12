@@ -240,7 +240,7 @@ static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix) {
 			BAT_TO_REALSXP(b, n, dbl, varvalue, 1);
 #endif
 	} else if (battype == TYPE_lng) {
-		BAT_TO_REALSXP(b, n, lng, varvalue, 0);
+		BAT_TO_SXP(b,n,lng,varvalue,NEW_NUMERIC,NUMERIC_POINTER,double,NA_REAL,0,v == lng_nil);
 	} else if (battype == TYPE_str) {
 		BUN j = 0;
 		BATiter li = bat_iterator(b);
@@ -513,7 +513,7 @@ static BAT* sexp_to_bat(SEXP s, int type) {
 			} else {
 				b->tnil = 1;
 				b->tnonil = 0;
-				ele_blob = BLOBnull();
+				ele_blob = (blob*) BLOBnull();
 			}
 			BLOBput(b->tvheap, &bun_offset, ele_blob);
 			if (BUNappend(b, ele_blob, FALSE) != GDK_SUCCEED) {
