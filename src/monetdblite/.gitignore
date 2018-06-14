@@ -1,0 +1,8 @@
+.DS_store
+.project
+.cproject
+build
+*.so
+MonetDBLite_*.t*
+.settings
+*.o
