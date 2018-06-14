@@ -19,6 +19,7 @@ install:
 branches:
   only:
     - master
+    - mar
 
 environment:
 #  global:
