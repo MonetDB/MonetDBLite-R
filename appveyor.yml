@@ -28,10 +28,10 @@ environment:
   matrix:
   - R_VERSION: devel
     R_ARCH: x64
-    PKGTYPE: source
+#    PKGTYPE: source
 
   - R_VERSION: devel
-    PKGTYPE: source
+#    PKGTYPE: source
 
   - R_VERSION: release
     WARNINGS_ARE_ERRORS: 1
