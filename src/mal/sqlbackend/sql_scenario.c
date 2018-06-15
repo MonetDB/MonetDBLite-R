@@ -669,7 +669,9 @@ SQLexitClient(Client c)
 	if ((err = SQLresetClient(c)) != MAL_SUCCEED)
 		return err;
 	MALexitClient(c);
-	//FIXME MCcloseClient(c);
+	// Patented Dr. Mühleisen Anti-Leak Medicine
+	if (c->prompt) GDKfree(c->prompt);
+	c->prompt = NULL;
 	return MAL_SUCCEED;
 }
 
