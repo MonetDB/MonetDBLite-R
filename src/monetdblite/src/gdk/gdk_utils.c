@@ -1323,23 +1323,8 @@ GDKvm_cursize(void)
 static void
 GDKmemfail(const char *s, size_t len)
 {
-	/* bumped your nose against the wall; try to prevent
-	 * repetition by adjusting maxsizes
-	   if (memtarget < 0.3 * GDKmem_cursize()) {
-		   size_t newmax = (size_t) (0.7 * (double) GDKmem_cursize());
-
-		   if (newmax < GDK_mem_maxsize)
-		   GDK_mem_maxsize = newmax;
-	   }
-	   if (vmtarget < 0.3 * GDKvm_cursize()) {
-		   size_t newmax = (size_t) (0.7 * (double) GDKvm_cursize());
-
-		   if (newmax < GDK_vm_maxsize)
-			   GDK_vm_maxsize = newmax;
-	   }
-	 */
-
-	fprintf(stderr, "#%s(%zu) fails, try to free up space [memory in use=%zu,virtual memory in use=%zu]\n", s, len, GDKmem_cursize(), GDKvm_cursize());
+	(void) s;
+	(void) len;
 }
 
 /* Memory allocation
@@ -1399,7 +1384,7 @@ GDKmalloc_internal(size_t size)
 	nsize = (size + 7) & ~7;
 	if ((s = malloc(nsize + MALLOC_EXTRA_SPACE + DEBUG_SPACE)) == NULL) {
 		GDKmemfail("GDKmalloc", size);
-		GDKerror("GDKmalloc_internal: failed for %zu bytes", size);
+		GDKerror("GDKmalloc_internal: failed for "ULLFMT" bytes", (uint64_t) size);
 		return NULL;
 	}
 	s = (void *) ((char *) s + MALLOC_EXTRA_SPACE);
@@ -1556,7 +1541,7 @@ GDKrealloc(void *s, size_t size)
 		os[-1] &= ~2;	/* not freed after all */
 #endif
 		GDKmemfail("GDKrealloc", size);
-		GDKerror("GDKrealloc: failed for %zu bytes", size);
+		GDKerror("GDKrealloc: failed for "ULLFMT" bytes", (uint64_t) size);
 		return NULL;
 	}
 	s = (void *) ((char *) s + MALLOC_EXTRA_SPACE);
