@@ -10,11 +10,11 @@ matrix:
       r: release
     - os: linux
       r: devel
-    - os: linux
-      r: devel
-      dist: trusty
-      env:
-        - RVERSION=devel _R_SAN_=TRUE _R_CHECK_FULL_=TRUE
+    # - os: linux
+    #   r: devel
+    #   dist: trusty
+    #   env:
+    #     - RVERSION=devel _R_SAN_=TRUE _R_CHECK_FULL_=TRUE
     - os: osx
       r: release
     # - os: osx
