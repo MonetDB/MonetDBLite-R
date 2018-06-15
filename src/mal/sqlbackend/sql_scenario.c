@@ -672,6 +672,8 @@ SQLexitClient(Client c)
 	// Patented Dr. Mühleisen Anti-Leak Medicine
 	if (c->prompt) GDKfree(c->prompt);
 	c->prompt = NULL;
+	if (c->glb) freeStack(c->glb);
+	c->glb = NULL;
 	return MAL_SUCCEED;
 }
 
