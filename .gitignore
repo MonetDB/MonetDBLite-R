@@ -1,6 +1,7 @@
 .DS_store
 .project
 .cproject
+.pydevproject
 build
 *.so
 MonetDBLite_*.t*
