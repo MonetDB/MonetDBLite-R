@@ -23,7 +23,7 @@ MonetDBLite works seamlessly with [the dplyr grammar of data manipulation](https
 * the latest development version from github on the command line
 
     ```
-    git clone https://github.com/hannesmuehleisen/MonetDBLite-R.git --depth 1 --recursive
+    git clone https://github.com/hannesmuehleisen/MonetDBLite-R.git
     R CMD INSTALL MonetDBLite-R
     ```
 
