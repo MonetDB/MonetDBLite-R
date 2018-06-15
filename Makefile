@@ -48,6 +48,7 @@ src/sql/scripts/17_temporal.sql \
 src/sql/scripts/18_index.sql \
 src/sql/scripts/20_vacuum.sql \
 src/sql/scripts/21_dependency_functions.sql \
+src/sql/scripts/21_dependency_views.sql \
 src/sql/scripts/22_clients.sql \
 src/sql/scripts/25_debug.sql \
 src/sql/scripts/26_sysmon.sql \

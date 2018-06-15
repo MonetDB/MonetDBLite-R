@@ -288,55 +288,6 @@ sql_update_hugeint(Client c, mvc *sql)
 #endif
 
 static str
-sql_update_geom(Client c, mvc *sql, int olddb)
-{
-	size_t bufsize, pos = 0;
-	char *buf, *err = NULL;
-	char *geomupgrade;
-	char *schema = stack_get_string(sql, "current_schema");
-	geomsqlfix_fptr fixfunc;
-	node *n;
-	sql_schema *s = mvc_bind_schema(sql, "sys");
-
-	if ((fixfunc = geomsqlfix_get()) == NULL)
-		return NULL;
-
-	geomupgrade = (*fixfunc)(olddb);
-	if (geomupgrade == NULL)
-		throw(SQL, "sql_update_geom", SQLSTATE(HY001) MAL_MALLOC_FAIL);
-	bufsize = strlen(geomupgrade) + 512;
-	buf = GDKmalloc(bufsize);
-	if (buf == NULL) {
-		GDKfree(geomupgrade);
-		throw(SQL, "sql_update_geom", SQLSTATE(HY001) MAL_MALLOC_FAIL);
-	}
-	pos += snprintf(buf + pos, bufsize - pos, "set schema \"sys\";\n");
-	pos += snprintf(buf + pos, bufsize - pos, "%s", geomupgrade);
-	GDKfree(geomupgrade);
-
-	pos += snprintf(buf + pos, bufsize - pos, "delete from sys.types where systemname in ('mbr', 'wkb', 'wkba');\n");
-	for (n = types->h; n; n = n->next) {
-		sql_type *t = n->data;
-
-		if (t->base.id < 2000 &&
-		    (strcmp(t->base.name, "mbr") == 0 ||
-		     strcmp(t->base.name, "wkb") == 0 ||
-		     strcmp(t->base.name, "wkba") == 0))
-			pos += snprintf(buf + pos, bufsize - pos, "insert into sys.types values (%d, '%s', '%s', %u, %u, %d, %d, %d);\n", t->base.id, t->base.name, t->sqlname, t->digits, t->scale, t->radix, t->eclass, t->s ? t->s->base.id : s->base.id);
-	}
-
-	if (schema)
-		pos += snprintf(buf + pos, bufsize - pos, "set schema \"%s\";\n", schema);
-	pos += snprintf(buf + pos, bufsize - pos, "commit;\n");
-
-	assert(pos < bufsize);
-	printf("Running database upgrade commands:\n%s\n", buf);
-	err = SQLstatementIntern(c, &buf, "update", 1, 0, NULL);
-	GDKfree(buf);
-	return err;		/* usually MAL_SUCCEED */
-}
-
-static str
 sql_update_dec2016(Client c, mvc *sql)
 {
 	size_t bufsize = 10240, pos = 0;
@@ -854,48 +805,6 @@ sql_update_jul2017_sp3(Client c, mvc *sql)
 		GDKfree(buf);
 	}
 	return err;
-}
-
-static str
-sql_update_mar2018_geom(Client c, mvc *sql, sql_table *t)
-{
-	size_t bufsize = 10000, pos = 0;
-	char *buf = GDKmalloc(bufsize), *err = NULL;
-	char *schema = stack_get_string(sql, "current_schema");
-
-	if (buf == NULL)
-		throw(SQL, "sql_update_mar2018_geom", SQLSTATE(HY001) MAL_MALLOC_FAIL);
-	pos += snprintf(buf + pos, bufsize - pos, "set schema \"sys\";\n");
-
-	t->system = 0;
-	pos += snprintf(buf + pos, bufsize - pos,
-			"drop view sys.geometry_columns cascade;\n"
-			"create view sys.geometry_columns as\n"
-			"\tselect cast(null as varchar(1)) as f_table_catalog,\n"
-			"\t\ts.name as f_table_schema,\n"
-			"\t\tt.name as f_table_name,\n"
-			"\t\tc.name as f_geometry_column,\n"
-			"\t\tcast(has_z(c.type_digits) + has_m(c.type_digits) +2 as integer) as coord_dimension,\n"
-			"\t\tc.type_scale as srid,\n"
-			"\t\tget_type(c.type_digits, 0) as type\n"
-			"\tfrom sys.columns c, sys.tables t, sys.schemas s\n"
-			"\twhere c.table_id = t.id and t.schema_id = s.id\n"
-			"\t  and c.type in (select sqlname from sys.types where systemname in ('wkb', 'wkba'));\n"
-			"GRANT SELECT ON sys.geometry_columns TO PUBLIC;\n"
-			"update sys._tables set system = true where name = 'geometry_columns' and schema_id in (select id from schemas where name = 'sys');\n");
-
-	pos += snprintf(buf + pos, bufsize - pos,
-			"delete from sys.systemfunctions where function_id not in (select id from sys.functions);\n");
-
-	if (schema)
-		pos += snprintf(buf + pos, bufsize - pos, "set schema \"%s\";\n", schema);
-	pos += snprintf(buf + pos, bufsize - pos, "commit;\n");
-
-	assert(pos < bufsize);
-	printf("Running database upgrade commands:\n%s\n", buf);
-	err = SQLstatementIntern(c, &buf, "update", 1, 0, NULL);
-	GDKfree(buf);
-	return err;		/* usually MAL_SUCCEED */
 }
 
 static str
@@ -1609,30 +1518,6 @@ sql_replace_Mar2018_ids_view(Client c, mvc *sql)
 	return err;		/* usually MAL_SUCCEED */
 }
 
-static str
-sql_update_gsl(Client c, mvc *sql)
-{
-	size_t bufsize = 1024, pos = 0;
-	char *buf = GDKmalloc(bufsize), *err = NULL;
-	char *schema = stack_get_string(sql, "current_schema");
-
-	if (buf == NULL)
-		throw(SQL, "sql_update_gsl", SQLSTATE(HY001) MAL_MALLOC_FAIL);
-	pos += snprintf(buf + pos, bufsize - pos,
-			"set schema \"sys\";\n"
-			"drop function sys.chi2prob(double, double);\n"
-			"delete from systemfunctions where function_id not in (select id from functions);\n");
-	if (schema)
-		pos += snprintf(buf + pos, bufsize - pos, "set schema \"%s\";\n", schema);
-	pos += snprintf(buf + pos, bufsize - pos, "commit;\n");
-	assert(pos < bufsize);
-
-	printf("Running database upgrade commands:\n%s\n", buf);
-	err = SQLstatementIntern(c, &buf, "update", 1, 0, NULL);
-	GDKfree(buf);
-	return err;		/* usually MAL_SUCCEED */
-}
-
 void
 SQLupgrades(Client c, mvc *m)
 {
@@ -1640,8 +1525,6 @@ SQLupgrades(Client c, mvc *m)
 	sql_subfunc *f;
 	char *err;
 	sql_schema *s = mvc_bind_schema(m, "sys");
-	sql_table *t;
-	sql_column *col;
 
 #ifdef HAVE_HGE
 	if (have_hge) {
@@ -1663,29 +1546,7 @@ SQLupgrades(Client c, mvc *m)
 		table_funcs.table_insert(m->session->tr, privs, &f->func->base.id, &pub, &p, &zero, &zero);
 	}
 
-	/* If the point type exists, but the geometry type does not
-	 * exist any more at the "sys" schema (i.e., the first part of
-	 * the upgrade has been completed succesfully), then move on
-	 * to the second part */
-	if (find_sql_type(s, "point") != NULL) {
-		/* type sys.point exists: this is an old geom-enabled
-		 * database */
-		if ((err = sql_update_geom(c, m, 1)) != NULL) {
-			fprintf(stderr, "!%s\n", err);
-			freeException(err);
-		}
-	} else if (geomsqlfix_get() != NULL) {
-		/* the geom module is loaded... */
-		sql_find_subtype(&tp, "clob", 0, 0);
-		if (!sql_bind_func(m->sa, s, "st_wkttosql",
-				   &tp, NULL, F_FUNC)) {
-			/* ... but the database is not geom-enabled */
-			if ((err = sql_update_geom(c, m, 0)) != NULL) {
-				fprintf(stderr, "!%s\n", err);
-				freeException(err);
-			}
-		}
-	}
+
 
 	sql_find_subtype(&tp, "clob", 0, 0);
 	if (!sql_bind_func3(m->sa, s, "createorderindex", &tp, &tp, &tp, F_PROC)) {
@@ -1727,33 +1588,13 @@ SQLupgrades(Client c, mvc *m)
 		freeException(err);
 	}
 
-	if ((t = mvc_bind_table(m, s, "geometry_columns")) != NULL &&
-	    (col = mvc_bind_column(m, t, "coord_dimension")) != NULL &&
-	    strcmp(col->type.type->sqlname, "int") != 0) {
-		if ((err = sql_update_mar2018_geom(c, m, t)) != NULL) {
-			fprintf(stderr, "!%s\n", err);
-			freeException(err);
-		}
-	}
 
 	if (!sql_bind_func(m->sa, s, "master", NULL, NULL, F_PROC)) {
 		if ((err = sql_update_mar2018(c, m)) != NULL) {
 			fprintf(stderr, "!%s\n", err);
 			freeException(err);
 		}
-#ifdef HAVE_NETCDF
-		if (mvc_bind_table(m, s, "netcdf_files") != NULL &&
-		    (err = sql_update_mar2018_netcdf(c, m)) != NULL) {
-			fprintf(stderr, "!%s\n", err);
-			freeException(err);
-		}
-#endif
-#ifdef HAVE_SAMTOOLS
-		if ((err = sql_update_mar2018_samtools(c, m)) != NULL) {
-			fprintf(stderr, "!%s\n", err);
-			freeException(err);
-		}
-#endif
+
 	}
 
 	if (sql_bind_func(m->sa, s, "dependencies_functions_os_triggers", NULL, NULL, F_UNION)) {
@@ -1788,18 +1629,4 @@ SQLupgrades(Client c, mvc *m)
 			res_tables_destroy(output);
 	}
 
-	/* temporarily use variable `err' to check existence of MAL
-	 * module gsl */
-	if ((err = getName("gsl")) == NULL || getModule(err) == NULL) {
-		/* no MAL module gsl, check for SQL function sys.chi2prob */
-		sql_find_subtype(&tp, "double", 0, 0);
-		if (sql_bind_func(m->sa, s, "chi2prob", &tp, &tp, F_FUNC)) {
-			/* sys.chi2prob exists, but there is no
-			 * implementation */
-			if ((err = sql_update_gsl(c, m)) != NULL) {
-				fprintf(stderr, "!%s\n", err);
-				freeException(err);
-			}
-		}
-	}
 }
