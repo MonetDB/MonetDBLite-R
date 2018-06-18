@@ -1588,16 +1588,12 @@ SQLupgrades(Client c, mvc *m)
 		freeException(err);
 	}
 
-
-	if (!sql_bind_func(m->sa, s, "master", NULL, NULL, F_PROC)) {
-		if ((err = sql_update_mar2018(c, m)) != NULL) {
-			fprintf(stderr, "!%s\n", err);
-			freeException(err);
-		}
-
-	}
-
+	// patched because "master" function is in the toxic wlcr module
 	if (sql_bind_func(m->sa, s, "dependencies_functions_os_triggers", NULL, NULL, F_UNION)) {
+		if ((err = sql_update_mar2018(c, m)) != NULL) {
+					fprintf(stderr, "!%s\n", err);
+					freeException(err);
+				}
 		if ((err = sql_update_mar2018_sp1(c, m)) != NULL) {
 			fprintf(stderr, "!%s\n", err);
 			freeException(err);
