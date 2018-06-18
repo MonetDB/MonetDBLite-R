@@ -274,18 +274,17 @@ MT_init_posix(void)
 
 
 void *
-MT_mmap_addr(const char *path, int mode, size_t len, void* addr)
+MT_mmap(const char *path, int mode, size_t len)
 {
-	int fd = -1;
+	int fd;
 	void *ret;
-	if (path != NULL) {
-		fd = open(path, O_CREAT | ((mode & MMAP_WRITE) ? O_RDWR : O_RDONLY) | O_CLOEXEC, MONETDB_MODE);
-		if (fd < 0) {
-			GDKsyserror("MT_mmap: open %s failed\n", path);
-			return MAP_FAILED;
-		}
+
+	fd = open(path, O_CREAT | ((mode & MMAP_WRITE) ? O_RDWR : O_RDONLY) | O_CLOEXEC, MONETDB_MODE);
+	if (fd < 0) {
+		GDKsyserror("MT_mmap: open %s failed\n", path);
+		return MAP_FAILED;
 	}
-	ret = mmap(addr,
+	ret = mmap(NULL,
 		   len,
 		   ((mode & MMAP_WRITABLE) ? PROT_WRITE : 0) | PROT_READ,
 		   (mode & MMAP_COPY) ? (MAP_PRIVATE | MAP_NORESERVE) : MAP_SHARED,
@@ -300,11 +299,6 @@ MT_mmap_addr(const char *path, int mode, size_t len, void* addr)
 	return ret;
 }
 
-void *
-MT_mmap(const char *path, int mode, size_t len)
-{
-	return MT_mmap_addr(path, mode, len, NULL);
-}
 
 int
 MT_munmap(void *p, size_t len)
