@@ -1788,7 +1788,7 @@ new_bbpentry(FILE *fp, bat i, const char *prefix)
 	if (fprintf(fp, "%s"ULLFMT" %d %s %s %d " BUNFMT " "
 		    BUNFMT " " OIDFMT, prefix,
 		    /* BAT info */
-		    (int64_t) i,
+		    (uint64_t) i,
 		    BBP_status(i) & BBPPERSISTENT,
 		    BBP_logical(i),
 		    BBP_physical(i),
