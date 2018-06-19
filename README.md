@@ -23,7 +23,7 @@ MonetDBLite works seamlessly with [the dplyr grammar of data manipulation](https
 * the latest development version from github using `devtools`
 
     ```
-    devtools::install_github("hannesmuehleisen/MonetDBLite-R", ref="mar")
+    devtools::install_github("hannesmuehleisen/MonetDBLite-R")
     ```
 
 If you encounter a bug, please file a minimal reproducible example on [github](https://github.com/hannesmuehleisen/MonetDBLite-R/issues). For questions and other discussion, please use [stack overflow](http://stackoverflow.com/questions/tagged/monetdblite) with the tag `monetdblite`.  The development version of MonetDBLite endures [sisyphean perpetual testing](https://sisyphus.project.cwi.nl/) on both unix and windows machines.
