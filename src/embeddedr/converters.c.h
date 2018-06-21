@@ -1,5 +1,7 @@
 #define RSTR(somestr) mkCharCE(somestr, CE_UTF8)
 
+#define INT64_PTR(X) ((int64_t*) NUMERIC_POINTER(X))
+
 #define BAT_TO_SXP(bat,n,tpe,retsxp,newfun,ptrfun,ctype,naval,memcopy,nacheck)\
 	do {													\
 		tpe v; BUN j;     								\
@@ -424,10 +426,17 @@ static BAT* sexp_to_bat(SEXP s, int type) {
 		break;
 	}
 	case TYPE_lng: {
-		if (!IS_INTEGER(s)) {
-			return NULL;
+		if (strcmp("integer64", CHAR(STRING_ELT(GET_CLASS(s), 0))) == 0) {
+			if (!IS_NUMERIC(s)) {
+				return NULL;
+			}
+			SXP_TO_BAT(lng, INT64_PTR, *p==NA_INTEGER);
+		} else {
+			if (!IS_INTEGER(s)) {
+				return NULL;
+			}
+			SXP_TO_BAT(lng, INTEGER_POINTER, *p==NA_INTEGER);
 		}
-		SXP_TO_BAT(lng, INTEGER_POINTER, *p==NA_INTEGER);
 		break;
 	}
 #ifdef HAVE_HGE
