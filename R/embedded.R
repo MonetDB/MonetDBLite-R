@@ -42,7 +42,7 @@ monetdb_embedded_startup <- function(dir=":memory:", quiet=TRUE, sequential=TRUE
 	invisible(TRUE)
 }
 
-monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE) {
+monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE, int64=FALSE) {
 	if (!inherits(conn, classname)) {
 		stop("Invalid connection")
 	}
@@ -66,7 +66,7 @@ monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE
 	}
 	# make sure the query is terminated
 	query <- paste(query, "\n;", sep="")
-	res <- .Call(monetdb_query_R, conn, query, execute, resultconvert, interactive() && getOption("monetdb.progress", FALSE))
+	res <- .Call(monetdb_query_R, conn, query, execute, resultconvert, interactive() && getOption("monetdb.progress", FALSE), int64)
 	resp <- list()
 	if (is.character(res)) { # error
 		resp$type <- "!" # MSG_MESSAGE

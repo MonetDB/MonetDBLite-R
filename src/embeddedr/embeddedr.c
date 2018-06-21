@@ -99,7 +99,7 @@ static int monetdb_progress_R(void* conn, void* data, size_t num_statements, siz
 
 
 
-SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resultconvertsexp, SEXP progressbarsexp) {
+SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resultconvertsexp, SEXP progressbarsexp, SEXP int64sexp) {
 	monetdb_result* output = NULL;
 	long affected_rows = 0, prepare_id = 0;
 	char* err = NULL;
@@ -155,7 +155,7 @@ SEXP monetdb_query_R(SEXP connsexp, SEXP querysexp, SEXP executesexp, SEXP resul
 			if (!LOGICAL(resultconvertsexp)[0]) {
 				BATsetcount(b, 0); // hehe
 			}
-			if (!(varvalue = bat_to_sexp(b, output->nrows, &(raw_col->type), &unfix))) {
+			if (!(varvalue = bat_to_sexp(b, output->nrows, &(raw_col->type), &unfix, !LOGICAL(int64sexp)[0]))) {
 				UNPROTECT(i * 2 + 4);
 				PutRNGstate();
 				return monetdb_error_R("Conversion error");

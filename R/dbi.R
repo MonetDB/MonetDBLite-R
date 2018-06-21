@@ -350,7 +350,7 @@ setMethod("dbSendQuery", signature(conn="MonetDBConnection", statement="characte
 
 # This one does all the work in this class
 setMethod("dbSendQuery", signature(conn="MonetDBEmbeddedConnection", statement="character"),  
-          def=function(conn, statement, ..., list=NULL, execute = TRUE, resultconvert = TRUE) {   
+          def=function(conn, statement, ..., list=NULL, execute = TRUE, resultconvert = TRUE, int64=FALSE) {   
   check_flag(execute)
   check_flag(resultconvert)
   if (!conn@connenv$open) {
@@ -367,7 +367,7 @@ setMethod("dbSendQuery", signature(conn="MonetDBEmbeddedConnection", statement="
   if(!is.null(log_file <- getOption("monetdb.log.query", NULL)))
     cat(c(statement, ";\n"), file = log_file, sep="", append = TRUE)
   startt <- Sys.time()
-  resp <- monetdb_embedded_query(conn@connenv$conn, statement, execute, resultconvert)
+  resp <- monetdb_embedded_query(conn@connenv$conn, statement, execute, resultconvert, int64)
   takent <- round(as.numeric(Sys.time() - startt), 2)
   env <- new.env(parent=emptyenv())
   env$open <- TRUE

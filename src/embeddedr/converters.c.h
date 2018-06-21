@@ -152,7 +152,7 @@ static SEXP monetdb_r_dressup(BAT *b, size_t n, SEXPTYPE target_type) {
 #endif
 
 
-static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix) {
+static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix, char int64) {
 	SEXP varvalue = NULL;
 	int battype = getBatType(b->ttype);
 	// TODO: deal with more esoteric SQL types (TIME)
@@ -240,7 +240,15 @@ static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix) {
 			BAT_TO_REALSXP(b, n, dbl, varvalue, 1);
 #endif
 	} else if (battype == TYPE_lng) {
-		BAT_TO_SXP(b,n,lng,varvalue,NEW_NUMERIC,NUMERIC_POINTER,double,NA_REAL,0,v == lng_nil);
+		if (!int64){
+			BAT_TO_SXP(b,n,lng,varvalue,NEW_NUMERIC,NUMERIC_POINTER,double,NA_REAL,0,v == lng_nil);
+		}
+		else {
+			// TODO dressup opportunity!
+			BAT_TO_REALSXP(b, n, dbl, varvalue, 1);
+			SET_CLASS(varvalue, PROTECT(mkString("integer64")));
+			UNPROTECT(1);
+		}
 	} else if (battype == TYPE_str) {
 		BUN j = 0;
 		BATiter li = bat_iterator(b);
@@ -302,7 +310,7 @@ static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix) {
 		if(!b2) {
 			return NULL;
 		}
-		varvalue = bat_to_sexp(b2, n, NULL, unfix);
+		varvalue = bat_to_sexp(b2, n, NULL, unfix, int64);
 		if (!varvalue) {
 			return NULL;
 		}
