@@ -452,6 +452,29 @@ test_that("both numeric and integer dates can be written", {
 	expect_false(dbExistsTable(con, tname))
 })
 
+
+test_that("integer64 works when requested", {
+	dbBegin(con)
+
+	require("bit64")
+	a <- data.frame(a=as.integer64(c(42, NA, 4294967294)))
+
+	dbWriteTable(con, tname, a, int64=T)
+	expect_true(dbExistsTable(con, tname))
+	res <- dbGetQuery(con, sprintf("SELECT * FROM %s", tname), int64=T)
+	expect_equal(res$a, a$a)
+	dbRemoveTable(con, tname)
+
+	dbWriteTable(con, tname, a, int64=F)
+	expect_true(dbExistsTable(con, tname))
+	res <- dbGetQuery(con, sprintf("SELECT * FROM %s", tname), int64=F)
+	expect_equal(res$a, as.numeric(a$a))
+	dbRemoveTable(con, tname)
+
+	dbRollback(con)
+	expect_false(dbExistsTable(con, tname))
+})
+
 # TODO: write into decimal col?
 test_that("pk violations throw errors", {
 	expect_false(dbExistsTable(con, tname))
