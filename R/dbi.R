@@ -350,9 +350,13 @@ setMethod("dbSendQuery", signature(conn="MonetDBConnection", statement="characte
 
 # This one does all the work in this class
 setMethod("dbSendQuery", signature(conn="MonetDBEmbeddedConnection", statement="character"),  
-          def=function(conn, statement, ..., list=NULL, execute = TRUE, resultconvert = TRUE, int64=FALSE) {   
+          def=function(conn, statement, ..., list=NULL, execute = TRUE, resultconvert = TRUE, 
+          int64=getOption("monetdb.int64", FALSE)) {   
+
   check_flag(execute)
   check_flag(resultconvert)
+  check_flag(int64)
+
   if (!conn@connenv$open) {
     stop("This connection was closed.")
   }
@@ -487,12 +491,13 @@ quoteIfNeeded <- function(conn, x, warn=TRUE, ...) {
 }
 
 setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character", value="ANY"), def=function(conn, name, value, overwrite=FALSE, 
-  append=FALSE, csvdump=FALSE, transaction=TRUE, temporary=FALSE, row.names=FALSE, field.types=NULL, ...) {
+  append=FALSE, csvdump=FALSE, transaction=TRUE, temporary=FALSE, row.names=FALSE, field.types=NULL, int64=getOption("monetdb.int64", FALSE), ...) {
 
   check_flag(overwrite)
   check_flag(append)
   check_flag(temporary)
   check_flag(csvdump)
+  check_flag(int64)
 
   if (!missing(transaction)) {
     .Deprecated("Setting parameter transaction to dbWriteTable is deprecated.")
@@ -544,7 +549,7 @@ setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character"
   value <- sqlRownamesToColumn(value, row.names)
   
   if (!dbExistsTable(conn, qname)) {
-    fts <- sapply(value, dbDataType, dbObj=conn)
+    fts <- sapply(value, dbDataType, dbObj=conn, int64=int64)
     if (!is.null(field.types)) {
       if (!is.character(field.types) || length(field.types) != length(fts)) {
         stop("invalid field types argument")
@@ -576,6 +581,13 @@ setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character"
     for (c in names(classes[classes=="factor"])) {
       levels(value[[c]]) <- enc2utf8(levels(value[[c]]))
     }
+    for (c in names(classes[classes=="integer64"])) {
+      if (!int64) {
+        value[[c]] <- as.numeric(value[[c]])
+       }
+    }
+
+
     if (inherits(conn, "MonetDBEmbeddedConnection")) {
       for (c in names(classes[classes=="POSIXlt"])) {
         value[[c]] <- as.POSIXct(value[[c]])
@@ -626,11 +638,12 @@ setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character"
   return(invisible(TRUE))
 })
 
-datatype <- function(dbObj, obj, ...) {
+datatype <- function(dbObj, obj, int64=FALSE, ...) {
   if (is.null(obj)) stop("NULL parameter")
   if (is.data.frame(obj)) {
     return (vapply(obj, function(x) datatype(dbObj, x), FUN.VALUE = "character"))
   }
+  else if (int64 && inherits(obj, "integer64")) "BIGINT"
   else if (inherits(obj, "Date")) "DATE"
   else if (inherits(obj, "difftime")) "TIME"
   else if (is.logical(obj)) "BOOLEAN"
