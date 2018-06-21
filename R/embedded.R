@@ -64,6 +64,14 @@ monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE
 	if (length(resultconvert) != 1) {
 		stop("Need a single resultconvert flag as parameter.")
 	}
+	int64 <- as.logical(int64)
+	if (length(resultconvert) != 1) {
+		stop("Need a single int64 flag as parameter.")
+	}
+	if (int64) {
+		require("bit64")
+	}
+	
 	# make sure the query is terminated
 	query <- paste(query, "\n;", sep="")
 	res <- .Call(monetdb_query_R, conn, query, execute, resultconvert, interactive() && getOption("monetdb.progress", FALSE), int64)
