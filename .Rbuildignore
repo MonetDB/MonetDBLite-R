@@ -6,6 +6,7 @@
 .*\.git
 .*\.sql
 .*\.mal
+.*\.o
 .*sql_parser\.y
 ^speed_comparisons\.png
 ^src/build

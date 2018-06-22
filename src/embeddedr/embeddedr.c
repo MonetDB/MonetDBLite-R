@@ -331,7 +331,7 @@ SEXP monetdb_shutdown_R(void) {
 static const R_CallMethodDef R_CallDef[] = {
    CALLDEF(monetdb_startup_R, 3),
    CALLDEF(monetdb_connect_R, 0),
-   CALLDEF(monetdb_query_R, 5),
+   CALLDEF(monetdb_query_R, 6),
    CALLDEF(monetdb_append_R, 4),
    CALLDEF(monetdb_disconnect_R, 1),
    CALLDEF(monetdb_shutdown_R, 0),
