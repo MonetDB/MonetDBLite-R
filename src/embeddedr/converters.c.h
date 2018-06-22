@@ -246,7 +246,7 @@ static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix, char
 			BAT_TO_SXP(b,n,lng,varvalue,NEW_NUMERIC,NUMERIC_POINTER,double,NA_REAL,0,v == lng_nil);
 		}
 		else {
-
+#ifndef NATIVE_WIN32
 			if (!b->tnonil || b->tnil || b->T.heap.storage != STORE_MMAP ||
 						n < 1000000) {
 				BAT_TO_REALSXP(b, n, dbl, varvalue, 1);
@@ -254,9 +254,14 @@ static SEXP bat_to_sexp(BAT* b, size_t n, sql_subtype *subtype, int *unfix, char
 				varvalue = monetdb_r_dressup(b, n, REALSXP);
 				*unfix = 0;
 			}
+#else
+			BAT_TO_REALSXP(b, n, dbl, varvalue, 1);
+#endif
 			SET_CLASS(varvalue, PROTECT(mkString("integer64")));
 			UNPROTECT(1);
 		}
+
+
 	} else if (battype == TYPE_str) {
 		BUN j = 0;
 		BATiter li = bat_iterator(b);
