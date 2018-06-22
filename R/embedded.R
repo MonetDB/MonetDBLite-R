@@ -68,8 +68,8 @@ monetdb_embedded_query <- function(conn, query, execute=TRUE, resultconvert=TRUE
 	if (length(resultconvert) != 1) {
 		stop("Need a single int64 flag as parameter.")
 	}
-	if (int64) {
-		require("bit64")
+  	if (int64 && !requireNamespace("bit64", quietly = TRUE)) {
+  		stop("Need bit64 package for integer64 support")
 	}
 	
 	# make sure the query is terminated
