@@ -4,6 +4,7 @@ library(DBI)
 versions <- c("0.5.0", "0.5.1")
 
 test_that("we can upgrade old dbs", {
+	skip_on_os("windows")
 	for (v in versions) {
 		message(v)
 		dbfile <- sprintf("oldfarm-%s.zip", v)
