@@ -47,8 +47,7 @@ check_flag <- function(x) {
 
 
 setMethod("dbConnect", "MonetDBDriver", def=function(drv, dbname="demo", user="monetdb", 
-                                                     password="monetdb", host="localhost", port=50000L, timeout=60L, wait=FALSE, language="sql", embedded=FALSE,
-                                                     ..., url="") {
+                                                     password="monetdb", host="localhost", port=50000L, timeout=60L, wait=FALSE, language="sql", embedded=FALSE, bigint=ifelse(getOption("monetdb.int64", FALSE), "integer64", "numeric"), ..., url="") {
   
 
   if (substring(url, 1, 10) == "monetdb://" || substring(url, 1, 12) == "monetdblite:") {
@@ -101,6 +100,19 @@ setMethod("dbConnect", "MonetDBDriver", def=function(drv, dbname="demo", user="m
     else embedded <- dbname
   }
 
+  bigint <- tolower(bigint)
+  int64 <- FALSE
+  if (!(bigint %in% c("numeric", "integer64"))) {
+    stop("Only numeric and integer64 supported for bigint parameter.")
+  }
+  if (bigint == "integer64" && embedded == FALSE) {
+    stop("integer64 support only supported in embedded mode.")
+  }
+  if (bigint == "integer64") {
+    int64 <- TRUE
+  }
+
+
   if (embedded != FALSE) {
     monetdb_embedded_startup(embedded, !getOption("monetdb.debug.embedded", FALSE), 
       getOption("monetdb.sequential", FALSE))
@@ -108,7 +120,9 @@ setMethod("dbConnect", "MonetDBDriver", def=function(drv, dbname="demo", user="m
     connenv$conn <- monetdb_embedded_connect()
     connenv$open <- TRUE
     connenv$autocommit <- TRUE
-    connenv$resultsets = 0
+    connenv$resultsets <- 0
+    connenv$int64 <- int64
+
     conn <- new("MonetDBEmbeddedConnection", connenv=connenv)
     attr(conn, "dbPreExists") <- TRUE
     return(conn)
@@ -146,7 +160,8 @@ setMethod("dbConnect", "MonetDBDriver", def=function(drv, dbname="demo", user="m
   connenv$deferred <- list()
   connenv$exception <- list()
   connenv$autocommit <- TRUE
-  connenv$params <- list(drv=drv, host=host, port=port, timeout=timeout, dbname=dbname, user=user, password=password, language=language)
+  connenv$int64 <- 0
+  connenv$params <- list(drv=drv, host=host, port=port, timeout=timeout, dbname=dbname, user=user, password=password, language=language, bigint=bigint)
   connenv$socket <- .mapiConnect(host, port, timeout) 
   .mapiAuthenticate(connenv$socket, dbname, user, password, language=language)
   
@@ -350,12 +365,10 @@ setMethod("dbSendQuery", signature(conn="MonetDBConnection", statement="characte
 
 # This one does all the work in this class
 setMethod("dbSendQuery", signature(conn="MonetDBEmbeddedConnection", statement="character"),  
-          def=function(conn, statement, ..., list=NULL, execute = TRUE, resultconvert = TRUE, 
-          int64=getOption("monetdb.int64", FALSE)) {   
+          def=function(conn, statement, ..., list=NULL, execute = TRUE, resultconvert = TRUE) {   
 
   check_flag(execute)
   check_flag(resultconvert)
-  check_flag(int64)
 
   if (!conn@connenv$open) {
     stop("This connection was closed.")
@@ -371,7 +384,7 @@ setMethod("dbSendQuery", signature(conn="MonetDBEmbeddedConnection", statement="
   if(!is.null(log_file <- getOption("monetdb.log.query", NULL)))
     cat(c(statement, ";\n"), file = log_file, sep="", append = TRUE)
   startt <- Sys.time()
-  resp <- monetdb_embedded_query(conn@connenv$conn, statement, execute, resultconvert, int64)
+  resp <- monetdb_embedded_query(conn@connenv$conn, statement, execute, resultconvert, conn@connenv$int64)
   takent <- round(as.numeric(Sys.time() - startt), 2)
   env <- new.env(parent=emptyenv())
   env$open <- TRUE
@@ -491,13 +504,12 @@ quoteIfNeeded <- function(conn, x, warn=TRUE, ...) {
 }
 
 setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character", value="ANY"), def=function(conn, name, value, overwrite=FALSE, 
-  append=FALSE, csvdump=FALSE, transaction=TRUE, temporary=FALSE, row.names=FALSE, field.types=NULL, int64=getOption("monetdb.int64", FALSE), ...) {
+  append=FALSE, csvdump=FALSE, transaction=TRUE, temporary=FALSE, row.names=FALSE, field.types=NULL, ...) {
 
   check_flag(overwrite)
   check_flag(append)
   check_flag(temporary)
   check_flag(csvdump)
-  check_flag(int64)
 
   if (!missing(transaction)) {
     .Deprecated("Setting parameter transaction to dbWriteTable is deprecated.")
@@ -547,7 +559,7 @@ setMethod("dbWriteTable", signature(conn="MonetDBConnection", name = "character"
   }
 
   value <- sqlRownamesToColumn(value, row.names)
-  
+  int64 <- conn@connenv$int64
   if (!dbExistsTable(conn, qname)) {
     fts <- sapply(value, dbDataType, dbObj=conn, int64=int64)
     if (!is.null(field.types)) {

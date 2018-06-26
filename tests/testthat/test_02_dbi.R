@@ -454,25 +454,30 @@ test_that("both numeric and integer dates can be written", {
 
 
 test_that("integer64 works when requested", {
-	dbBegin(con)
-
 	require("bit64")
 	a <- data.frame(a=as.integer64(c(42, NA, 4294967294)))
 
-	dbWriteTable(con, tname, a, int64=T)
-	expect_true(dbExistsTable(con, tname))
-	res <- dbGetQuery(con, sprintf("SELECT * FROM %s", tname), int64=T)
+	con2 <- dbConnect(MonetDBLite::MonetDBLite(), dbfolder, bigint="integer64")
+	dbBegin(con2)
+	dbWriteTable(con2, tname, a)
+	expect_true(dbExistsTable(con2, tname))
+	res <- dbGetQuery(con2, sprintf("SELECT * FROM %s", tname))
 	expect_equal(res$a, a$a)
-	dbRemoveTable(con, tname)
+	dbRemoveTable(con2, tname)
+	dbRollback(con2)
+	expect_false(dbExistsTable(con2, tname))
+	dbDisconnect(con2)
 
-	dbWriteTable(con, tname, a, int64=F)
-	expect_true(dbExistsTable(con, tname))
-	res <- dbGetQuery(con, sprintf("SELECT * FROM %s", tname), int64=F)
+	con3 <- dbConnect(MonetDBLite::MonetDBLite(), dbfolder, bigint="numeric")
+	dbBegin(con3)
+	dbWriteTable(con3, tname, a)
+	expect_true(dbExistsTable(con3, tname))
+	res <- dbGetQuery(con3, sprintf("SELECT * FROM %s", tname))
 	expect_equal(res$a, as.numeric(a$a))
-	dbRemoveTable(con, tname)
-
-	dbRollback(con)
-	expect_false(dbExistsTable(con, tname))
+	dbRemoveTable(con3, tname)
+	dbRollback(con3)
+	expect_false(dbExistsTable(con3, tname))
+	dbDisconnect(con3)
 })
 
 # TODO: write into decimal col?
