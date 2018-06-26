@@ -45,9 +45,6 @@
 /* Directory separator */
 #define DIR_SEP_STR "/"
 
-#define LLFMT "%"PRId64
-#define ULLFMT "%"PRIu64
-
 #else
 
 /* Directory separator */
@@ -55,9 +52,6 @@
 
 /* Directory separator */
 #define DIR_SEP_STR "\\"
-
-#define LLFMT "%I64d"
-#define ULLFMT "%I64u"
 
 #endif
 

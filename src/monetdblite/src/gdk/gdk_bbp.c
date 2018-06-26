@@ -1455,6 +1455,8 @@ BBPheader(FILE *fp)
 	if (fgets(buf, sizeof(buf), fp) == NULL) {
 		GDKfatal("BBPinit: short BBP");
 	}
+	ATOMIC_SET(BBPsize, 1, BBPsizeLock);
+	BBPdirty(1);
 	/* when removing GDKLIBRARY_TALIGN, also remove the strstr
 	 * call and just sscanf from buf */
 	if ((s = strstr(buf, "BBPsize")) != NULL) {
@@ -1591,11 +1593,12 @@ BBPinit(void)
 	/* scan the BBP.dir to obtain current size */
 	BBPlimit = 0;
 	memset(BBP, 0, sizeof(BBP));
-	ATOMIC_SET(BBPsize, 1, BBPsizeLock);
-	BBPdirty(1);
 
 	if (!GDKinmemory()) {
 		bbpversion = BBPheader(fp);
+	} else {
+		ATOMIC_SET(BBPsize, 1, BBPsizeLock);
+		BBPdirty(1);
 	}
 	BBPextend(0, FALSE);		/* allocate BBP records */
 	ATOMIC_SET(BBPsize, 1, BBPsizeLock);
@@ -1739,7 +1742,7 @@ static inline int
 heap_entry(FILE *fp, BAT *b)
 {
 	return fprintf(fp, " %s %d %d %d " BUNFMT " " BUNFMT " " BUNFMT " "
-		       BUNFMT " " OIDFMT " "ULLFMT" "ULLFMT" %d",
+		       BUNFMT " " OIDFMT " %zu %zu %d",
 		       b->ttype >= 0 ? BATatoms[b->ttype].name : ATOMunknown_name(b->ttype),
 		       b->twidth,
 		       b->tvarsized | (b->tvheap ? b->tvheap->hashash << 1 : 0),
@@ -1754,8 +1757,8 @@ heap_entry(FILE *fp, BAT *b)
 		       b->tnosorted,
 		       b->tnorevsorted,
 		       b->tseqbase,
-		       (uint64_t) b->theap.free,
-			   (uint64_t) b->theap.size,
+		       b->theap.free,
+		       b->theap.size,
 		       (int) b->theap.newstorage);
 }
 
@@ -1764,8 +1767,8 @@ vheap_entry(FILE *fp, Heap *h)
 {
 	if (h == NULL)
 		return 0;
-	return fprintf(fp, " "ULLFMT" "ULLFMT" %d",
-			(uint64_t) h->free, (uint64_t) h->size, (int) h->newstorage);
+	return fprintf(fp, " %zu %zu %d",
+		       h->free, h->size, (int) h->newstorage);
 }
 
 static gdk_return
@@ -1785,10 +1788,10 @@ new_bbpentry(FILE *fp, bat i, const char *prefix)
 	}
 #endif
 
-	if (fprintf(fp, "%s"ULLFMT" %d %s %s %d " BUNFMT " "
+	if (fprintf(fp, "%s%zd %d %s %s %d " BUNFMT " "
 		    BUNFMT " " OIDFMT, prefix,
 		    /* BAT info */
-		    (uint64_t) i,
+		    (ssize_t) i,
 		    BBP_status(i) & BBPPERSISTENT,
 		    BBP_logical(i),
 		    BBP_physical(i),
