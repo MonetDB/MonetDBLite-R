@@ -16,11 +16,6 @@ clone_script:
 install:
   - ps: Bootstrap
 
-branches:
-  only:
-    - master
-    - mar
-
 environment:
 #  global:
 #    WARNINGS_ARE_ERRORS: 1
