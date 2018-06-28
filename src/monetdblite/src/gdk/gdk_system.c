@@ -54,89 +54,10 @@ ATOMIC_TYPE volatile GDKlocksleepcnt;
 MT_Lock * volatile GDKlocklist = 0;
 ATOMIC_FLAG volatile GDKlocklistlock = ATOMIC_FLAG_INIT;
 
-/* merge sort of linked list */
-static MT_Lock *
-sortlocklist(MT_Lock *l)
-{
-	MT_Lock *r, *t, *ll = NULL;
-
-	if (l == NULL || l->next == NULL) {
-		/* list is trivially sorted (0 or 1 element) */
-		return l;
-	}
-	/* break list into two (almost) equal pieces:
-	* l is start of "left" list, r of "right" list, ll last
-	* element of "left" list */
-	for (t = r = l; t && t->next; t = t->next->next) {
-		ll = r;
-		r = r->next;
-	}
-	ll->next = NULL;	/* break list into two */
-	/* recursively sort both sublists */
-	l = sortlocklist(l);
-	r = sortlocklist(r);
-	/* merge
-	 * t is new list, ll is last element of new list, l and r are
-	 * start of unprocessed part of left and right lists */
-	t = ll = NULL;
-	while (l && r) {
-		if (l->sleep < r->sleep ||
-		    (l->sleep == r->sleep &&
-		     l->contention < r->contention) ||
-		    (l->sleep == r->sleep &&
-		     l->contention == r->contention &&
-		     l->count <= r->count)) {
-			/* l is smaller */
-			if (ll == NULL) {
-				assert(t == NULL);
-				t = ll = l;
-			} else {
-				ll->next = l;
-				ll = ll->next;
-			}
-			l = l->next;
-		} else {
-			/* r is smaller */
-			if (ll == NULL) {
-				assert(t == NULL);
-				t = ll = r;
-			} else {
-				ll->next = r;
-				ll = ll->next;
-			}
-			r = r->next;
-		}
-	}
-	/* append rest of remaining list */
-	ll->next = l ? l : r;
-	return t;
-}
-
 void
 GDKlockstatistics(int what)
 {
-	MT_Lock *l;
-
-	if (ATOMIC_TAS(GDKlocklistlock, dummy) != 0) {
-		fprintf(stderr, "#WARNING: GDKlocklistlock is set, so cannot access lock list\n");
-		return;
-	}
-	GDKlocklist = sortlocklist(GDKlocklist);
-	fprintf(stderr, "# lock name\tcount\tcontention\tsleep\tlocked\t(un)locker\n");
-	for (l = GDKlocklist; l; l = l->next)
-		if (what == 0 ||
-		    (what == 1 && l->count) ||
-		    (what == 2 && l->contention) ||
-		    (what == 3 && l->lock))
-			fprintf(stderr, "# %-18s\t%zu\t%zu\t%zu\t%s\t%s\n",
-				l->name ? l->name : "unknown",
-				l->count, l->contention, l->sleep,
-				l->lock ? "locked" : "",
-				l->locker ? l->locker : "");
-	fprintf(stderr, "#total lock count %zu\n", (size_t) GDKlockcnt);
-	fprintf(stderr, "#lock contention  %zu\n", (size_t) GDKlockcontentioncnt);
-	fprintf(stderr, "#lock sleep count %zu\n", (size_t) GDKlocksleepcnt);
-	ATOMIC_CLEAR(GDKlocklistlock, dummy);
+	(void) what;
 }
 #endif
 

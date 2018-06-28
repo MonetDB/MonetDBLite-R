@@ -173,12 +173,12 @@ OPTmitosisImplementation(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPtr p)
 
 #ifdef DEBUG_OPT_MITOSIS
 	fprintf(stderr, "#opt_mitosis: target is %s.%s "
-							   " with " BUNFMT " rows of size %d into %zu"
+							   " with " BUNFMT " rows of size %d into %"PRIu64""
 								" rows/piece %d threads %d pieces"
 								" fixed parts %d fixed size %d\n",
 				 getVarConstant(mb, getArg(target, 2)).val.sval,
 				 getVarConstant(mb, getArg(target, 3)).val.sval,
-				 rowcnt, row_size, m, threads, pieces, mito_parts, mito_size);
+				 rowcnt, row_size, (uint64_t) m, threads, pieces, mito_parts, mito_size);
 #endif
 	if (pieces <= 1)
 		return 0;
