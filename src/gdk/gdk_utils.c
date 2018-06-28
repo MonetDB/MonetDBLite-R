@@ -213,19 +213,6 @@ GDKlog(FILE *lockFile, const char *format, ...)
 	fflush(lockFile);
 }
 
-/*
- * @+ Interrupt handling
- * The current version simply catches signals and prints a warning.
- * It should be extended to cope with the specifics of the interrupt
- * received.
- */
-#if 0				/* these are unused */
-static void
-BATSIGignore(int nr)
-{
-	GDKsyserror("! ERROR signal %d caught by thread %zu\n", nr, (size_t) MT_getpid());
-}
-#endif
 
 
 /* memory thresholds; these values some "sane" constants only, really
@@ -437,27 +424,27 @@ GDKinit(str dbpath)
 		}
 	}
 	if (GDKgetenv("gdk_vm_maxsize") == NULL) {
-		snprintf(buf, sizeof(buf), "%zu", GDK_vm_maxsize);
+		snprintf(buf, sizeof(buf), "%"PRIu64"", (uint64_t) GDK_vm_maxsize);
 		if (GDKsetenv("gdk_vm_maxsize", buf) != GDK_SUCCEED)
 			GDKfatal("GDKinit: GDKsetenv failed");
 	}
 	if (GDKgetenv("gdk_mem_maxsize") == NULL) {
-		snprintf(buf, sizeof(buf), "%zu", GDK_mem_maxsize);
+		snprintf(buf, sizeof(buf), "%"PRIu64"", (uint64_t) GDK_mem_maxsize);
 		if (GDKsetenv("gdk_mem_maxsize", buf) != GDK_SUCCEED)
 			GDKfatal("GDKinit: GDKsetenv failed");
 	}
 	if (GDKgetenv("gdk_mmap_minsize_persistent") == NULL) {
-		snprintf(buf, sizeof(buf), "%zu", GDK_mmap_minsize_persistent);
+		snprintf(buf, sizeof(buf), "%"PRIu64"", (uint64_t) GDK_mmap_minsize_persistent);
 		if (GDKsetenv("gdk_mmap_minsize_persistent", buf) != GDK_SUCCEED)
 			GDKfatal("GDKinit: GDKsetenv failed");
 	}
 	if (GDKgetenv("gdk_mmap_minsize_transient") == NULL) {
-		snprintf(buf, sizeof(buf), "%zu", GDK_mmap_minsize_transient);
+		snprintf(buf, sizeof(buf), "%"PRIu64"", (uint64_t) GDK_mmap_minsize_transient);
 		if (GDKsetenv("gdk_mmap_minsize_transient", buf) != GDK_SUCCEED)
 			GDKfatal("GDKinit: GDKsetenv failed");
 	}
 	if (GDKgetenv("gdk_mmap_pagesize") == NULL) {
-		snprintf(buf, sizeof(buf), "%zu", GDK_mmap_pagesize);
+		snprintf(buf, sizeof(buf), "%"PRIu64"", (uint64_t) GDK_mmap_pagesize);
 		if (GDKsetenv("gdk_mmap_pagesize", buf) != GDK_SUCCEED)
 			GDKfatal("GDKinit: GDKsetenv failed");
 	}
@@ -1573,7 +1560,7 @@ GDKmalloc(size_t size)
 {
 	void *p = malloc(size);
 	if (p == NULL)
-		GDKerror("GDKmalloc: failed for %zu bytes", size);
+		GDKerror("GDKmalloc: failed for %"PRIu64" bytes", (uint64_t) size);
 	return p;
 }
 
@@ -1589,7 +1576,7 @@ GDKzalloc(size_t size)
 {
 	void *ptr = calloc(size, 1);
 	if (ptr == NULL)
-		GDKerror("GDKzalloc: failed for %zu bytes", size);
+		GDKerror("GDKzalloc: failed for %"PRIu64" bytes", (uint64_t) size);
 	return ptr;
 }
 
@@ -1598,7 +1585,7 @@ GDKrealloc(void *ptr, size_t size)
 {
 	void *p = realloc(ptr, size);
 	if (p == NULL)
-		GDKerror("GDKrealloc: failed for %zu bytes", size);
+		GDKerror("GDKrealloc: failed for %"PRIu64" bytes", (uint64_t) size);
 	return p;
 }
 

@@ -1235,8 +1235,8 @@ SQLproducer(void *p)
 	thr = THRnew("SQLproducer");
 
 #ifdef _DEBUG_TABLET_CNTRL
-	mnstr_printf(GDKout, "#SQLproducer started size %zu len %zu\n",
-				 task->b->size, task->b->len);
+	mnstr_printf(GDKout, "#SQLproducer started size %"PRIu64" len %"PRIu64"\n",
+				 (uint64_t) task->b->size, (uint64_t) task->b->len);
 #endif
 	base = end = s = task->input[cur];
 	*s = 0;
@@ -1249,8 +1249,8 @@ SQLproducer(void *p)
 		ateof[cur] = tablet_read_more(task->b, task->out, task->b->size) == EOF;
 #ifdef _DEBUG_TABLET_CNTRL
 		if (ateof[cur] == 0)
-			mnstr_printf(GDKout, "#read %zu bytes pos = %zu eof=%d offset=" LLFMT " \n",
-						 task->b->len, task->b->pos, task->b->eof,
+			mnstr_printf(GDKout, "#read %"PRIu64" bytes pos = %"PRIu64" eof=%d offset=" LLFMT " \n",
+						(uint64_t) task->b->len, (uint64_t) task->b->pos, task->b->eof,
 						 (lng) (s - task->input[cur]));
 #endif
 		// we may be reading from standard input and may be out of input
@@ -1522,7 +1522,7 @@ SQLproducer(void *p)
 		bufcnt[cur] = cnt;
 #ifdef _DEBUG_TABLET_CNTRL
 		if (ateof[cur] == 0)
-			mnstr_printf(GDKout, "#shuffle %zu: %.63s\n", strlen(s), s);
+			mnstr_printf(GDKout, "#shuffle %"PRIu64": %.63s\n", (uint64_t) strlen(s), s);
 #endif
 		/* move the non-parsed correct row data to the head of the next buffer */
 		s = task->input[cur];

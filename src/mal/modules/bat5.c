@@ -67,7 +67,7 @@ local_itoa(ssize_t i)
 {
 	static char buf[32];
 
-	snprintf(buf, 32, "%zd", i);
+	snprintf(buf, 32, "%"PRId64, (int64_t) i);
 	return buf;
 }
 static char *
@@ -75,7 +75,7 @@ local_utoa(size_t i)
 {
 	static char buf[32];
 
-	snprintf(buf, 32, "%zu", i);
+	snprintf(buf, 32, "%"PRIu64, (uint64_t) i);
 	return buf;
 }
 

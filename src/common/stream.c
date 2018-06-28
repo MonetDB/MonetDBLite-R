@@ -338,8 +338,8 @@ mnstr_read(stream *restrict s, void *restrict buf, size_t elmsize, size_t cnt)
 	if (s == NULL || buf == NULL)
 		return -1;
 #ifdef STREAM_DEBUG
-	fprintf(stderr, "read %s %zu %zu\n",
-		s->name ? s->name : "<unnamed>", elmsize, cnt);
+	fprintf(stderr, "read %s %"PRIu64" %"PRIu64"\n",
+		s->name ? s->name : "<unnamed>", (uint64_t) elmsize, (uint64_t) cnt);
 #endif
 	assert(s->access == ST_READ);
 	if (s->errnr)
@@ -358,8 +358,8 @@ mnstr_readline(stream *restrict s, void *restrict buf, size_t maxcnt)
 	if (s == NULL || buf == NULL)
 		return -1;
 #ifdef STREAM_DEBUG
-	fprintf(stderr, "readline %s %zu\n",
-		s->name ? s->name : "<unnamed>", maxcnt);
+	fprintf(stderr, "readline %s %"PRIu64"\n",
+		s->name ? s->name : "<unnamed>", (uint64_t) maxcnt);
 #endif
 	assert(s->access == ST_READ);
 	if (s->errnr)
@@ -416,8 +416,8 @@ mnstr_write(stream *restrict s, const void *restrict buf, size_t elmsize, size_t
 	if (s == NULL || buf == NULL)
 		return -1;
 #ifdef STREAM_DEBUG
-	fprintf(stderr, "write %s %zu %zu\n",
-		s->name ? s->name : "<unnamed>", elmsize, cnt);
+	fprintf(stderr, "write %s %"PRIu64" %"PRIu64"\n",
+		s->name ? s->name : "<unnamed>", (uint64_t) elmsize, (uint64_t) cnt);
 #endif
 	assert(s->access == ST_WRITE);
 	if (s->errnr)

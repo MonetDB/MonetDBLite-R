@@ -517,11 +517,7 @@ typedef oid var_t;		/* type used for heap index of var-sized BAT */
 typedef oid BUN;		/* BUN position */
 #define SIZEOF_BUN	SIZEOF_OID
 #define BUNFMT		OIDFMT
-/* alternatively:
-typedef size_t BUN;
-#define SIZEOF_BUN	SIZEOF_SIZE_T
-#define BUNFMT		"%zu"
-*/
+
 #if SIZEOF_BUN == SIZEOF_INT
 #define BUN_NONE ((BUN) INT_MAX)
 #else
