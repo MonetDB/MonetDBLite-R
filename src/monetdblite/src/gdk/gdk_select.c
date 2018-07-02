@@ -433,7 +433,7 @@ BAT_hashselect(BAT *b, BAT *s, BAT *bn, const void *tl, BUN maximum)
 				v = src[o-off];				\
 				assert(cnt < BATcapacity(bn));		\
 				dst[cnt] = o;				\
-				cnt += (TEST);				\
+				cnt += (TEST) != 0;				\
 				p++;					\
 			}						\
 		}							\
