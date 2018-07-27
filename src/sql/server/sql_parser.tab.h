@@ -88,169 +88,169 @@
      LOCALTIMESTAMP = 304,
      LOCALTIME = 305,
      LEX_ERROR = 306,
-     GEOMETRY = 307,
-     GEOMETRYSUBTYPE = 308,
-     GEOMETRYA = 309,
-     USER = 310,
-     CURRENT_USER = 311,
-     SESSION_USER = 312,
-     LOCAL = 313,
-     LOCKED = 314,
-     BEST = 315,
-     EFFORT = 316,
-     CURRENT_ROLE = 317,
-     sqlSESSION = 318,
-     sqlDELETE = 319,
-     UPDATE = 320,
-     SELECT = 321,
-     INSERT = 322,
-     LATERAL = 323,
-     LEFT = 324,
-     RIGHT = 325,
-     FULL = 326,
-     OUTER = 327,
-     NATURAL = 328,
-     CROSS = 329,
-     JOIN = 330,
-     INNER = 331,
-     COMMIT = 332,
-     ROLLBACK = 333,
-     SAVEPOINT = 334,
-     RELEASE = 335,
-     WORK = 336,
-     CHAIN = 337,
-     NO = 338,
-     PRESERVE = 339,
-     ROWS = 340,
-     START = 341,
-     TRANSACTION = 342,
-     READ = 343,
-     WRITE = 344,
-     ONLY = 345,
-     ISOLATION = 346,
-     LEVEL = 347,
-     UNCOMMITTED = 348,
-     COMMITTED = 349,
-     sqlREPEATABLE = 350,
-     SERIALIZABLE = 351,
-     DIAGNOSTICS = 352,
-     sqlSIZE = 353,
-     STORAGE = 354,
-     ASYMMETRIC = 355,
-     SYMMETRIC = 356,
-     ORDER = 357,
-     ORDERED = 358,
-     BY = 359,
-     IMPRINTS = 360,
-     EXISTS = 361,
-     ESCAPE = 362,
-     HAVING = 363,
-     sqlGROUP = 364,
-     sqlNULL = 365,
-     FROM = 366,
-     FOR = 367,
-     MATCH = 368,
-     EXTRACT = 369,
-     SEQUENCE = 370,
-     INCREMENT = 371,
-     RESTART = 372,
-     CONTINUE = 373,
-     MAXVALUE = 374,
-     MINVALUE = 375,
-     CYCLE = 376,
-     NOMAXVALUE = 377,
-     NOMINVALUE = 378,
-     NOCYCLE = 379,
-     NEXT = 380,
-     VALUE = 381,
-     CACHE = 382,
-     GENERATED = 383,
-     ALWAYS = 384,
-     IDENTITY = 385,
-     SERIAL = 386,
-     BIGSERIAL = 387,
-     AUTO_INCREMENT = 388,
-     SCOLON = 389,
-     AT = 390,
-     XMLCOMMENT = 391,
-     XMLCONCAT = 392,
-     XMLDOCUMENT = 393,
-     XMLELEMENT = 394,
-     XMLATTRIBUTES = 395,
-     XMLFOREST = 396,
-     XMLPARSE = 397,
-     STRIP = 398,
-     WHITESPACE = 399,
-     XMLPI = 400,
-     XMLQUERY = 401,
-     PASSING = 402,
-     XMLTEXT = 403,
-     NIL = 404,
-     REF = 405,
-     ABSENT = 406,
-     EMPTY = 407,
-     DOCUMENT = 408,
-     ELEMENT = 409,
-     CONTENT = 410,
-     XMLNAMESPACES = 411,
-     NAMESPACE = 412,
-     XMLVALIDATE = 413,
-     RETURNING = 414,
-     LOCATION = 415,
-     ID = 416,
-     ACCORDING = 417,
-     XMLSCHEMA = 418,
-     URI = 419,
-     XMLAGG = 420,
-     FILTER = 421,
-     UNIONJOIN = 422,
-     CORRESPONDING = 423,
-     INTERSECT = 424,
-     EXCEPT = 425,
-     UNION = 426,
-     DATA = 427,
-     WITH = 428,
-     FILTER_FUNC = 429,
-     NOT = 430,
-     SOME = 431,
-     OR = 432,
-     ILIKE = 433,
-     NOT_ILIKE = 434,
-     LIKE = 435,
-     NOT_LIKE = 436,
-     sqlIN = 437,
-     NOT_IN = 438,
-     BETWEEN = 439,
-     NOT_BETWEEN = 440,
-     ANY = 441,
-     ALL = 442,
-     AND = 443,
-     COMPARISON = 444,
-     SPLIT_PART = 445,
-     POSITION = 446,
-     SUBSTRING = 447,
-     CONCATSTRING = 448,
-     RIGHT_SHIFT_ASSIGN = 449,
-     LEFT_SHIFT_ASSIGN = 450,
-     RIGHT_SHIFT = 451,
-     LEFT_SHIFT = 452,
-     UMINUS = 453,
-     GEOM_OVERLAP_OR_LEFT = 454,
-     GEOM_OVERLAP_OR_BELOW = 455,
-     GEOM_OVERLAP_OR_ABOVE = 456,
-     GEOM_OVERLAP = 457,
-     GEOM_MBR_EQUAL = 458,
-     GEOM_DIST = 459,
-     GEOM_ABOVE = 460,
-     GEOM_BELOW = 461,
-     GEOM_OVERLAP_OR_RIGHT = 462,
-     TEMP = 463,
-     TEMPORARY = 464,
-     STREAM = 465,
-     MERGE = 466,
-     REMOTE = 467,
-     REPLICA = 468,
-     ASC = 469,
+     sqlASC = 307,
+     GEOMETRY = 308,
+     GEOMETRYSUBTYPE = 309,
+     GEOMETRYA = 310,
+     USER = 311,
+     CURRENT_USER = 312,
+     SESSION_USER = 313,
+     LOCAL = 314,
+     LOCKED = 315,
+     BEST = 316,
+     EFFORT = 317,
+     CURRENT_ROLE = 318,
+     sqlSESSION = 319,
+     sqlDELETE = 320,
+     UPDATE = 321,
+     SELECT = 322,
+     INSERT = 323,
+     LATERAL = 324,
+     LEFT = 325,
+     RIGHT = 326,
+     FULL = 327,
+     OUTER = 328,
+     NATURAL = 329,
+     CROSS = 330,
+     JOIN = 331,
+     INNER = 332,
+     COMMIT = 333,
+     ROLLBACK = 334,
+     SAVEPOINT = 335,
+     RELEASE = 336,
+     WORK = 337,
+     CHAIN = 338,
+     NO = 339,
+     PRESERVE = 340,
+     ROWS = 341,
+     START = 342,
+     TRANSACTION = 343,
+     READ = 344,
+     WRITE = 345,
+     ONLY = 346,
+     ISOLATION = 347,
+     LEVEL = 348,
+     UNCOMMITTED = 349,
+     COMMITTED = 350,
+     sqlREPEATABLE = 351,
+     SERIALIZABLE = 352,
+     DIAGNOSTICS = 353,
+     sqlSIZE = 354,
+     STORAGE = 355,
+     ASYMMETRIC = 356,
+     SYMMETRIC = 357,
+     ORDER = 358,
+     ORDERED = 359,
+     BY = 360,
+     IMPRINTS = 361,
+     EXISTS = 362,
+     ESCAPE = 363,
+     HAVING = 364,
+     sqlGROUP = 365,
+     sqlNULL = 366,
+     FROM = 367,
+     FOR = 368,
+     MATCH = 369,
+     EXTRACT = 370,
+     SEQUENCE = 371,
+     INCREMENT = 372,
+     RESTART = 373,
+     CONTINUE = 374,
+     MAXVALUE = 375,
+     MINVALUE = 376,
+     CYCLE = 377,
+     NOMAXVALUE = 378,
+     NOMINVALUE = 379,
+     NOCYCLE = 380,
+     NEXT = 381,
+     VALUE = 382,
+     CACHE = 383,
+     GENERATED = 384,
+     ALWAYS = 385,
+     IDENTITY = 386,
+     SERIAL = 387,
+     BIGSERIAL = 388,
+     AUTO_INCREMENT = 389,
+     SCOLON = 390,
+     AT = 391,
+     XMLCOMMENT = 392,
+     XMLCONCAT = 393,
+     XMLDOCUMENT = 394,
+     XMLELEMENT = 395,
+     XMLATTRIBUTES = 396,
+     XMLFOREST = 397,
+     XMLPARSE = 398,
+     STRIP = 399,
+     WHITESPACE = 400,
+     XMLPI = 401,
+     XMLQUERY = 402,
+     PASSING = 403,
+     XMLTEXT = 404,
+     NIL = 405,
+     REF = 406,
+     ABSENT = 407,
+     EMPTY = 408,
+     DOCUMENT = 409,
+     ELEMENT = 410,
+     CONTENT = 411,
+     XMLNAMESPACES = 412,
+     NAMESPACE = 413,
+     XMLVALIDATE = 414,
+     RETURNING = 415,
+     LOCATION = 416,
+     ID = 417,
+     ACCORDING = 418,
+     XMLSCHEMA = 419,
+     URI = 420,
+     XMLAGG = 421,
+     FILTER = 422,
+     UNIONJOIN = 423,
+     CORRESPONDING = 424,
+     INTERSECT = 425,
+     EXCEPT = 426,
+     UNION = 427,
+     DATA = 428,
+     WITH = 429,
+     FILTER_FUNC = 430,
+     NOT = 431,
+     SOME = 432,
+     OR = 433,
+     ILIKE = 434,
+     NOT_ILIKE = 435,
+     LIKE = 436,
+     NOT_LIKE = 437,
+     sqlIN = 438,
+     NOT_IN = 439,
+     BETWEEN = 440,
+     NOT_BETWEEN = 441,
+     ANY = 442,
+     ALL = 443,
+     AND = 444,
+     COMPARISON = 445,
+     SPLIT_PART = 446,
+     POSITION = 447,
+     SUBSTRING = 448,
+     CONCATSTRING = 449,
+     RIGHT_SHIFT_ASSIGN = 450,
+     LEFT_SHIFT_ASSIGN = 451,
+     RIGHT_SHIFT = 452,
+     LEFT_SHIFT = 453,
+     UMINUS = 454,
+     GEOM_OVERLAP_OR_LEFT = 455,
+     GEOM_OVERLAP_OR_BELOW = 456,
+     GEOM_OVERLAP_OR_ABOVE = 457,
+     GEOM_OVERLAP = 458,
+     GEOM_MBR_EQUAL = 459,
+     GEOM_DIST = 460,
+     GEOM_ABOVE = 461,
+     GEOM_BELOW = 462,
+     GEOM_OVERLAP_OR_RIGHT = 463,
+     TEMP = 464,
+     TEMPORARY = 465,
+     STREAM = 466,
+     MERGE = 467,
+     REMOTE = 468,
+     REPLICA = 469,
      DESC = 470,
      AUTHORIZATION = 471,
      CHECK = 472,
@@ -425,169 +425,169 @@
 #define LOCALTIMESTAMP 304
 #define LOCALTIME 305
 #define LEX_ERROR 306
-#define GEOMETRY 307
-#define GEOMETRYSUBTYPE 308
-#define GEOMETRYA 309
-#define USER 310
-#define CURRENT_USER 311
-#define SESSION_USER 312
-#define LOCAL 313
-#define LOCKED 314
-#define BEST 315
-#define EFFORT 316
-#define CURRENT_ROLE 317
-#define sqlSESSION 318
-#define sqlDELETE 319
-#define UPDATE 320
-#define SELECT 321
-#define INSERT 322
-#define LATERAL 323
-#define LEFT 324
-#define RIGHT 325
-#define FULL 326
-#define OUTER 327
-#define NATURAL 328
-#define CROSS 329
-#define JOIN 330
-#define INNER 331
-#define COMMIT 332
-#define ROLLBACK 333
-#define SAVEPOINT 334
-#define RELEASE 335
-#define WORK 336
-#define CHAIN 337
-#define NO 338
-#define PRESERVE 339
-#define ROWS 340
-#define START 341
-#define TRANSACTION 342
-#define READ 343
-#define WRITE 344
-#define ONLY 345
-#define ISOLATION 346
-#define LEVEL 347
-#define UNCOMMITTED 348
-#define COMMITTED 349
-#define sqlREPEATABLE 350
-#define SERIALIZABLE 351
-#define DIAGNOSTICS 352
-#define sqlSIZE 353
-#define STORAGE 354
-#define ASYMMETRIC 355
-#define SYMMETRIC 356
-#define ORDER 357
-#define ORDERED 358
-#define BY 359
-#define IMPRINTS 360
-#define EXISTS 361
-#define ESCAPE 362
-#define HAVING 363
-#define sqlGROUP 364
-#define sqlNULL 365
-#define FROM 366
-#define FOR 367
-#define MATCH 368
-#define EXTRACT 369
-#define SEQUENCE 370
-#define INCREMENT 371
-#define RESTART 372
-#define CONTINUE 373
-#define MAXVALUE 374
-#define MINVALUE 375
-#define CYCLE 376
-#define NOMAXVALUE 377
-#define NOMINVALUE 378
-#define NOCYCLE 379
-#define NEXT 380
-#define VALUE 381
-#define CACHE 382
-#define GENERATED 383
-#define ALWAYS 384
-#define IDENTITY 385
-#define SERIAL 386
-#define BIGSERIAL 387
-#define AUTO_INCREMENT 388
-#define SCOLON 389
-#define AT 390
-#define XMLCOMMENT 391
-#define XMLCONCAT 392
-#define XMLDOCUMENT 393
-#define XMLELEMENT 394
-#define XMLATTRIBUTES 395
-#define XMLFOREST 396
-#define XMLPARSE 397
-#define STRIP 398
-#define WHITESPACE 399
-#define XMLPI 400
-#define XMLQUERY 401
-#define PASSING 402
-#define XMLTEXT 403
-#define NIL 404
-#define REF 405
-#define ABSENT 406
-#define EMPTY 407
-#define DOCUMENT 408
-#define ELEMENT 409
-#define CONTENT 410
-#define XMLNAMESPACES 411
-#define NAMESPACE 412
-#define XMLVALIDATE 413
-#define RETURNING 414
-#define LOCATION 415
-#define ID 416
-#define ACCORDING 417
-#define XMLSCHEMA 418
-#define URI 419
-#define XMLAGG 420
-#define FILTER 421
-#define UNIONJOIN 422
-#define CORRESPONDING 423
-#define INTERSECT 424
-#define EXCEPT 425
-#define UNION 426
-#define DATA 427
-#define WITH 428
-#define FILTER_FUNC 429
-#define NOT 430
-#define SOME 431
-#define OR 432
-#define ILIKE 433
-#define NOT_ILIKE 434
-#define LIKE 435
-#define NOT_LIKE 436
-#define sqlIN 437
-#define NOT_IN 438
-#define BETWEEN 439
-#define NOT_BETWEEN 440
-#define ANY 441
-#define ALL 442
-#define AND 443
-#define COMPARISON 444
-#define SPLIT_PART 445
-#define POSITION 446
-#define SUBSTRING 447
-#define CONCATSTRING 448
-#define RIGHT_SHIFT_ASSIGN 449
-#define LEFT_SHIFT_ASSIGN 450
-#define RIGHT_SHIFT 451
-#define LEFT_SHIFT 452
-#define UMINUS 453
-#define GEOM_OVERLAP_OR_LEFT 454
-#define GEOM_OVERLAP_OR_BELOW 455
-#define GEOM_OVERLAP_OR_ABOVE 456
-#define GEOM_OVERLAP 457
-#define GEOM_MBR_EQUAL 458
-#define GEOM_DIST 459
-#define GEOM_ABOVE 460
-#define GEOM_BELOW 461
-#define GEOM_OVERLAP_OR_RIGHT 462
-#define TEMP 463
-#define TEMPORARY 464
-#define STREAM 465
-#define MERGE 466
-#define REMOTE 467
-#define REPLICA 468
-#define ASC 469
+#define sqlASC 307
+#define GEOMETRY 308
+#define GEOMETRYSUBTYPE 309
+#define GEOMETRYA 310
+#define USER 311
+#define CURRENT_USER 312
+#define SESSION_USER 313
+#define LOCAL 314
+#define LOCKED 315
+#define BEST 316
+#define EFFORT 317
+#define CURRENT_ROLE 318
+#define sqlSESSION 319
+#define sqlDELETE 320
+#define UPDATE 321
+#define SELECT 322
+#define INSERT 323
+#define LATERAL 324
+#define LEFT 325
+#define RIGHT 326
+#define FULL 327
+#define OUTER 328
+#define NATURAL 329
+#define CROSS 330
+#define JOIN 331
+#define INNER 332
+#define COMMIT 333
+#define ROLLBACK 334
+#define SAVEPOINT 335
+#define RELEASE 336
+#define WORK 337
+#define CHAIN 338
+#define NO 339
+#define PRESERVE 340
+#define ROWS 341
+#define START 342
+#define TRANSACTION 343
+#define READ 344
+#define WRITE 345
+#define ONLY 346
+#define ISOLATION 347
+#define LEVEL 348
+#define UNCOMMITTED 349
+#define COMMITTED 350
+#define sqlREPEATABLE 351
+#define SERIALIZABLE 352
+#define DIAGNOSTICS 353
+#define sqlSIZE 354
+#define STORAGE 355
+#define ASYMMETRIC 356
+#define SYMMETRIC 357
+#define ORDER 358
+#define ORDERED 359
+#define BY 360
+#define IMPRINTS 361
+#define EXISTS 362
+#define ESCAPE 363
+#define HAVING 364
+#define sqlGROUP 365
+#define sqlNULL 366
+#define FROM 367
+#define FOR 368
+#define MATCH 369
+#define EXTRACT 370
+#define SEQUENCE 371
+#define INCREMENT 372
+#define RESTART 373
+#define CONTINUE 374
+#define MAXVALUE 375
+#define MINVALUE 376
+#define CYCLE 377
+#define NOMAXVALUE 378
+#define NOMINVALUE 379
+#define NOCYCLE 380
+#define NEXT 381
+#define VALUE 382
+#define CACHE 383
+#define GENERATED 384
+#define ALWAYS 385
+#define IDENTITY 386
+#define SERIAL 387
+#define BIGSERIAL 388
+#define AUTO_INCREMENT 389
+#define SCOLON 390
+#define AT 391
+#define XMLCOMMENT 392
+#define XMLCONCAT 393
+#define XMLDOCUMENT 394
+#define XMLELEMENT 395
+#define XMLATTRIBUTES 396
+#define XMLFOREST 397
+#define XMLPARSE 398
+#define STRIP 399
+#define WHITESPACE 400
+#define XMLPI 401
+#define XMLQUERY 402
+#define PASSING 403
+#define XMLTEXT 404
+#define NIL 405
+#define REF 406
+#define ABSENT 407
+#define EMPTY 408
+#define DOCUMENT 409
+#define ELEMENT 410
+#define CONTENT 411
+#define XMLNAMESPACES 412
+#define NAMESPACE 413
+#define XMLVALIDATE 414
+#define RETURNING 415
+#define LOCATION 416
+#define ID 417
+#define ACCORDING 418
+#define XMLSCHEMA 419
+#define URI 420
+#define XMLAGG 421
+#define FILTER 422
+#define UNIONJOIN 423
+#define CORRESPONDING 424
+#define INTERSECT 425
+#define EXCEPT 426
+#define UNION 427
+#define DATA 428
+#define WITH 429
+#define FILTER_FUNC 430
+#define NOT 431
+#define SOME 432
+#define OR 433
+#define ILIKE 434
+#define NOT_ILIKE 435
+#define LIKE 436
+#define NOT_LIKE 437
+#define sqlIN 438
+#define NOT_IN 439
+#define BETWEEN 440
+#define NOT_BETWEEN 441
+#define ANY 442
+#define ALL 443
+#define AND 444
+#define COMPARISON 445
+#define SPLIT_PART 446
+#define POSITION 447
+#define SUBSTRING 448
+#define CONCATSTRING 449
+#define RIGHT_SHIFT_ASSIGN 450
+#define LEFT_SHIFT_ASSIGN 451
+#define RIGHT_SHIFT 452
+#define LEFT_SHIFT 453
+#define UMINUS 454
+#define GEOM_OVERLAP_OR_LEFT 455
+#define GEOM_OVERLAP_OR_BELOW 456
+#define GEOM_OVERLAP_OR_ABOVE 457
+#define GEOM_OVERLAP 458
+#define GEOM_MBR_EQUAL 459
+#define GEOM_DIST 460
+#define GEOM_ABOVE 461
+#define GEOM_BELOW 462
+#define GEOM_OVERLAP_OR_RIGHT 463
+#define TEMP 464
+#define TEMPORARY 465
+#define STREAM 466
+#define MERGE 467
+#define REMOTE 468
+#define REPLICA 469
 #define DESC 470
 #define AUTHORIZATION 471
 #define CHECK 472
@@ -716,7 +716,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 110 "src/sql/server/sql_parser.y"
+#line 111 "src/sql/server/sql_parser.y"
 {
 	int		i_val,bval;
 	lng		l_val,operation;

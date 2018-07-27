@@ -119,6 +119,7 @@ embedded_export char* monetdb_set_autocommit(monetdb_connection conn, char val);
 embedded_export char* monetdb_query(monetdb_connection conn, char* query, char execute, monetdb_result** result, long *affected_rows, long* prepare_id);
 embedded_export monetdb_column* monetdb_result_fetch(monetdb_result* result, size_t column_index);
 embedded_export void* monetdb_result_fetch_rawcol(monetdb_result* result, size_t column_index); // actually a res_col
+embedded_export char* monetdb_clear_prepare(monetdb_connection conn, size_t id);
 
 embedded_export char* monetdb_append(monetdb_connection conn, const char* schema, const char* table, append_data *data, int ncols);
 embedded_export void  monetdb_cleanup_result(monetdb_connection conn, monetdb_result* result);

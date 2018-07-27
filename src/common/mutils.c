@@ -10,7 +10,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#ifndef NATIVE_WIN32
 #include <unistd.h>
+#else
+#include "fsync.h"
+#include <stdio.h>
+#endif
 #include <stdlib.h>
 #ifdef HAVE_STRINGS_H
 # include <strings.h>
@@ -24,21 +29,7 @@
 
 #ifdef NATIVE_WIN32
 
-#include <dirent.h>
 
-
-#include "fsync.c"
-
-/* Some definitions that we need to compile on Windows.
- * Note that Windows only runs on little endian architectures. */
-//typedef unsigned int u_int32_t;
-//typedef int int32_t;
-//#define BIG_ENDIAN	4321
-//#define LITTLE_ENDIAN	1234
-//#define BYTE_ORDER	LITTLE_ENDIAN
-
-
-#include <stdio.h>
 
 /* translate Windows error code (GetLastError()) to Unix-style error */
 int

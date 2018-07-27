@@ -931,7 +931,7 @@ rel_create_table(mvc *sql, sql_schema *ss, int temp, const char *sname, const ch
 
 	if (mvc_bind_table(sql, s, name)) {
 		if (if_not_exists) {
-			return NULL;
+			return rel_psm_block(sql->sa, new_exp_list(sql->sa));
 		} else {
 			char *cd = (temp == SQL_DECLARED_TABLE)?"DECLARE":"CREATE";
 			return sql_error(sql, 02, SQLSTATE(42S01) "%s TABLE: name '%s' already in use", cd, name);
@@ -1270,7 +1270,7 @@ rel_create_schema(mvc *sql, dlist *auth_name, dlist *schema_elements, int if_not
 			sql_error(sql, 02, SQLSTATE(3F000) "CREATE SCHEMA: name '%s' already in use", name);
 			return NULL;
 		} else {
-			return NULL;
+			return rel_psm_block(sql->sa, new_exp_list(sql->sa));
 		}
 	} else {
 		sql_schema *os = sql->session->schema;
@@ -1402,7 +1402,11 @@ sql_alter_table(mvc *sql, dlist *qname, symbol *te)
 			for (n = nt->columns.nelm; n; n = n->next) {
 				sql_column *c = n->data;
 				if (c->def) {
-					char *d = sql_message("select %s;", c->def);
+					char *d, *typestr = subtype2string2(&c->type);
+					if(!typestr)
+						return sql_error(sql, 02, SQLSTATE(HY001) MAL_MALLOC_FAIL);
+					d = sql_message("select cast(%s as %s);", c->def, typestr);
+					_DELETE(typestr);
 					e = rel_parse_val(sql, d, sql->emode);
 					_DELETE(d);
 				} else {

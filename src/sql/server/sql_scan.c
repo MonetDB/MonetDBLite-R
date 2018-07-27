@@ -18,7 +18,9 @@
 #include "sql_parser.h"		/* for sql_error() */
 
 #include "stream.h"
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 #include <ctype.h>
 #include "sql_keyword.h"
@@ -119,7 +121,7 @@ scanner_init_keywords(void)
 	failed += keywords_insert("EFFORT", EFFORT);
 
 	failed += keywords_insert("AS", AS);
-	failed += keywords_insert("ASC", ASC);
+	failed += keywords_insert("ASC", sqlASC);
 	failed += keywords_insert("AUTHORIZATION", AUTHORIZATION);
 	failed += keywords_insert("BETWEEN", BETWEEN);
 	failed += keywords_insert("SYMMETRIC", SYMMETRIC);
