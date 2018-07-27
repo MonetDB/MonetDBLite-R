@@ -21,7 +21,13 @@
  * required for proper conversion on different byte order platforms.
  */
 
+#if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
+#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
+#endif
+
+#ifndef NATIVE_WIN32
 #include <unistd.h>
+#endif
 #include <ctype.h>
 #include <stdio.h>
 

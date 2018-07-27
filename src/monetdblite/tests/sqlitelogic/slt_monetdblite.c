@@ -1,6 +1,8 @@
 #include <ctype.h>
 #include <stdio.h>
+#ifndef _MSC_VER
 #include <strings.h>
+#endif
 #include "embedded.h"
 
 

@@ -5,14 +5,9 @@
 #ifndef _SEEN_MONETDB_CONFIG_H
 #define _SEEN_MONETDB_CONFIG_H 1
 
-
-#define SIZEOF_INT __SIZEOF_INT__
-#define SIZEOF_LONG __SIZEOF_LONG__
-#define SIZEOF_LONG_LONG __SIZEOF_LONG_LONG__
-#ifndef SIZEOF_SIZE_T
-#define SIZEOF_SIZE_T __SIZEOF_SIZE_T__
+#ifdef _MSC_VER
+#define NATIVE_WIN32
 #endif
-#define SIZEOF_VOID_P __SIZEOF_POINTER__
 
 
 #ifdef __MINGW32__
@@ -24,7 +19,39 @@
 #ifdef NATIVE_WIN32
 #include <windows.h>
 #undef ERROR
+
+
 #endif
+
+#ifdef _MSC_VER
+#define strcasecmp _stricmp 
+#define strncasecmp _strnicmp 
+#define ftruncate _chsize
+
+#define __SIZEOF_INT__ 4
+#define __SIZEOF_LONG__ 4
+#define __SIZEOF_LONG_LONG__ 8
+
+#ifndef _WIN64
+typedef long ssize_t;
+#define __SIZEOF_SIZE_T__ 4
+#define __SIZEOF_POINTER__ 4 
+#else
+typedef long long ssize_t;
+#define __SIZEOF_SIZE_T__ 8
+#define __SIZEOF_POINTER__ 8 
+#endif
+
+#endif
+
+#define SIZEOF_INT __SIZEOF_INT__
+#define SIZEOF_LONG __SIZEOF_LONG__
+#define SIZEOF_LONG_LONG __SIZEOF_LONG_LONG__
+#ifndef SIZEOF_SIZE_T
+#define SIZEOF_SIZE_T __SIZEOF_SIZE_T__
+#endif
+#define SIZEOF_VOID_P __SIZEOF_POINTER__
+
 
 
 ///* Define if building universal (internal helper macro) */
@@ -861,6 +888,27 @@ typedef lng ptrdiff_t;
 
 #define PROMPT1		"\001\001\n"	/* prompt: ready for new query */
 #define PROMPT2		"\001\002\n"	/* prompt: more data needed */
+
+// unset a bunch of stuff unsupported by VS
+#ifdef _MSC_VER
+#undef HAVE_CTIME_R
+#undef HAVE_GETTIMEOFDAY
+#undef HAVE_LIBPTHREAD
+#undef HAVE_PTHREAD_H
+#undef HAVE_PTHREAD_KILL
+#undef HAVE_SCHED_H
+#undef HAVE_SEMAPHORE_H
+#undef HAVE_STRINGS_H
+#undef HAVE_STRNCASECMP
+#undef HAVE_SYS_FILE_H
+#undef HAVE_SYS_PARAM_H
+#undef HAVE_SYS_TIME_H
+#undef HAVE_UNISTD_H
+#undef HAVE_DIRENT_H
+#undef TIME_WITH_SYS_TIME
+
+#endif
+
 
 #endif /* _SEEN_MONETDB_CONFIG_H */
 

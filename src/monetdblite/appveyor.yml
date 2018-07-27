@@ -1,14 +1,28 @@
 clone_depth: 1
 image:
-- Visual Studio 2015
+- Visual Studio 2017
 environment:
   matrix:
-    - mingw_bin: 'C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin'
-    - mingw_bin: 'C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin'
-    - mingw_bin: 'C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin'
+    - name: mingw64
+      install_script: set "PATH=C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin;%PATH%"
+      build_script: mingw32-make
+      test_script: mingw32-make test
+
+#    - mingw_bin: 'C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin'
+#    - mingw_bin: 'C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64\bin'
+    - name: vs32
+      install_script: cmake .
+      build_script: cmake --build .
+      test_script: Debug\test_readme.exe && Debug\test_sqlitelogic.exe --engine MonetDBLite --halt --verify tests\sqlitelogic\select1.test
+
+    - name: vs64
+      install_script: cmake -G "Visual Studio 15 2017 Win64" .
+      build_script: cmake --build .
+      test_script: Debug\test_readme.exe && Debug\test_sqlitelogic.exe --engine MonetDBLite --halt --verify tests\sqlitelogic\select1.test
+
 install:
-  - set "PATH=%mingw_bin%;%PATH%"
+  - "%install_script%"
 build_script:
-  - mingw32-make
+  - "%build_script%"
 test_script:
-  - mingw32-make test
+  - "%test_script%"

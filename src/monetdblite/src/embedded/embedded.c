@@ -312,6 +312,11 @@ cleanup:
 	return res;
 }
 
+char* monetdb_clear_prepare(monetdb_connection conn, size_t id) {
+	char query[100];
+	sprintf(query, "release "ULLFMT, (uint64_t) id);
+	return(monetdb_query_internal(conn, query, 1, NULL, NULL, NULL, 'X'));
+}
 
 char* monetdb_set_autocommit(monetdb_connection conn, char val) {
 	char query[100];

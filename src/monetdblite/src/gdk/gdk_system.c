@@ -42,8 +42,9 @@
 #endif
 
 #include <signal.h>
-
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>		/* for sysconf symbols */
+#endif
 
 MT_Lock MT_system_lock MT_LOCK_INITIALIZER("MT_system_lock");
 
@@ -61,6 +62,278 @@ GDKlockstatistics(int what)
 }
 #endif
 
+
+
+#if !defined(HAVE_PTHREAD_H) && defined(WIN32) && defined(_MSC_VER)
+static struct winthread {
+	struct winthread *next;
+	HANDLE hdl;
+	DWORD tid;
+	void (*func) (void *);
+	void *arg;
+	int flags;
+} *winthreads = NULL;
+#define EXITED		1
+#define DETACHED	2
+#define WAITING		4
+static CRITICAL_SECTION winthread_cs;
+static int winthread_cs_init = 0;
+
+void
+gdk_system_reset(void)
+{
+	winthread_cs_init = 0;
+}
+
+static struct winthread *
+find_winthread(DWORD tid)
+{
+	struct winthread *w;
+
+	EnterCriticalSection(&winthread_cs);
+	for (w = winthreads; w; w = w->next)
+		if (w->tid == tid)
+			break;
+	LeaveCriticalSection(&winthread_cs);
+	return w;
+}
+
+static void
+rm_winthread(struct winthread *w)
+{
+	struct winthread **wp;
+
+	assert(winthread_cs_init);
+	EnterCriticalSection(&winthread_cs);
+	for (wp = &winthreads; *wp && *wp != w; wp = &(*wp)->next)
+		;
+	if (*wp)
+		*wp = w->next;
+	LeaveCriticalSection(&winthread_cs);
+	free(w);
+}
+
+static DWORD WINAPI
+thread_starter(LPVOID arg)
+{
+	(*((struct winthread *) arg)->func)(((struct winthread *) arg)->arg);
+	((struct winthread *) arg)->flags |= EXITED;
+	ExitThread(0);
+	return TRUE;
+}
+
+static void
+join_threads(void)
+{
+	struct winthread *w;
+	int waited;
+
+	do {
+		waited = 0;
+		EnterCriticalSection(&winthread_cs);
+		for (w = winthreads; w; w = w->next) {
+			if ((w->flags & (EXITED | DETACHED | WAITING)) == (EXITED | DETACHED)) {
+				w->flags |= WAITING;
+				LeaveCriticalSection(&winthread_cs);
+				WaitForSingleObject(w->hdl, INFINITE);
+				CloseHandle(w->hdl);
+				rm_winthread(w);
+				waited = 1;
+				EnterCriticalSection(&winthread_cs);
+				break;
+			}
+		}
+		LeaveCriticalSection(&winthread_cs);
+	} while (waited);
+}
+
+void
+join_detached_threads(void)
+{
+	struct winthread *w;
+	int waited;
+
+	do {
+		waited = 0;
+		EnterCriticalSection(&winthread_cs);
+		for (w = winthreads; w; w = w->next) {
+			if ((w->flags & (DETACHED | WAITING)) == DETACHED) {
+				w->flags |= WAITING;
+				LeaveCriticalSection(&winthread_cs);
+				WaitForSingleObject(w->hdl, INFINITE);
+				CloseHandle(w->hdl);
+				rm_winthread(w);
+				waited = 1;
+				EnterCriticalSection(&winthread_cs);
+				break;
+			}
+		}
+		LeaveCriticalSection(&winthread_cs);
+	} while (waited);
+}
+
+int
+MT_create_thread(MT_Id *t, void (*f) (void *), void *arg, enum MT_thr_detach d)
+{
+	struct winthread *w = malloc(sizeof(*w));
+
+	if (w == NULL)
+		return -1;
+
+	if (winthread_cs_init == 0) {
+		/* we only get here before any threads are created,
+		 * and this is the only time that winthread_cs_init is
+		 * ever changed */
+		InitializeCriticalSection(&winthread_cs);
+		winthread_cs_init = 1;
+	}
+	join_threads();
+	w->func = f;
+	w->arg = arg;
+	w->flags = 0;
+	if (d == MT_THR_DETACHED)
+		w->flags |= DETACHED;
+	EnterCriticalSection(&winthread_cs);
+	w->next = winthreads;
+	winthreads = w;
+	LeaveCriticalSection(&winthread_cs);
+	w->hdl = CreateThread(NULL, THREAD_STACK_SIZE, thread_starter, w, 0, &w->tid);
+	if (w->hdl == NULL) {
+		rm_winthread(w);
+		return -1;
+	}
+	*t = (MT_Id) w->tid;
+	return 0;
+}
+
+void
+MT_exiting_thread(void)
+{
+	struct winthread *w;
+
+	if ((w = find_winthread(GetCurrentThreadId())) != NULL)
+		w->flags |= EXITED;
+}
+
+/* coverity[+kill] */
+void
+MT_exit_thread(int s)
+{
+	if (winthread_cs_init) {
+		MT_exiting_thread();
+		ExitThread(s);
+	} else {
+		/* no threads started yet, so this is a global exit */
+		MT_global_exit(s);
+	}
+}
+
+int
+MT_join_thread(MT_Id t)
+{
+	struct winthread *w;
+
+	assert(winthread_cs_init);
+	join_threads();
+	w = find_winthread((DWORD) t);
+	if (w == NULL || w->hdl == NULL)
+		return -1;
+	if (WaitForSingleObject(w->hdl, INFINITE) == WAIT_OBJECT_0 &&
+	    CloseHandle(w->hdl)) {
+		rm_winthread(w);
+		return 0;
+	}
+	return -1;
+}
+
+int
+MT_kill_thread(MT_Id t)
+{
+	struct winthread *w;
+
+	assert(winthread_cs_init);
+	join_threads();
+	w = find_winthread((DWORD) t);
+	if (w == NULL)
+		return -1;
+	if (w->hdl == NULL) {
+		/* detached thread */
+		HANDLE h;
+		int ret = 0;
+		h = OpenThread(THREAD_ALL_ACCESS, 0, (DWORD) t);
+		if (h == NULL)
+			return -1;
+		if (TerminateThread(h, -1))
+			ret = -1;
+		CloseHandle(h);
+		return ret;
+	}
+	if (TerminateThread(w->hdl, -1))
+		return 0;
+	return -1;
+}
+
+#ifdef USE_PTHREAD_LOCKS
+
+void
+pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *mutexattr)
+{
+	(void) mutexattr;
+	*mutex = CreateMutex(NULL, 0, NULL);
+}
+
+void
+pthread_mutex_destroy(pthread_mutex_t *mutex)
+{
+	CloseHandle(*mutex);
+}
+
+int
+pthread_mutex_lock(pthread_mutex_t *mutex)
+{
+	return WaitForSingleObject(*mutex, INFINITE) == WAIT_OBJECT_0 ? 0 : -1;
+}
+
+int
+pthread_mutex_trylock(pthread_mutex_t *mutex)
+{
+	return WaitForSingleObject(*mutex, 0) == WAIT_OBJECT_0 ? 0 : -1;
+}
+
+int
+pthread_mutex_unlock(pthread_mutex_t *mutex)
+{
+	return ReleaseMutex(*mutex) ? 0 : -1;
+}
+
+#endif
+
+void
+pthread_sema_init(pthread_sema_t *s, int flag, int nresources)
+{
+	(void) flag;
+	*s = CreateSemaphore(NULL, nresources, 0x7fffffff, NULL);
+}
+
+void
+pthread_sema_destroy(pthread_sema_t *s)
+{
+	CloseHandle(*s);
+}
+
+void
+pthread_sema_up(pthread_sema_t *s)
+{
+	ReleaseSemaphore(*s, 1, NULL);
+}
+
+void
+pthread_sema_down(pthread_sema_t *s)
+{
+	WaitForSingleObject(*s, INFINITE);
+}
+
+#else  /* !defined(HAVE_PTHREAD_H) && defined(_MSC_VER) */
 
 static struct posthread {
 	struct posthread *next;
@@ -359,6 +632,9 @@ pthread_sema_down(pthread_sema_t *s)
 	}
 	(void)pthread_mutex_unlock(&(s->mutex));
 }
+
+#endif // pthread locks
+
 
 /* coverity[+kill] */
 void

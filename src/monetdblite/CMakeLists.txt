@@ -3,7 +3,7 @@ project(MonetDBLite_C)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set (CMAKE_C_FLAGS "-DLIBGDK -DLIBMAL -DLIBOPTIMIZER -DLIBSTREAM")
+set (CMAKE_C_FLAGS "-DLIBGDK -DLIBMAL -DLIBOPTIMIZER -DLIBSTREAM -DLIBSQL -DMONETDBLITE_COMPILE")
 include_directories(src)
 include_directories(src/common)
 include_directories(src/embedded)
@@ -18,8 +18,7 @@ include_directories(src/sql/server)
 include_directories(src/sql/storage)
 include_directories(src/sql/storage/bat)
 
-add_library(monetdb5 SHARED
-        src/common/fsync.c
+add_library(libmonetdb5 SHARED
         src/common/mutils.c
         src/common/mutils.h
         src/common/stream.c
@@ -365,9 +364,32 @@ add_library(monetdb5 SHARED
         src/monetdb_config.h.in
 )
 
-add_executable(readme 
+add_executable(test_readme 
         tests/readme/readme.c
 )
+set(lib "monetdb5 pthread dl m")
+if (WIN32)
+        set(lib "libmonetdb5")
+endif()
 
-target_link_libraries(readme monetdb5 pthread dl m)
+add_executable(test_tpchq1
+        tests/tpchq1/test1.c
+)
+
+add_executable(test_sqlitelogic
+        tests/sqlitelogic/sqllogictest.c
+        tests/sqlitelogic/md5.c 
+)
+
+
+
+set(lib "monetdb5 pthread dl m")
+if (WIN32)
+        set(lib "libmonetdb5")
+endif()
+
+target_link_libraries(test_readme ${lib})
+target_link_libraries(test_tpchq1 ${lib})
+target_link_libraries(test_sqlitelogic ${lib})
+
 

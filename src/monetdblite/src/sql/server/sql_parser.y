@@ -19,8 +19,9 @@
 #ifdef HAVE_HGE
 #include "mal.h"		/* for have_hge */
 #endif
-
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <string.h>
 
 #define SA 	m->sa
@@ -528,6 +529,7 @@ int yydebug=1;
 	BOOL_FALSE BOOL_TRUE
 	CURRENT_DATE CURRENT_TIMESTAMP CURRENT_TIME LOCALTIMESTAMP LOCALTIME
 	LEX_ERROR 
+	sqlASC
 	
 /* the tokens used in geom */
 %token <sval> GEOMETRY GEOMETRYSUBTYPE GEOMETRYA 
@@ -592,7 +594,7 @@ SQLCODE SQLERROR UNDER WHENEVER
 */
 
 %token TEMP TEMPORARY STREAM MERGE REMOTE REPLICA
-%token<sval> ASC DESC AUTHORIZATION
+%token<sval> DESC AUTHORIZATION
 %token CHECK CONSTRAINT CREATE COMMENT
 %token TYPE PROCEDURE FUNCTION sqlLOADER AGGREGATE RETURNS EXTERNAL sqlNAME DECLARE
 %token CALL LANGUAGE
@@ -1289,7 +1291,7 @@ opt_index_type:
 
 /* sql-server def
 CREATE [ UNIQUE ] INDEX index_name
-    ON { table | view } ( column [ ASC | DESC ] [ ,...n ] )
+    ON { table | view } ( column [ sqlASC | DESC ] [ ,...n ] )
 [ WITH < index_option > [ ,...n] ]
 [ ON filegroup ]
 
@@ -3459,7 +3461,7 @@ ordering_spec:
 
 opt_asc_desc:
     /* empty */ 	{ $$ = TRUE; }
- |  ASC			{ $$ = TRUE; }
+ |  sqlASC			{ $$ = TRUE; }
  |  DESC		{ $$ = FALSE; }
  ;
 
@@ -5483,8 +5485,13 @@ intval:
 		      tpe->type->localtype == TYPE_int ||
 		      tpe->type->localtype == TYPE_sht ||
 		      tpe->type->localtype == TYPE_bte ) {
+#ifdef HAVE_HGE
+			hge sgn = stack_get_number(m, name);
+			assert((hge) GDK_int_min <= sgn && sgn <= (hge) GDK_int_max);
+#else
 			lng sgn = stack_get_number(m, name);
 			assert((lng) GDK_int_min <= sgn && sgn <= (lng) GDK_int_max);
+#endif
 			$$ = (int) sgn;
 		  } else {
 			char *msg = sql_message(SQLSTATE(22000) "Constant (%s) has wrong type (number expected)", $1);

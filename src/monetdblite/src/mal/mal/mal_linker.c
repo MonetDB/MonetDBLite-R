@@ -19,13 +19,12 @@
 
 #include "mutils.h"
 #include <sys/types.h> /* opendir */
-#ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 
 #if defined(_MSC_VER) && _MSC_VER >= 1400
 #define open _open
@@ -79,7 +78,15 @@ getAddress(str fcnname)
 	 *
 	 * the first argument must be the same as the base name of the
 	 * library that is created in src/tools */
-	dl = mdlopen("libmonetdb5", RTLD_NOW | RTLD_GLOBAL);
+
+	// this is only relevant on Windows
+	char* libname = "libmonetdb5";
+	char* libnameenv = getenv("MONETDBLITE_LIBNAME");
+	if (libnameenv != NULL) {
+		libname = libnameenv;
+	}
+
+	dl = mdlopen(libname, RTLD_NOW | RTLD_GLOBAL);
 	if (dl == NULL) 
 		return NULL;
 

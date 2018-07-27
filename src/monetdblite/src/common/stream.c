@@ -103,6 +103,10 @@
 #endif
 #endif
 
+#if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
+#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
+#endif
+
 #ifndef SHUT_RD
 #define SHUT_RD		0
 #define SHUT_WR		1
@@ -1896,30 +1900,7 @@ file_rastream(FILE *restrict fp, const char *restrict name)
 			return NULL;
 		}
 	}
-#ifdef _MSC_VER
-	if (fileno(fp) == 0 && isatty(0)) {
-		struct console *c = malloc(sizeof(struct console));
-		if(c == NULL) {
-			destroy(s);
-			return NULL;
-		}
-		s->stream_data.p = c;
-		c->h = GetStdHandle(STD_INPUT_HANDLE);
-		c->i = 0;
-		c->len = 0;
-		c->rd = 0;
-		s->read = console_read;
-		s->write = NULL;
-		s->destroy = console_destroy;
-		s->close = NULL;
-		s->flush = NULL;
-		s->fsync = NULL;
-		s->fgetpos = NULL;
-		s->fsetpos = NULL;
-		s->isutf8 = 1;
-		return s;
-	}
-#endif
+
 	return s;
 }
 
@@ -1937,30 +1918,7 @@ file_wastream(FILE *restrict fp, const char *restrict name)
 		return NULL;
 	s->access = ST_WRITE;
 	s->type = ST_ASCII;
-#ifdef _MSC_VER
-	if ((fileno(fp) == 1 || fileno(fp) == 2) && isatty(fileno(fp))) {
-		struct console *c = malloc(sizeof(struct console));
-		if(c == NULL) {
-			destroy(s);
-			return NULL;
-		}
-		s->stream_data.p = c;
-		c->h = GetStdHandle(STD_OUTPUT_HANDLE);
-		c->i = 0;
-		c->len = 0;
-		c->rd = 0;
-		s->read = NULL;
-		s->write = console_write;
-		s->destroy = console_destroy;
-		s->close = NULL;
-		s->flush = NULL;
-		s->fsync = NULL;
-		s->fgetpos = NULL;
-		s->fsetpos = NULL;
-		s->isutf8 = 1;
-		return s;
-	}
-#endif
+
 	s->stream_data.p = (void *) fp;
 	return s;
 }
@@ -1969,12 +1927,6 @@ file_wastream(FILE *restrict fp, const char *restrict name)
 FILE *
 getFile(stream *s)
 {
-#ifdef _MSC_VER
-	if (s->read == console_read)
-		return stdin;
-	if (s->write == console_write)
-		return stdout;
-#endif
 	if (s->read != file_read)
 		return NULL;
 	return (FILE *) s->stream_data.p;
