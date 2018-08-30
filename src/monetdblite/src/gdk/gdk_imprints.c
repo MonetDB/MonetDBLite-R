@@ -247,7 +247,7 @@ BATcheckimprints(BAT *b)
 					close(fd);
 					imprints->imprints.parentid = b->batCacheid;
 					b->timprints = imprints;
-					ALGODEBUG fprintf(stderr, "#BATcheckimprints(" ALGOBATFMT "): reusing persisted imprints\n", ALGOBATPAR(b));
+					ALGODEBUG fprintf(stderr, "#BATcheckimprints: reusing persisted imprints %d\n", b->batCacheid);
 					MT_lock_unset(&GDKimprintsLock(b->batCacheid));
 
 					return true;
@@ -262,51 +262,8 @@ BATcheckimprints(BAT *b)
 	}
 	ret = b->timprints != NULL;
 	MT_lock_unset(&GDKimprintsLock(b->batCacheid));
-	ALGODEBUG if (ret) fprintf(stderr, "#BATcheckimprints(" ALGOBATFMT "): already has imprints\n", ALGOBATPAR(b));
+	ALGODEBUG if (ret) fprintf(stderr, "#BATcheckimprints: already has imprints %d\n", b->batCacheid);
 	return ret;
-}
-
-static void
-BATimpsync(void *arg)
-{
-	BAT *b = arg;
-	Imprints *imprints;
-	int fd;
-	lng t0 = 0;
-
-	ALGODEBUG t0 = GDKusec();
-
-	MT_lock_set(&GDKimprintsLock(b->batCacheid));
-	if ((imprints = b->timprints) != NULL) {
-		if (HEAPsave(&imprints->imprints, BBP_physical(b->batCacheid),
-			     "timprints") == GDK_SUCCEED &&
-		    (fd = GDKfdlocate(imprints->imprints.farmid,
-				      BBP_physical(b->batCacheid), "rb+",
-				      "timprints")) >= 0) {
-			/* add version number */
-			((size_t *) imprints->imprints.base)[0] |= (size_t) IMPRINTS_VERSION << 8;
-			/* sync-on-disk checked bit */
-			((size_t *) imprints->imprints.base)[0] |= (size_t) 1 << 16;
-			if (write(fd, imprints->imprints.base, sizeof(size_t)) < 0)
-				perror("write imprints");
-			if (!(GDKdebug & NOSYNCMASK)) {
-#if defined(NATIVE_WIN32)
-				_commit(fd);
-#elif defined(HAVE_FDATASYNC)
-				fdatasync(fd);
-#elif defined(HAVE_FSYNC)
-				fsync(fd);
-#endif
-			}
-			close(fd);
-			ALGODEBUG fprintf(stderr, "#BATimpsync(" ALGOBATFMT "): "
-					  "imprints persisted "
-					  "(" LLFMT " usec)\n", ALGOBATPAR(b),
-					  GDKusec() - t0);
-		}
-	}
-	MT_lock_unset(&GDKimprintsLock(b->batCacheid));
-	BBPunfix(b->batCacheid);
 }
 
 gdk_return
@@ -347,7 +304,6 @@ BATimprints(BAT *b)
 	if (VIEWtparent(b)) {
 		/* views always keep null pointer and need to obtain
 		 * the latest imprint from the parent at query time */
-		s2 = b;		/* remember for ALGODEBUG print */
 		b = BBPdescriptor(VIEWtparent(b));
 		assert(b);
 		if (BATcheckimprints(b))
@@ -360,19 +316,11 @@ BATimprints(BAT *b)
 		BUN cnt;
 		const char *nme = BBP_physical(b->batCacheid);
 		size_t pages;
+		int fd;
 
-		ALGODEBUG {
-			if (s2)
-				fprintf(stderr, "#BATimprints(b=" ALGOBATFMT
-					"): creating imprints on parent "
-					ALGOBATFMT "\n",
-					ALGOBATPAR(s2), ALGOBATPAR(b));
-			else
-				fprintf(stderr, "#BATimprints(b=" ALGOBATFMT
-					"): creating imprints\n",
-					ALGOBATPAR(b));
-		}
-		s2 = NULL;
+		ALGODEBUG fprintf(stderr, "#BATimprints(b=%s#" BUNFMT ") %s: "
+				  "created imprints\n", BATgetId(b),
+				  BATcount(b), b->theap.filename);
 
 		imprints = GDKzalloc(sizeof(Imprints));
 		if (imprints == NULL) {
@@ -506,17 +454,33 @@ BATimprints(BAT *b)
 		((size_t *) imprints->imprints.base)[1] = (size_t) imprints->impcnt;
 		((size_t *) imprints->imprints.base)[2] = (size_t) imprints->dictcnt;
 		((size_t *) imprints->imprints.base)[3] = (size_t) BATcount(b);
+		if ((BBP_status(b->batCacheid) & BBPEXISTING) &&
+		    HEAPsave(&imprints->imprints, nme, "timprints") == GDK_SUCCEED &&
+		    (fd = GDKfdlocate(imprints->imprints.farmid, nme, "rb+",
+				      "timprints")) >= 0) {
+			ALGODEBUG fprintf(stderr, "#BATimprints: persisting imprints\n");
+			/* add version number */
+			((size_t *) imprints->imprints.base)[0] |= (size_t) IMPRINTS_VERSION << 8;
+			/* sync-on-disk checked bit */
+			((size_t *) imprints->imprints.base)[0] |= (size_t) 1 << 16;
+			if (write(fd, imprints->imprints.base, sizeof(size_t)) < 0)
+				perror("write imprints");
+			if (!(GDKdebug & NOSYNCMASK)) {
+#if defined(NATIVE_WIN32)
+				_commit(fd);
+#elif defined(HAVE_FDATASYNC)
+				fdatasync(fd);
+#elif defined(HAVE_FSYNC)
+				fsync(fd);
+#endif
+			}
+			close(fd);
+		}
 		imprints->imprints.parentid = b->batCacheid;
 		b->timprints = imprints;
-		if (BBP_status(b->batCacheid) & BBPEXISTING) {
-			MT_Id tid;
-			BBPfix(b->batCacheid);
-			if (MT_create_thread(&tid, BATimpsync, b, MT_THR_DETACHED) < 0)
-				BBPunfix(b->batCacheid);
-		}
 	}
 
-	ALGODEBUG fprintf(stderr, "#BATimprints(%s): imprints construction " LLFMT " usec\n", BATgetId(b), GDKusec() - t0);
+	ALGODEBUG fprintf(stderr, "#BATimprints: imprints construction " LLFMT " usec\n", GDKusec() - t0);
 	MT_lock_unset(&GDKimprintsLock(b->batCacheid));
 
 	/* BBPUnfix tries to get the imprints lock which might lead to
@@ -691,8 +655,8 @@ IMPSprint(BAT *b)
 	bte j;
 	int i;
 
-	if (!BATcheckimprints(b)) {
-		fprintf(stderr, "no imprint\n");
+	if (BATimprints(b) != GDK_SUCCEED) {
+		GDKclrerr(); /* not interested in BATimprints errors */
 		return;
 	}
 	imprints = b->timprints;

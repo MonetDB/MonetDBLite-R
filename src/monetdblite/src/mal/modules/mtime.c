@@ -194,6 +194,7 @@
 //#ifdef NATIVE_WIN32
 extern char *strptime(const char *, const char *, struct tm *);
 #include "strptime.c"
+//#endif
 
 
 #define get_rule(r)	((r).s.weekday | ((r).s.day<<6) | ((r).s.minutes<<10) | ((r).s.month<<21))

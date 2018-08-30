@@ -26,16 +26,16 @@
 #endif
 
 static inline lng
-GDK_ROTATE(lng x, int y, int z)
+GDK_ROTATE(lng x, int y, int z, lng m)
 {
-	return (lng) (((ulng) x << y) | ((ulng) x >> z));
+	return ((lng) ((ulng) x << y) & ~m) | ((x >> z) & m);
 }
 
 /* TODO: nil handling. however; we do not want to lose time in bulk_rotate_xor_hash with that */
 str
 MKEYrotate(lng *res, const lng *val, const int *n)
 {
-	*res = GDK_ROTATE(*val, *n, (sizeof(lng)*8) - *n);
+	*res = GDK_ROTATE(*val, *n, (sizeof(lng)*8) - *n, (((lng)1) << *n) - 1);
 	return MAL_SUCCEED;
 }
 
@@ -203,6 +203,7 @@ MKEYrotate_xor_hash(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPtr p)
 	int tpe = getArgType(mb, p, 3);
 	ptr *pval = getArgReference(stk, p, 3);
 	lng val;
+	lng mask = ((lng) 1 << lbit) - 1;
 
 	(void) cntxt;
 	switch (ATOMstorage(tpe)) {
@@ -232,7 +233,7 @@ MKEYrotate_xor_hash(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPtr p)
 			val = ATOMhash(tpe, pval);
 		break;
 	}
-	*dst = GDK_ROTATE(h, lbit, rbit) ^ val;
+	*dst = GDK_ROTATE(h, lbit, rbit, mask) ^ val;
 	return MAL_SUCCEED;
 }
 
@@ -242,6 +243,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 	BAT *hb, *b, *bn;
 	int lbit = *nbits;
 	int rbit = (int) sizeof(lng) * 8 - lbit;
+	lng mask = ((lng) 1 << lbit) - 1;
 	lng *r;
 	const lng *h;
 	BUN n;
@@ -278,7 +280,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 	case TYPE_bte: {
 		bte *v = (bte *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_bte(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_bte(v);
 			v++;
 			h++;
 		}
@@ -287,7 +289,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 	case TYPE_sht: {
 		sht *v = (sht *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_sht(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_sht(v);
 			v++;
 			h++;
 		}
@@ -297,7 +299,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 	case TYPE_flt: {
 		int *v = (int *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_int(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_int(v);
 			v++;
 			h++;
 		}
@@ -307,7 +309,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 	case TYPE_dbl: {
 		lng *v = (lng *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_lng(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_lng(v);
 			v++;
 			h++;
 		}
@@ -317,7 +319,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 	case TYPE_hge: {
 		hge *v = (hge *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_hge(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_hge(v);
 			v++;
 			h++;
 		}
@@ -330,7 +332,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 			BUN i;
 			BATloop(b, i, n) {
 				str s = (str) BUNtvar(bi, i);
-				*r++ = GDK_ROTATE(*h, lbit, rbit) ^ (lng) ((BUN *) s)[-1];
+				*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ (lng) ((BUN *) s)[-1];
 				h++;
 			}
 			break;
@@ -342,7 +344,7 @@ MKEYbulk_rotate_xor_hash(bat *res, const bat *hid, const int *nbits, const bat *
 		BUN i;
 
 		BATloop(b, i, n) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ (lng) (*hash)(BUNtail(bi, i));
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ (lng) (*hash)(BUNtail(bi, i));
 			h++;
 		}
 		break;
@@ -374,6 +376,7 @@ MKEYbulkconst_rotate_xor_hash(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPt
 	ptr *pval = getArgReference(stk, p, 3);
 	BAT *hb, *bn;
 	int rbit = (int) sizeof(lng) * 8 - lbit;
+	lng mask = ((lng) 1 << lbit) - 1;
 	lng *r;
 	const lng *h;
 	lng val;
@@ -425,7 +428,7 @@ MKEYbulkconst_rotate_xor_hash(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPt
 	h = (const lng *) Tloc(hb, 0);
 
 	while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ val;
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ val;
 			h++;
 	}
 
@@ -450,6 +453,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 	BAT *b, *bn;
 	int lbit = *nbits;
 	int rbit = (int) sizeof(lng) * 8 - lbit;
+	lng mask = ((lng) 1 << lbit) - 1;
 	lng *r;
 	BUN n;
 
@@ -471,7 +475,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 	case TYPE_bte: {
 		bte *v = (bte *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_bte(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_bte(v);
 			v++;
 		}
 		break;
@@ -479,7 +483,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 	case TYPE_sht: {
 		sht *v = (sht *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_sht(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_sht(v);
 			v++;
 		}
 		break;
@@ -488,7 +492,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 	case TYPE_flt: {
 		int *v = (int *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_int(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_int(v);
 			v++;
 		}
 		break;
@@ -497,7 +501,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 	case TYPE_dbl: {
 		lng *v = (lng *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_lng(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_lng(v);
 			v++;
 		}
 		break;
@@ -506,7 +510,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 	case TYPE_hge: {
 		hge *v = (hge *) Tloc(b, 0);
 		while (n-- > 0) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ MKEYHASH_hge(v);
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ MKEYHASH_hge(v);
 			v++;
 		}
 		break;
@@ -518,7 +522,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 			BUN i;
 			BATloop(b, i, n) {
 				str s = (str) BUNtvar(bi, i);
-				*r++ = GDK_ROTATE(*h, lbit, rbit) ^ (lng) ((BUN *) s)[-1];
+				*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ (lng) ((BUN *) s)[-1];
 			}
 			break;
 		}
@@ -529,7 +533,7 @@ MKEYconstbulk_rotate_xor_hash(bat *res, const lng *h, const int *nbits, const ba
 		BUN i;
 
 		BATloop(b, i, n) {
-			*r++ = GDK_ROTATE(*h, lbit, rbit) ^ (lng) (*hash)(BUNtail(bi, i));
+			*r++ = GDK_ROTATE(*h, lbit, rbit, mask) ^ (lng) (*hash)(BUNtail(bi, i));
 		}
 		break;
 	}

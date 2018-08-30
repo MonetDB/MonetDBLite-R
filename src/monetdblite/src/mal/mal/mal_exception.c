@@ -51,8 +51,7 @@ static char *M5OutOfMemory = MAL_MALLOC_FAIL;
  * is good.
  */
 static str createExceptionInternal(enum malexception type, const char *fcn, const char *format, va_list ap)
-	__attribute__((__format__(__printf__, 3, 0)))
-	__attribute__((__returns_nonnull__));
+	__attribute__((__format__(__printf__, 3, 0)));
 static str
 createExceptionInternal(enum malexception type, const char *fcn, const char *format, va_list ap)
 {
@@ -190,8 +189,7 @@ showException(stream *out, enum malexception type, const char *fcn, const char *
  */
 static str
 createMalExceptionInternal(MalBlkPtr mb, int pc, enum malexception type, char *prev, const char *format, va_list ap)
-	__attribute__((__format__(__printf__, 5, 0)))
-	__attribute__((__returns_nonnull__));
+	__attribute__((__format__(__printf__, 5, 0)));
 static str
 createMalExceptionInternal(MalBlkPtr mb, int pc, enum malexception type, char *prev, const char *format, va_list ap)
 {

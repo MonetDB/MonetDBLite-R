@@ -12,18 +12,9 @@
 #error this file should not be included outside its source directory
 #endif
 
-/* persist hash heaps for persistent BATs */
+#define DISABLE_PARENT_HASH 1
 /* #define PERSISTENTHASH 1 */
-
-/* persist order index heaps for persistent BATs */
 #define PERSISTENTIDX 1
-
-#if !__has_attribute(__visibility__)
-#define __visibility__(a)
-#endif
-#if !__has_attribute(__cold__)
-#define __cold__
-#endif
 
 #include "gdk_system_private.h"
 
@@ -67,8 +58,6 @@ __hidden void BATfree(BAT *b)
 	__attribute__((__visibility__("hidden")));
 __hidden gdk_return BATgroup_internal(BAT **groups, BAT **extents, BAT **histo, BAT *b, BAT *s, BAT *g, BAT *e, BAT *h, int subsorted)
 	__attribute__ ((__warn_unused_result__))
-	__attribute__((__visibility__("hidden")));
-__hidden Hash *BAThash_impl(BAT *b, BAT *s, BUN masksize, const char *ext)
 	__attribute__((__visibility__("hidden")));
 __hidden void BATinit_idents(BAT *bn)
 	__attribute__((__visibility__("hidden")));
@@ -201,8 +190,8 @@ __hidden void IMPSfree(BAT *b)
 __hidden int IMPSgetbin(int tpe, bte bits, const char *restrict bins, const void *restrict v)
 	__attribute__((__visibility__("hidden")));
 #ifndef NDEBUG
-void IMPSprint(BAT *b)		/* never called: for debugging only */
-	__attribute__((__cold__));
+__hidden void IMPSprint(BAT *b)
+	__attribute__((__visibility__("hidden")));
 #endif
 __hidden void MT_init_posix(void)
 	__attribute__((__visibility__("hidden")));
@@ -239,39 +228,6 @@ __hidden void gdk_bbp_reset(void)
 	__attribute__((__visibility__("hidden")));
 __hidden void gdk_system_reset(void)
 	__attribute__((__visibility__("hidden")));
-
-/* some macros to help print info about BATs when using ALGODEBUG */
-#define ALGOBATFMT	"%s#" BUNFMT "[%s]%s%s%s%s%s%s%s%s%s"
-#define ALGOBATPAR(b)	BATgetId(b),			\
-			BATcount(b),			\
-			ATOMname(b->ttype),		\
-			b->batPersistence == PERSISTENT ? "P" : isVIEW(b) ? "V" : "T", \
-			BATtdense(b) ? "D" : "",	\
-			b->tsorted ? "S" : "",		\
-			b->trevsorted ? "R" : "",	\
-			b->tkey ? "K" : "",		\
-			b->tnonil ? "N" : "",		\
-			b->thash ? "H" : "",		\
-			b->torderidx ? "O" : "",	\
-			b->timprints ? "I" : b->theap.parentid && BBP_cache(b->theap.parentid)->timprints ? "(I)" : ""
-/* use ALGOOPTBAT* when BAT is optional (can be NULL) */
-#define ALGOOPTBATFMT	"%s%s" BUNFMT "%s%s%s%s%s%s%s%s%s%s%s%s"
-#define ALGOOPTBATPAR(b)				\
-			b ? BATgetId(b) : "",		\
-			b ? "#" : "",			\
-			b ? BATcount(b) : 0,		\
-			b ? "[" : "",			\
-			b ? ATOMname(b->ttype) : "",	\
-			b ? "]" : "",			\
-			b ? b->batPersistence == PERSISTENT ? "P" : isVIEW(b) ? "V" : "T" : "", \
-			b && BATtdense(b) ? "D" : "",	\
-			b && b->tsorted ? "S" : "",	\
-			b && b->trevsorted ? "R" : "",	\
-			b && b->tkey ? "K" : "",	\
-			b && b->tnonil ? "N" : "",	\
-			b && b->thash ? "H" : "",	\
-			b && b->torderidx ? "O" : "",	\
-			b ? b->timprints ? "I" : b->theap.parentid && BBP_cache(b->theap.parentid)->timprints ? "(I)" : "" : ""
 
 #define BBP_BATMASK	511
 #define BBP_THREADMASK	63

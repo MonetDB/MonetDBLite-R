@@ -757,26 +757,26 @@
 #include "sql_parser.h"
 #include "sql_symbol.h"
 #include "sql_datetime.h"
-#include "sql_decimal.h"	/* for decimal_from_str() */
-#include "sql_semantic.h"	/* for sql_add_param() & sql_add_arg() */
+#include "sql_decimal.h" /* for decimal_from_str() */
+#include "sql_semantic.h"     /* for sql_add_param() & sql_add_arg() */
 #include "sql_env.h"
-#include "rel_sequence.h"	/* for sql_next_seq_name() */
+#include "rel_sequence.h"     /* for sql_next_seq_name() */
 #ifdef HAVE_HGE
-#include "mal.h"		/* for have_hge */
+#include "mal.h"         /* for have_hge */
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <string.h>
 
-#define SA 	m->sa
+#define SA     m->sa
 #define _symbol_create(t,d)         symbol_create( SA, t, d)
 #define _symbol_create_list(t,d)    symbol_create_list( SA, t, d)
 #define _symbol_create_int(t,d)     symbol_create_int( SA, t, d)
 #define _symbol_create_lng(t,d)     symbol_create_lng( SA, t, d)
 #define _symbol_create_symbol(t,d)  symbol_create_symbol( SA, t, d)
 #define _symbol_create_hexa(t,d)    symbol_create_hexa( SA, t, d)
-#define _newAtomNode(d)		    newAtomNode( SA, d)
+#define _newAtomNode(d)           newAtomNode( SA, d)
 
 #define L()                  dlist_create( SA )
 
@@ -792,7 +792,7 @@
 #define YYMALLOC GDKmalloc
 #define YYFREE GDKfree
 
-#define YY_parse_LSP_NEEDED	/* needed for bison++ 1.21.11-3 */
+#define YY_parse_LSP_NEEDED   /* needed for bison++ 1.21.11-3 */
 
 #define SET_Z(info)(info = info | 0x02)
 #define SET_M(info)(info = info | 0x01)
@@ -808,35 +808,35 @@
 static inline int
 UTF8_strlen(const char *val)
 {
-	const unsigned char *s = (const unsigned char *) val;
-	int pos = 0;
+     const unsigned char *s = (const unsigned char *) val;
+     int pos = 0;
 
-	while (*s) {
-		int c = *s++;
+     while (*s) {
+          int c = *s++;
 
-		pos++;
-		if (c < 0xC0)
-			continue;
-		if (*s++ < 0x80)
-			return int_nil;
-		if (c < 0xE0)
-			continue;
-		if (*s++ < 0x80)
-			return int_nil;
-		if (c < 0xF0)
-			continue;
-		if (*s++ < 0x80)
-			return int_nil;
-		if (c < 0xF8)
-			continue;
-		if (*s++ < 0x80)
-			return int_nil;
-		if (c < 0xFC)
-			continue;
-		if (*s++ < 0x80)
-			return int_nil;
-	}
-	return pos;
+          pos++;
+          if (c < 0xC0)
+               continue;
+          if (*s++ < 0x80)
+               return int_nil;
+          if (c < 0xE0)
+               continue;
+          if (*s++ < 0x80)
+               return int_nil;
+          if (c < 0xF0)
+               continue;
+          if (*s++ < 0x80)
+               return int_nil;
+          if (c < 0xF8)
+               continue;
+          if (*s++ < 0x80)
+               return int_nil;
+          if (c < 0xFC)
+               continue;
+          if (*s++ < 0x80)
+               return int_nil;
+     }
+     return pos;
 }
 
 
@@ -863,17 +863,17 @@ UTF8_strlen(const char *val)
 typedef union YYSTYPE
 #line 111 "src/sql/server/sql_parser.y"
 {
-	int		i_val,bval;
-	lng		l_val,operation;
-	double		fval;
-	char *		sval;
-	symbol*		sym;
-	dlist*		l;
-	sql_subtype	type;
+     int       i_val,bval;
+     lng       l_val,operation;
+     double         fval;
+     char *         sval;
+     symbol*        sym;
+     dlist*         l;
+     sql_subtype    type;
 }
 /* Line 193 of yacc.c.  */
 #line 876 "src/sql/server/sql_parser.tab.c"
-	YYSTYPE;
+     YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -1023,7 +1023,7 @@ YYID (i)
 #  endif
 #  if (defined __cplusplus && ! defined _STDLIB_H \
        && ! ((defined YYMALLOC || defined malloc) \
-	     && (defined YYFREE || defined free)))
+          && (defined YYFREE || defined free)))
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   ifndef _STDLIB_H
 #    define _STDLIB_H 1
@@ -1049,7 +1049,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+      || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -1074,13 +1074,13 @@ union yyalloc
 #   define YYCOPY(To, From, Count) \
       __builtin_memcpy (To, From, (Count) * sizeof (*(From)))
 #  else
-#   define YYCOPY(To, From, Count)		\
-      do					\
-	{					\
-	  YYSIZE_T yyi;				\
-	  for (yyi = 0; yyi < (Count); yyi++)	\
-	    (To)[yyi] = (From)[yyi];		\
-	}					\
+#   define YYCOPY(To, From, Count)      \
+      do                      \
+     {                        \
+       YYSIZE_T yyi;                    \
+       for (yyi = 0; yyi < (Count); yyi++)   \
+         (To)[yyi] = (From)[yyi];       \
+     }                        \
       while (YYID (0))
 #  endif
 # endif
@@ -1090,15 +1090,15 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack)					\
-    do									\
-      {									\
-	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack, Stack, yysize);				\
-	Stack = &yyptr->Stack;						\
-	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-	yyptr += yynewbytes / sizeof (*yyptr);				\
-      }									\
+# define YYSTACK_RELOCATE(Stack)                       \
+    do                                            \
+      {                                           \
+     YYSIZE_T yynewbytes;                              \
+     YYCOPY (&yyptr->Stack, Stack, yysize);                 \
+     Stack = &yyptr->Stack;                            \
+     yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
+     yyptr += yynewbytes / sizeof (*yyptr);                 \
+      }                                           \
     while (YYID (0))
 
 #endif
@@ -1121,7 +1121,7 @@ union yyalloc
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   591
 
-#define YYTRANSLATE(YYX)						\
+#define YYTRANSLATE(YYX)                          \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
 /* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
@@ -1791,21 +1791,21 @@ static const yytype_uint16 yyrline[] =
     5388,  5389,  5390,  5391,  5393,  5394,  5395,  5396,  5397,  5398,
     5399,  5400,  5401,  5402,  5403,  5404,  5405,  5406,  5407,  5408,
     5409,  5410,  5411,  5412,  5413,  5414,  5415,  5416,  5417,  5421,
-    5422,  5427,  5450,  5471,  5508,  5510,  5518,  5525,  5530,  5545,
-    5546,  5550,  5553,  5557,  5563,  5572,  5573,  5574,  5575,  5581,
-    5588,  5589,  5590,  5594,  5598,  5600,  5605,  5609,  5610,  5611,
-    5612,  5613,  5614,  5615,  5616,  5617,  5618,  5622,  5630,  5638,
-    5645,  5659,  5660,  5664,  5668,  5672,  5676,  5680,  5684,  5691,
-    5695,  5699,  5700,  5710,  5718,  5719,  5723,  5727,  5731,  5738,
-    5740,  5745,  5749,  5750,  5754,  5755,  5756,  5757,  5758,  5762,
-    5775,  5776,  5780,  5782,  5787,  5793,  5797,  5798,  5802,  5807,
-    5816,  5817,  5821,  5832,  5836,  5837,  5842,  5852,  5855,  5857,
-    5861,  5865,  5866,  5870,  5871,  5875,  5879,  5882,  5884,  5888,
-    5889,  5893,  5901,  5910,  5911,  5915,  5916,  5920,  5921,  5922,
-    5937,  5941,  5942,  5952,  5953,  5957,  5961,  5965,  5975,  5979,
-    5982,  5984,  5988,  5989,  5992,  5994,  5998,  6003,  6004,  6008,
-    6009,  6013,  6017,  6020,  6022,  6026,  6030,  6034,  6037,  6039,
-    6043,  6044,  6048,  6050,  6054,  6058,  6059,  6063,  6067,  6071
+    5422,  5427,  5450,  5471,  5503,  5505,  5513,  5520,  5525,  5540,
+    5541,  5545,  5548,  5552,  5558,  5567,  5568,  5569,  5570,  5576,
+    5583,  5584,  5585,  5589,  5593,  5595,  5600,  5604,  5605,  5606,
+    5607,  5608,  5609,  5610,  5611,  5612,  5613,  5617,  5625,  5633,
+    5640,  5654,  5655,  5659,  5663,  5667,  5671,  5675,  5679,  5686,
+    5690,  5694,  5695,  5705,  5713,  5714,  5718,  5722,  5726,  5733,
+    5735,  5740,  5744,  5745,  5749,  5750,  5751,  5752,  5753,  5757,
+    5770,  5771,  5775,  5777,  5782,  5788,  5792,  5793,  5797,  5802,
+    5811,  5812,  5816,  5827,  5831,  5832,  5837,  5847,  5850,  5852,
+    5856,  5860,  5861,  5865,  5866,  5870,  5874,  5877,  5879,  5883,
+    5884,  5888,  5896,  5905,  5906,  5910,  5911,  5915,  5916,  5917,
+    5932,  5936,  5937,  5947,  5948,  5952,  5956,  5960,  5970,  5974,
+    5977,  5979,  5983,  5984,  5987,  5989,  5993,  5998,  5999,  6003,
+    6004,  6008,  6012,  6015,  6017,  6021,  6025,  6029,  6032,  6034,
+    6038,  6039,  6043,  6045,  6049,  6053,  6054,  6058,  6062,  6066
 };
 #endif
 
@@ -6754,44 +6754,44 @@ static const yytype_uint16 yystos[] =
      254,   520,   670,   176,   349,   670
 };
 
-#define yyerrok		(yyerrstatus = 0)
-#define yyclearin	(yychar = YYEMPTY)
-#define YYEMPTY		(-2)
-#define YYEOF		0
+#define yyerrok          (yyerrstatus = 0)
+#define yyclearin   (yychar = YYEMPTY)
+#define YYEMPTY          (-2)
+#define YYEOF       0
 
-#define YYACCEPT	goto yyacceptlab
-#define YYABORT		goto yyabortlab
-#define YYERROR		goto yyerrorlab
+#define YYACCEPT    goto yyacceptlab
+#define YYABORT          goto yyabortlab
+#define YYERROR          goto yyerrorlab
 
 
 /* Like YYERROR except do call yyerror.  This remains here temporarily
    to ease the transition to the new meaning of YYERROR, for GCC.
    Once GCC version 2 has supplanted version 1, this can go.  */
 
-#define YYFAIL		goto yyerrlab
+#define YYFAIL      goto yyerrlab
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)					\
-do								\
-  if (yychar == YYEMPTY && yylen == 1)				\
-    {								\
-      yychar = (Token);						\
-      yylval = (Value);						\
-      yytoken = YYTRANSLATE (yychar);				\
-      YYPOPSTACK (1);						\
-      goto yybackup;						\
-    }								\
-  else								\
-    {								\
+#define YYBACKUP(Token, Value)                         \
+do                                      \
+  if (yychar == YYEMPTY && yylen == 1)                 \
+    {                                        \
+      yychar = (Token);                           \
+      yylval = (Value);                           \
+      yytoken = YYTRANSLATE (yychar);                  \
+      YYPOPSTACK (1);                             \
+      goto yybackup;                              \
+    }                                        \
+  else                                       \
+    {                                        \
       yyerror (m, YY_("syntax error: cannot back up")); \
-      YYERROR;							\
-    }								\
+      YYERROR;                               \
+    }                                        \
 while (YYID (0))
 
 
-#define YYTERROR	1
-#define YYERRCODE	256
+#define YYTERROR    1
+#define YYERRCODE   256
 
 
 /* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
@@ -6800,22 +6800,22 @@ while (YYID (0))
 
 #define YYRHSLOC(Rhs, K) ((Rhs)[K])
 #ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)				\
-    do									\
+# define YYLLOC_DEFAULT(Current, Rhs, N)                    \
+    do                                            \
       if (YYID (N))                                                    \
-	{								\
-	  (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;	\
-	  (Current).first_column = YYRHSLOC (Rhs, 1).first_column;	\
-	  (Current).last_line    = YYRHSLOC (Rhs, N).last_line;		\
-	  (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
-	}								\
-      else								\
-	{								\
-	  (Current).first_line   = (Current).last_line   =		\
-	    YYRHSLOC (Rhs, 0).last_line;				\
-	  (Current).first_column = (Current).last_column =		\
-	    YYRHSLOC (Rhs, 0).last_column;				\
-	}								\
+     {                                       \
+       (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;    \
+       (Current).first_column = YYRHSLOC (Rhs, 1).first_column;  \
+       (Current).last_line    = YYRHSLOC (Rhs, N).last_line;          \
+       (Current).last_column  = YYRHSLOC (Rhs, N).last_column;   \
+     }                                       \
+      else                                        \
+     {                                       \
+       (Current).first_line   = (Current).last_line   =          \
+         YYRHSLOC (Rhs, 0).last_line;                  \
+       (Current).first_column = (Current).last_column =          \
+         YYRHSLOC (Rhs, 0).last_column;                \
+     }                                       \
     while (YYID (0))
 #endif
 
@@ -6826,10 +6826,10 @@ while (YYID (0))
 
 #ifndef YY_LOCATION_PRINT
 # if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
-#  define YY_LOCATION_PRINT(File, Loc)			\
-     fprintf (File, "%d.%d-%d.%d",			\
-	      (Loc).first_line, (Loc).first_column,	\
-	      (Loc).last_line,  (Loc).last_column)
+#  define YY_LOCATION_PRINT(File, Loc)            \
+     fprintf (File, "%d.%d-%d.%d",           \
+           (Loc).first_line, (Loc).first_column,  \
+           (Loc).last_line,  (Loc).last_column)
 # else
 #  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
 # endif
@@ -6852,21 +6852,21 @@ while (YYID (0))
 #  define YYFPRINTF fprintf
 # endif
 
-# define YYDPRINTF(Args)			\
-do {						\
-  if (yydebug)					\
-    YYFPRINTF Args;				\
+# define YYDPRINTF(Args)           \
+do {                          \
+  if (yydebug)                     \
+    YYFPRINTF Args;                \
 } while (YYID (0))
 
-# define YY_SYMBOL_PRINT(Title, Type, Value, Location)			  \
-do {									  \
-  if (yydebug)								  \
-    {									  \
-      YYFPRINTF (stderr, "%s ", Title);					  \
-      yy_symbol_print (stderr,						  \
-		  Type, Value, m); \
-      YYFPRINTF (stderr, "\n");						  \
-    }									  \
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)             \
+do {                                           \
+  if (yydebug)                                      \
+    {                                               \
+      YYFPRINTF (stderr, "%s ", Title);                       \
+      yy_symbol_print (stderr,                                \
+            Type, Value, m); \
+      YYFPRINTF (stderr, "\n");                               \
+    }                                               \
 } while (YYID (0))
 
 
@@ -6900,7 +6900,7 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, m)
   switch (yytype)
     {
       default:
-	break;
+     break;
     }
 }
 
@@ -6953,10 +6953,10 @@ yy_stack_print (bottom, top)
   YYFPRINTF (stderr, "\n");
 }
 
-# define YY_STACK_PRINT(Bottom, Top)				\
-do {								\
-  if (yydebug)							\
-    yy_stack_print ((Bottom), (Top));				\
+# define YY_STACK_PRINT(Bottom, Top)                   \
+do {                                    \
+  if (yydebug)                               \
+    yy_stack_print ((Bottom), (Top));                  \
 } while (YYID (0))
 
 
@@ -6980,21 +6980,21 @@ yy_reduce_print (yyvsp, yyrule, m)
   int yyi;
   unsigned long int yylno = yyrline[yyrule];
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
-	     yyrule - 1, yylno);
+          yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
-		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       , m);
+                 &(yyvsp[(yyi + 1) - (yynrhs)])
+                                , m);
       fprintf (stderr, "\n");
     }
 }
 
-# define YY_REDUCE_PRINT(Rule)		\
-do {					\
-  if (yydebug)				\
+# define YY_REDUCE_PRINT(Rule)          \
+do {                     \
+  if (yydebug)                \
     yy_reduce_print (yyvsp, Rule, m); \
 } while (YYID (0))
 
@@ -7010,7 +7010,7 @@ int yydebug;
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
-#ifndef	YYINITDEPTH
+#ifndef   YYINITDEPTH
 # define YYINITDEPTH 200
 #endif
 
@@ -7097,27 +7097,27 @@ yytnamerr (char *yyres, const char *yystr)
       char const *yyp = yystr;
 
       for (;;)
-	switch (*++yyp)
-	  {
-	  case '\'':
-	  case ',':
-	    goto do_not_strip_quotes;
+     switch (*++yyp)
+       {
+       case '\'':
+       case ',':
+         goto do_not_strip_quotes;
 
-	  case '\\':
-	    if (*++yyp != '\\')
-	      goto do_not_strip_quotes;
-	    /* Fall through.  */
-	  default:
-	    if (yyres)
-	      yyres[yyn] = *yyp;
-	    yyn++;
-	    break;
+       case '\\':
+         if (*++yyp != '\\')
+           goto do_not_strip_quotes;
+         /* Fall through.  */
+       default:
+         if (yyres)
+           yyres[yyn] = *yyp;
+         yyn++;
+         break;
 
-	  case '"':
-	    if (yyres)
-	      yyres[yyn] = '\0';
-	    return yyn;
-	  }
+       case '"':
+         if (yyres)
+           yyres[yyn] = '\0';
+         return yyn;
+       }
     do_not_strip_quotes: ;
     }
 
@@ -7155,7 +7155,7 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 
 # if 0
       /* This is so xgettext sees the translatable formats that are
-	 constructed on the fly.  */
+      constructed on the fly.  */
       YY_("syntax error, unexpected %s");
       YY_("syntax error, unexpected %s, expecting %s");
       YY_("syntax error, unexpected %s, expecting %s or %s");
@@ -7168,13 +7168,13 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
       static char const yyexpecting[] = ", expecting %s";
       static char const yyor[] = " or %s";
       char yyformat[sizeof yyunexpected
-		    + sizeof yyexpecting - 1
-		    + ((YYERROR_VERBOSE_ARGS_MAXIMUM - 2)
-		       * (sizeof yyor - 1))];
+              + sizeof yyexpecting - 1
+              + ((YYERROR_VERBOSE_ARGS_MAXIMUM - 2)
+                 * (sizeof yyor - 1))];
       char const *yyprefix = yyexpecting;
 
       /* Start YYX at -YYN if negative to avoid negative indexes in
-	 YYCHECK.  */
+      YYCHECK.  */
       int yyxbegin = yyn < 0 ? -yyn : 0;
 
       /* Stay within bounds of both yycheck and yytname.  */
@@ -7186,22 +7186,22 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
       yyfmt = yystpcpy (yyformat, yyunexpected);
 
       for (yyx = yyxbegin; yyx < yyxend; ++yyx)
-	if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-	  {
-	    if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
-	      {
-		yycount = 1;
-		yysize = yysize0;
-		yyformat[sizeof yyunexpected - 1] = '\0';
-		break;
-	      }
-	    yyarg[yycount++] = yytname[yyx];
-	    yysize1 = yysize + yytnamerr (0, yytname[yyx]);
-	    yysize_overflow |= (yysize1 < yysize);
-	    yysize = yysize1;
-	    yyfmt = yystpcpy (yyfmt, yyprefix);
-	    yyprefix = yyor;
-	  }
+     if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
+       {
+         if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
+           {
+          yycount = 1;
+          yysize = yysize0;
+          yyformat[sizeof yyunexpected - 1] = '\0';
+          break;
+           }
+         yyarg[yycount++] = yytname[yyx];
+         yysize1 = yysize + yytnamerr (0, yytname[yyx]);
+         yysize_overflow |= (yysize1 < yysize);
+         yysize = yysize1;
+         yyfmt = yystpcpy (yyfmt, yyprefix);
+         yyprefix = yyor;
+       }
 
       yyf = YY_(yyformat);
       yysize1 = yysize + yystrlen (yyf);
@@ -7209,29 +7209,29 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
       yysize = yysize1;
 
       if (yysize_overflow)
-	return YYSIZE_MAXIMUM;
+     return YYSIZE_MAXIMUM;
 
       if (yyresult)
-	{
-	  /* Avoid sprintf, as that infringes on the user's name space.
-	     Don't have undefined behavior even if the translation
-	     produced a string with the wrong number of "%s"s.  */
-	  char *yyp = yyresult;
-	  int yyi = 0;
-	  while ((*yyp = *yyf) != '\0')
-	    {
-	      if (*yyp == '%' && yyf[1] == 's' && yyi < yycount)
-		{
-		  yyp += yytnamerr (yyp, yyarg[yyi++]);
-		  yyf += 2;
-		}
-	      else
-		{
-		  yyp++;
-		  yyf++;
-		}
-	    }
-	}
+     {
+       /* Avoid sprintf, as that infringes on the user's name space.
+          Don't have undefined behavior even if the translation
+          produced a string with the wrong number of "%s"s.  */
+       char *yyp = yyresult;
+       int yyi = 0;
+       while ((*yyp = *yyf) != '\0')
+         {
+           if (*yyp == '%' && yyf[1] == 's' && yyi < yycount)
+          {
+            yyp += yytnamerr (yyp, yyarg[yyi++]);
+            yyf += 2;
+          }
+           else
+          {
+            yyp++;
+            yyf++;
+          }
+         }
+     }
       return yysize;
     }
 }
@@ -7267,7 +7267,7 @@ yydestruct (yymsg, yytype, yyvaluep, m)
     {
 
       default:
-	break;
+     break;
     }
 }
 
@@ -7380,7 +7380,7 @@ int yynerrs;
   yystate = 0;
   yyerrstatus = 0;
   yynerrs = 0;
-  yychar = YYEMPTY;		/* Cause a token to be read.  */
+  yychar = YYEMPTY;      /* Cause a token to be read.  */
 
   /* Initialize stack pointers.
      Waste one element of value and location stack
@@ -7410,25 +7410,25 @@ int yynerrs;
 
 #ifdef yyoverflow
       {
-	/* Give user a chance to reallocate the stack.  Use copies of
-	   these so that the &'s don't force the real ones into
-	   memory.  */
-	YYSTYPE *yyvs1 = yyvs;
-	yytype_int16 *yyss1 = yyss;
+     /* Give user a chance to reallocate the stack.  Use copies of
+        these so that the &'s don't force the real ones into
+        memory.  */
+     YYSTYPE *yyvs1 = yyvs;
+     yytype_int16 *yyss1 = yyss;
 
 
-	/* Each stack pointer address is followed by the size of the
-	   data in use in that stack, in bytes.  This used to be a
-	   conditional around just the two extra args, but that might
-	   be undefined if yyoverflow is a macro.  */
-	yyoverflow (YY_("memory exhausted"),
-		    &yyss1, yysize * sizeof (*yyssp),
-		    &yyvs1, yysize * sizeof (*yyvsp),
+     /* Each stack pointer address is followed by the size of the
+        data in use in that stack, in bytes.  This used to be a
+        conditional around just the two extra args, but that might
+        be undefined if yyoverflow is a macro.  */
+     yyoverflow (YY_("memory exhausted"),
+              &yyss1, yysize * sizeof (*yyssp),
+              &yyvs1, yysize * sizeof (*yyvsp),
 
-		    &yystacksize);
+              &yystacksize);
 
-	yyss = yyss1;
-	yyvs = yyvs1;
+     yyss = yyss1;
+     yyvs = yyvs1;
       }
 #else /* no yyoverflow */
 # ifndef YYSTACK_RELOCATE
@@ -7436,23 +7436,23 @@ int yynerrs;
 # else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-	goto yyexhaustedlab;
+     goto yyexhaustedlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-	yystacksize = YYMAXDEPTH;
+     yystacksize = YYMAXDEPTH;
 
       {
-	yytype_int16 *yyss1 = yyss;
-	union yyalloc *yyptr =
-	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-	if (! yyptr)
-	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss);
-	YYSTACK_RELOCATE (yyvs);
+     yytype_int16 *yyss1 = yyss;
+     union yyalloc *yyptr =
+       (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+     if (! yyptr)
+       goto yyexhaustedlab;
+     YYSTACK_RELOCATE (yyss);
+     YYSTACK_RELOCATE (yyvs);
 
 #  undef YYSTACK_RELOCATE
-	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+     if (yyss1 != yyssa)
+       YYSTACK_FREE (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -7462,10 +7462,10 @@ int yynerrs;
 
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-		  (unsigned long int) yystacksize));
+            (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
-	YYABORT;
+     YYABORT;
     }
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
@@ -7514,7 +7514,7 @@ yybackup:
   if (yyn <= 0)
     {
       if (yyn == 0 || yyn == YYTABLE_NINF)
-	goto yyerrlab;
+     goto yyerrlab;
       yyn = -yyn;
       goto yyreduce;
     }
@@ -7574,93 +7574,93 @@ yyreduce:
         case 2:
 #line 628 "src/sql/server/sql_parser.y"
     {
-		if (m->sym) {
-			append_symbol(m->sym->data.lval, (yyval.sym));
-			(yyval.sym) = m->sym;
-		} else {
-			m->sym = (yyval.sym) = (yyvsp[(1) - (2)].sym);
-		}
-		YYACCEPT;
-	}
+          if (m->sym) {
+               append_symbol(m->sym->data.lval, (yyval.sym));
+               (yyval.sym) = m->sym;
+          } else {
+               m->sym = (yyval.sym) = (yyvsp[(1) - (2)].sym);
+          }
+          YYACCEPT;
+     }
     break;
 
   case 3:
 #line 638 "src/sql/server/sql_parser.y"
     {
-		  	  m->emode = m_prepare; 
-			  m->scanner.as = m->scanner.yycur; 
-			  m->scanner.key = 0;
-			}
+                 m->emode = m_prepare; 
+                 m->scanner.as = m->scanner.yycur; 
+                 m->scanner.key = 0;
+               }
     break;
 
   case 4:
 #line 643 "src/sql/server/sql_parser.y"
     {
-			  if (m->sym) {
-				append_symbol(m->sym->data.lval, (yyvsp[(3) - (4)].sym));
-				(yyval.sym) = m->sym;
-			  } else {
-				m->sym = (yyval.sym) = (yyvsp[(3) - (4)].sym);
-			  }
-			  YYACCEPT;
-			}
+                 if (m->sym) {
+                    append_symbol(m->sym->data.lval, (yyvsp[(3) - (4)].sym));
+                    (yyval.sym) = m->sym;
+                 } else {
+                    m->sym = (yyval.sym) = (yyvsp[(3) - (4)].sym);
+                 }
+                 YYACCEPT;
+               }
     break;
 
   case 5:
 #line 652 "src/sql/server/sql_parser.y"
     {
-		  	  m->emode = m_plan;
-			  m->scanner.as = m->scanner.yycur; 
-			  m->scanner.key = 0;
-			}
+                 m->emode = m_plan;
+                 m->scanner.as = m->scanner.yycur; 
+                 m->scanner.key = 0;
+               }
     break;
 
   case 6:
 #line 657 "src/sql/server/sql_parser.y"
     {
-			  if (m->sym) {
-				append_symbol(m->sym->data.lval, (yyvsp[(3) - (4)].sym));
-				(yyval.sym) = m->sym;
-			  } else {
-				m->sym = (yyval.sym) = (yyvsp[(3) - (4)].sym);
-			  }
-			  YYACCEPT;
-			}
+                 if (m->sym) {
+                    append_symbol(m->sym->data.lval, (yyvsp[(3) - (4)].sym));
+                    (yyval.sym) = m->sym;
+                 } else {
+                    m->sym = (yyval.sym) = (yyvsp[(3) - (4)].sym);
+                 }
+                 YYACCEPT;
+               }
     break;
 
   case 7:
 #line 667 "src/sql/server/sql_parser.y"
     {
-		  	  m->emod |= mod_explain;
-			  m->scanner.as = m->scanner.yycur; 
-			  m->scanner.key = 0;
-			}
+                 m->emod |= mod_explain;
+                 m->scanner.as = m->scanner.yycur; 
+                 m->scanner.key = 0;
+               }
     break;
 
   case 8:
 #line 672 "src/sql/server/sql_parser.y"
     {
-			  if (m->sym) {
-				append_symbol(m->sym->data.lval, (yyvsp[(3) - (4)].sym));
-				(yyval.sym) = m->sym;
-			  } else {
-				m->sym = (yyval.sym) = (yyvsp[(3) - (4)].sym);
-			  }
-			  YYACCEPT;
-			}
+                 if (m->sym) {
+                    append_symbol(m->sym->data.lval, (yyvsp[(3) - (4)].sym));
+                    (yyval.sym) = m->sym;
+                 } else {
+                    m->sym = (yyval.sym) = (yyvsp[(3) - (4)].sym);
+                 }
+                 YYACCEPT;
+               }
     break;
 
   case 9:
 #line 682 "src/sql/server/sql_parser.y"
     {
-			  if (m->scanner.mode == LINE_1) {
-				yyerror(m, "SQL debugging only supported in interactive mode");
-				YYABORT;
-			  }
-		  	  m->emod |= mod_debug;
-			  m->scanner.as = m->scanner.yycur; 
-			  m->scanner.key = 0;
-			}
+                 if (m->scanner.mode == LINE_1) {
+                    yyerror(m, "SQL debugging only supported in interactive mode");
+                    YYABORT;
+                 }
+                 m->emod |= mod_debug;
+                 m->scanner.as = m->scanner.yycur; 
+                 m->scanner.key = 0;
+               }
     break;
 
   case 10:
@@ -7671,10 +7671,10 @@ yyreduce:
   case 11:
 #line 692 "src/sql/server/sql_parser.y"
     {
-		  	  m->emod |= mod_trace;
-			  m->scanner.as = m->scanner.yycur; 
-			  m->scanner.key = 0;
-			}
+                 m->emod |= mod_trace;
+                 m->scanner.as = m->scanner.yycur; 
+                 m->scanner.key = 0;
+               }
     break;
 
   case 12:
@@ -7740,11 +7740,11 @@ yyreduce:
   case 36:
 #line 744 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_list(l, (yyvsp[(2) - (5)].l));
-		append_list(l, (yyvsp[(3) - (5)].l));
-		append_symbol(l, (yyvsp[(4) - (5)].sym));
-		append_int(l, (yyvsp[(5) - (5)].i_val));
-		(yyval.sym) = _symbol_create_list( SQL_ANALYZE, l); }
+          append_list(l, (yyvsp[(2) - (5)].l));
+          append_list(l, (yyvsp[(3) - (5)].l));
+          append_symbol(l, (yyvsp[(4) - (5)].sym));
+          append_int(l, (yyvsp[(5) - (5)].i_val));
+          (yyval.sym) = _symbol_create_list( SQL_ANALYZE, l); }
     break;
 
   case 39:
@@ -7770,135 +7770,135 @@ yyreduce:
   case 43:
 #line 767 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_list(l, (yyvsp[(1) - (2)].l) );
-		append_type(l, &(yyvsp[(2) - (2)].type) );
-		(yyval.l) = append_symbol(L(), _symbol_create_list( SQL_DECLARE, l)); }
+          append_list(l, (yyvsp[(1) - (2)].l) );
+          append_type(l, &(yyvsp[(2) - (2)].type) );
+          (yyval.l) = append_symbol(L(), _symbol_create_list( SQL_DECLARE, l)); }
     break;
 
   case 44:
 #line 772 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_list(l, (yyvsp[(3) - (4)].l) );
-		append_type(l, &(yyvsp[(4) - (4)].type) );
-		(yyval.l) = append_symbol((yyvsp[(1) - (4)].l), _symbol_create_list( SQL_DECLARE, l)); }
+          append_list(l, (yyvsp[(3) - (4)].l) );
+          append_type(l, &(yyvsp[(4) - (4)].type) );
+          (yyval.l) = append_symbol((yyvsp[(1) - (4)].l), _symbol_create_list( SQL_DECLARE, l)); }
     break;
 
   case 45:
 #line 781 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_string(l, (yyvsp[(2) - (4)].sval) );
-		append_symbol(l, (yyvsp[(4) - (4)].sym) );
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+          append_string(l, (yyvsp[(2) - (4)].sval) );
+          append_symbol(l, (yyvsp[(4) - (4)].sym) );
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 46:
 #line 786 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  	append_list(l, (yyvsp[(2) - (4)].l));
-	  	append_symbol(l, (yyvsp[(4) - (4)].sym));
-	  	(yyval.sym) = _symbol_create_list( SQL_SET, l ); }
+          append_list(l, (yyvsp[(2) - (4)].l));
+          append_symbol(l, (yyvsp[(4) - (4)].sym));
+          (yyval.sym) = _symbol_create_list( SQL_SET, l ); }
     break;
 
   case 47:
 #line 791 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  sql_subtype t;
-	        sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(4) - (4)].sval)), 0 );
-		append_string(l, sa_strdup(SA, "current_user"));
-		append_symbol(l,
-			_newAtomNode( _atom_string(&t, sql2str((yyvsp[(4) - (4)].sval)))) );
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+            sql_subtype t;
+             sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(4) - (4)].sval)), 0 );
+          append_string(l, sa_strdup(SA, "current_user"));
+          append_symbol(l,
+               _newAtomNode( _atom_string(&t, sql2str((yyvsp[(4) - (4)].sval)))) );
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 48:
 #line 799 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  sql_subtype t;
-		sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(3) - (3)].sval)), 0 );
-		append_string(l, sa_strdup(SA, "current_schema"));
-		append_symbol(l,
-			_newAtomNode( _atom_string(&t, sql2str((yyvsp[(3) - (3)].sval)))) );
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+            sql_subtype t;
+          sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(3) - (3)].sval)), 0 );
+          append_string(l, sa_strdup(SA, "current_schema"));
+          append_symbol(l,
+               _newAtomNode( _atom_string(&t, sql2str((yyvsp[(3) - (3)].sval)))) );
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 49:
 #line 807 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  sql_subtype t;
-		sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(4) - (4)].sval)), 0 );
-		append_string(l, sa_strdup(SA, "current_user"));
-		append_symbol(l,
-			_newAtomNode( _atom_string(&t, sql2str((yyvsp[(4) - (4)].sval)))) );
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+            sql_subtype t;
+          sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(4) - (4)].sval)), 0 );
+          append_string(l, sa_strdup(SA, "current_user"));
+          append_symbol(l,
+               _newAtomNode( _atom_string(&t, sql2str((yyvsp[(4) - (4)].sval)))) );
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 50:
 #line 815 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  sql_subtype t;
-		sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(3) - (3)].sval)), 0);
-		append_string(l, sa_strdup(SA, "current_role"));
-		append_symbol(l,
-			_newAtomNode( _atom_string(&t, sql2str((yyvsp[(3) - (3)].sval)))) );
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+            sql_subtype t;
+          sql_find_subtype(&t, "char", UTF8_strlen((yyvsp[(3) - (3)].sval)), 0);
+          append_string(l, sa_strdup(SA, "current_role"));
+          append_symbol(l,
+               _newAtomNode( _atom_string(&t, sql2str((yyvsp[(3) - (3)].sval)))) );
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 51:
 #line 823 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_string(l, sa_strdup(SA, "current_timezone"));
-		append_symbol(l, _symbol_create_list( SQL_OP, append_list(L(),
-			append_string( L(), sa_strdup(SA, "local_timezone")))));
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+          append_string(l, sa_strdup(SA, "current_timezone"));
+          append_symbol(l, _symbol_create_list( SQL_OP, append_list(L(),
+               append_string( L(), sa_strdup(SA, "local_timezone")))));
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 52:
 #line 829 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_string(l, sa_strdup(SA, "current_timezone"));
-		append_symbol(l, (yyvsp[(4) - (4)].sym) );
-		(yyval.sym) = _symbol_create_list( SQL_SET, l); }
+          append_string(l, sa_strdup(SA, "current_timezone"));
+          append_symbol(l, (yyvsp[(4) - (4)].sym) );
+          (yyval.sym) = _symbol_create_list( SQL_SET, l); }
     break;
 
   case 53:
 #line 838 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_list(l, (yyvsp[(4) - (7)].l));
-		append_symbol(l, (yyvsp[(5) - (7)].sym));
-		append_symbol(l, (yyvsp[(6) - (7)].sym));
-		append_list(l, (yyvsp[(7) - (7)].l));
-		append_int(l, (yyvsp[(3) - (7)].bval));
-		(yyval.sym) = _symbol_create_list( SQL_CREATE_SCHEMA, l); }
+          append_list(l, (yyvsp[(4) - (7)].l));
+          append_symbol(l, (yyvsp[(5) - (7)].sym));
+          append_symbol(l, (yyvsp[(6) - (7)].sym));
+          append_list(l, (yyvsp[(7) - (7)].l));
+          append_int(l, (yyvsp[(3) - (7)].bval));
+          (yyval.sym) = _symbol_create_list( SQL_CREATE_SCHEMA, l); }
     break;
 
   case 54:
 #line 846 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		append_list(l, (yyvsp[(4) - (5)].l));
-		append_int(l, (yyvsp[(5) - (5)].i_val));
-		append_int(l, (yyvsp[(3) - (5)].bval));
-		(yyval.sym) = _symbol_create_list( SQL_DROP_SCHEMA, l); }
+          append_list(l, (yyvsp[(4) - (5)].l));
+          append_int(l, (yyvsp[(5) - (5)].i_val));
+          append_int(l, (yyvsp[(3) - (5)].bval));
+          (yyval.sym) = _symbol_create_list( SQL_DROP_SCHEMA, l); }
     break;
 
   case 55:
 #line 855 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_string((yyval.l), (yyvsp[(1) - (1)].sval) );
-	  append_string((yyval.l), NULL ); }
+       append_string((yyval.l), (yyvsp[(1) - (1)].sval) );
+       append_string((yyval.l), NULL ); }
     break;
 
   case 56:
 #line 859 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_string((yyval.l), NULL );
-	  append_string((yyval.l), (yyvsp[(2) - (2)].sval) ); }
+       append_string((yyval.l), NULL );
+       append_string((yyval.l), (yyvsp[(2) - (2)].sval) ); }
     break;
 
   case 57:
 #line 863 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_string((yyval.l), (yyvsp[(1) - (3)].sval) );
-	  append_string((yyval.l), (yyvsp[(3) - (3)].sval) ); }
+       append_string((yyval.l), (yyvsp[(1) - (3)].sval) );
+       append_string((yyval.l), (yyvsp[(3) - (3)].sval) ); }
     break;
 
   case 59:
@@ -7949,22 +7949,22 @@ yyreduce:
   case 74:
 #line 901 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (6)].l));
-	  append_list(l, (yyvsp[(4) - (6)].l));
-	  append_int(l, (yyvsp[(5) - (6)].bval));
-	  append_int(l, (yyvsp[(6) - (6)].i_val));
-	(yyval.sym) = _symbol_create_list( SQL_GRANT, l);
-	}
+       append_list(l, (yyvsp[(2) - (6)].l));
+       append_list(l, (yyvsp[(4) - (6)].l));
+       append_int(l, (yyvsp[(5) - (6)].bval));
+       append_int(l, (yyvsp[(6) - (6)].i_val));
+     (yyval.sym) = _symbol_create_list( SQL_GRANT, l);
+     }
     break;
 
   case 75:
 #line 911 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (6)].l));
-	  append_list(l, (yyvsp[(4) - (6)].l));
-	  append_int(l, (yyvsp[(5) - (6)].bval));
-	  append_int(l, (yyvsp[(6) - (6)].i_val));
-	(yyval.sym) = _symbol_create_list( SQL_GRANT_ROLES, l); }
+       append_list(l, (yyvsp[(2) - (6)].l));
+       append_list(l, (yyvsp[(4) - (6)].l));
+       append_int(l, (yyvsp[(5) - (6)].bval));
+       append_int(l, (yyvsp[(6) - (6)].i_val));
+     (yyval.sym) = _symbol_create_list( SQL_GRANT_ROLES, l); }
     break;
 
   case 76:
@@ -8010,22 +8010,22 @@ yyreduce:
   case 84:
 #line 943 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_list(l, (yyvsp[(5) - (6)].l));
-	  append_int(l, (yyvsp[(2) - (6)].bval)); /* GRANT OPTION FOR */
-	  append_int(l, 0);
-	  append_int(l, (yyvsp[(6) - (6)].i_val));
-	(yyval.sym) = _symbol_create_list( SQL_REVOKE, l); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_list(l, (yyvsp[(5) - (6)].l));
+       append_int(l, (yyvsp[(2) - (6)].bval)); /* GRANT OPTION FOR */
+       append_int(l, 0);
+       append_int(l, (yyvsp[(6) - (6)].i_val));
+     (yyval.sym) = _symbol_create_list( SQL_REVOKE, l); }
     break;
 
   case 85:
 #line 951 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_list(l, (yyvsp[(5) - (6)].l));
-	  append_int(l, (yyvsp[(2) - (6)].bval));
-	  append_int(l, (yyvsp[(6) - (6)].i_val));
-	(yyval.sym) = _symbol_create_list( SQL_REVOKE_ROLES, l); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_list(l, (yyvsp[(5) - (6)].l));
+       append_int(l, (yyvsp[(2) - (6)].bval));
+       append_int(l, (yyvsp[(6) - (6)].i_val));
+     (yyval.sym) = _symbol_create_list( SQL_REVOKE_ROLES, l); }
     break;
 
   case 86:
@@ -8051,15 +8051,15 @@ yyreduce:
   case 90:
 #line 971 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_list((yyval.l), (yyvsp[(1) - (1)].l));
-	  append_symbol((yyval.l), _symbol_create(SQL_GRANT, NULL)); }
+       append_list((yyval.l), (yyvsp[(1) - (1)].l));
+       append_symbol((yyval.l), _symbol_create(SQL_GRANT, NULL)); }
     break;
 
   case 91:
 #line 975 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_list((yyval.l), (yyvsp[(1) - (3)].l));
-	  append_symbol((yyval.l), (yyvsp[(3) - (3)].sym)); }
+       append_list((yyval.l), (yyvsp[(1) - (3)].l));
+       append_symbol((yyval.l), (yyvsp[(3) - (3)].sym)); }
     break;
 
   case 92:
@@ -8175,138 +8175,138 @@ yyreduce:
   case 115:
 #line 1042 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_symbol(l, (yyvsp[(6) - (6)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_symbol(l, (yyvsp[(6) - (6)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 116:
 #line 1047 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_symbol(l, _symbol_create_list( SQL_TABLE, append_list(L(),(yyvsp[(6) - (6)].l))));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_symbol(l, _symbol_create_list( SQL_TABLE, append_list(L(),(yyvsp[(6) - (6)].l))));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 117:
 #line 1052 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 118:
 #line 1057 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 119:
 #line 1062 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_readonly));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_readonly));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 120:
 #line 1067 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_append));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_append));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 121:
 #line 1072 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (6)].l));
-	  append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_writable));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
+       append_list(l, (yyvsp[(3) - (6)].l));
+       append_symbol(l, _symbol_create_int(SQL_ALTER_TABLE, tr_writable));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_TABLE, l ); }
     break;
 
   case 122:
 #line 1077 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(3) - (4)].sval));
-	  append_list(l, (yyvsp[(4) - (4)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_USER, l ); }
+       append_string(l, (yyvsp[(3) - (4)].sval));
+       append_list(l, (yyvsp[(4) - (4)].l));
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_USER, l ); }
     break;
 
   case 123:
 #line 1082 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(3) - (6)].sval));
-	  append_string(l, (yyvsp[(6) - (6)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_RENAME_USER, l ); }
+       append_string(l, (yyvsp[(3) - (6)].sval));
+       append_string(l, (yyvsp[(6) - (6)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_RENAME_USER, l ); }
     break;
 
   case 124:
 #line 1087 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  dlist *p = L();
-	  append_string(l, NULL);
-	  append_string(p, (yyvsp[(6) - (10)].sval));
-	  append_string(p, NULL);
-	  append_int(p, (yyvsp[(4) - (10)].i_val));
-	  append_string(p, (yyvsp[(10) - (10)].sval));
-	  append_list(l, p);
-	  (yyval.sym) = _symbol_create_list( SQL_ALTER_USER, l ); }
+       dlist *p = L();
+       append_string(l, NULL);
+       append_string(p, (yyvsp[(6) - (10)].sval));
+       append_string(p, NULL);
+       append_int(p, (yyvsp[(4) - (10)].i_val));
+       append_string(p, (yyvsp[(10) - (10)].sval));
+       append_list(l, p);
+       (yyval.sym) = _symbol_create_list( SQL_ALTER_USER, l ); }
     break;
 
   case 125:
 #line 1099 "src/sql/server/sql_parser.y"
     { dlist * l = L();
-				  append_string(l, (yyvsp[(4) - (4)].sval));
-				  append_string(l, NULL);
-				  append_int(l, (yyvsp[(2) - (4)].i_val));
-				  append_string(l, NULL);
-				  (yyval.l) = l; }
+                      append_string(l, (yyvsp[(4) - (4)].sval));
+                      append_string(l, NULL);
+                      append_int(l, (yyvsp[(2) - (4)].i_val));
+                      append_string(l, NULL);
+                      (yyval.l) = l; }
     break;
 
   case 126:
 #line 1105 "src/sql/server/sql_parser.y"
     { dlist * l = L();
-				  append_string(l, NULL);
-				  append_string(l, (yyvsp[(3) - (3)].sval));
-				  append_int(l, 0);
-				  append_string(l, NULL);
-				  (yyval.l) = l; }
+                      append_string(l, NULL);
+                      append_string(l, (yyvsp[(3) - (3)].sval));
+                      append_int(l, 0);
+                      append_string(l, NULL);
+                      (yyval.l) = l; }
     break;
 
   case 127:
 #line 1112 "src/sql/server/sql_parser.y"
     { dlist * l = L();
-				  append_string(l, (yyvsp[(4) - (7)].sval));
-				  append_string(l, (yyvsp[(7) - (7)].sval));
-				  append_int(l, (yyvsp[(2) - (7)].i_val));
-				  append_string(l, NULL);
-				  (yyval.l) = l; }
+                      append_string(l, (yyvsp[(4) - (7)].sval));
+                      append_string(l, (yyvsp[(7) - (7)].sval));
+                      append_int(l, (yyvsp[(2) - (7)].i_val));
+                      append_string(l, NULL);
+                      (yyval.l) = l; }
     break;
 
   case 128:
 #line 1122 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (5)].sval));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_DEFAULT, l); }
+       append_string(l, (yyvsp[(2) - (5)].sval));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_DEFAULT, l); }
     break;
 
   case 129:
 #line 1127 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (4)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_NULL, l); }
+       append_string(l, (yyvsp[(2) - (4)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_NULL, l); }
     break;
 
   case 130:
 #line 1131 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (5)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_NOT_NULL, l); }
+       append_string(l, (yyvsp[(2) - (5)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_NOT_NULL, l); }
     break;
 
   case 131:
@@ -8317,46 +8317,46 @@ yyreduce:
   case 132:
 #line 1137 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (5)].sval));
-	  if (!strlen((yyvsp[(5) - (5)].sval)))
-	  	append_string(l, NULL);
-	  else
-	  	append_string(l, (yyvsp[(5) - (5)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_STORAGE, l); }
+       append_string(l, (yyvsp[(2) - (5)].sval));
+       if (!strlen((yyvsp[(5) - (5)].sval)))
+          append_string(l, NULL);
+       else
+          append_string(l, (yyvsp[(5) - (5)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_STORAGE, l); }
     break;
 
   case 133:
 #line 1145 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (5)].sval));
-	  append_string(l, NULL);
-	  (yyval.sym) = _symbol_create_list( SQL_STORAGE, l); }
+       append_string(l, (yyvsp[(2) - (5)].sval));
+       append_string(l, NULL);
+       (yyval.sym) = _symbol_create_list( SQL_STORAGE, l); }
     break;
 
   case 134:
 #line 1153 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (3)].sval) );
-	  append_int(l, (yyvsp[(3) - (3)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_COLUMN, l ); }
+       append_string(l, (yyvsp[(2) - (3)].sval) );
+       append_int(l, (yyvsp[(3) - (3)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_COLUMN, l ); }
     break;
 
   case 135:
 #line 1158 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (3)].sval) );
-	  append_int(l, (yyvsp[(3) - (3)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_CONSTRAINT, l ); }
+       append_string(l, (yyvsp[(2) - (3)].sval) );
+       append_int(l, (yyvsp[(3) - (3)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_CONSTRAINT, l ); }
     break;
 
   case 136:
 #line 1163 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (3)].l) );
-	  append_int(l, (yyvsp[(3) - (3)].i_val) );
-	  append_int(l, 0);
-	  append_int(l, FALSE ); /* no if exists check */
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_TABLE, l ); }
+       append_list(l, (yyvsp[(2) - (3)].l) );
+       append_int(l, (yyvsp[(3) - (3)].i_val) );
+       append_int(l, 0);
+       append_int(l, FALSE ); /* no if exists check */
+       (yyval.sym) = _symbol_create_list( SQL_DROP_TABLE, l ); }
     break;
 
   case 137:
@@ -8387,31 +8387,31 @@ yyreduce:
   case 147:
 #line 1201 "src/sql/server/sql_parser.y"
     {
-		dlist *l = L();
-		append_list(l, (yyvsp[(3) - (4)].l));
-		append_list(l, (yyvsp[(4) - (4)].l));
-		append_int(l, 0); /* to be dropped */
-		(yyval.sym) = _symbol_create_list(SQL_CREATE_SEQ, l);
-	}
+          dlist *l = L();
+          append_list(l, (yyvsp[(3) - (4)].l));
+          append_list(l, (yyvsp[(4) - (4)].l));
+          append_int(l, 0); /* to be dropped */
+          (yyval.sym) = _symbol_create_list(SQL_CREATE_SEQ, l);
+     }
     break;
 
   case 148:
 #line 1212 "src/sql/server/sql_parser.y"
     {
-		dlist *l = L();
-		append_list(l, (yyvsp[(3) - (3)].l));
-		(yyval.sym) = _symbol_create_list(SQL_DROP_SEQ, l);
-	}
+          dlist *l = L();
+          append_list(l, (yyvsp[(3) - (3)].l));
+          (yyval.sym) = _symbol_create_list(SQL_DROP_SEQ, l);
+     }
     break;
 
   case 149:
 #line 1229 "src/sql/server/sql_parser.y"
     {
-		dlist *l = L();
-		append_list(l, (yyvsp[(3) - (4)].l));
-		append_list(l, (yyvsp[(4) - (4)].l)); 
-		(yyval.sym) = _symbol_create_list(SQL_ALTER_SEQ, l);
-	}
+          dlist *l = L();
+          append_list(l, (yyvsp[(3) - (4)].l));
+          append_list(l, (yyvsp[(4) - (4)].l)); 
+          (yyval.sym) = _symbol_create_list(SQL_ALTER_SEQ, l);
+     }
     break;
 
   case 150:
@@ -8517,11 +8517,11 @@ yyreduce:
   case 170:
 #line 1277 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(4) - (9)].sval));
-	  append_int(l, (yyvsp[(2) - (9)].i_val));
-	  append_list(l, (yyvsp[(6) - (9)].l));
-	  append_list(l, (yyvsp[(8) - (9)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_INDEX, l); }
+       append_string(l, (yyvsp[(4) - (9)].sval));
+       append_int(l, (yyvsp[(2) - (9)].i_val));
+       append_list(l, (yyvsp[(6) - (9)].l));
+       append_list(l, (yyvsp[(8) - (9)].l));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_INDEX, l); }
     break;
 
   case 171:
@@ -8547,20 +8547,20 @@ yyreduce:
   case 175:
 #line 1310 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (3)].sval));
-	  append_int(l, (yyvsp[(3) - (3)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_ROLE, l ); }
+       append_string(l, (yyvsp[(2) - (3)].sval));
+       append_int(l, (yyvsp[(3) - (3)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_ROLE, l ); }
     break;
 
   case 176:
 #line 1315 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (10)].sval));
-	  append_string(l, (yyvsp[(6) - (10)].sval));
-	  append_string(l, (yyvsp[(8) - (10)].sval));
-	  append_string(l, (yyvsp[(10) - (10)].sval));
-	  append_int(l, (yyvsp[(4) - (10)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_USER, l ); }
+       append_string(l, (yyvsp[(2) - (10)].sval));
+       append_string(l, (yyvsp[(6) - (10)].sval));
+       append_string(l, (yyvsp[(8) - (10)].sval));
+       append_string(l, (yyvsp[(10) - (10)].sval));
+       append_int(l, (yyvsp[(4) - (10)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_USER, l ); }
     break;
 
   case 177:
@@ -8591,16 +8591,16 @@ yyreduce:
   case 182:
 #line 1337 "src/sql/server/sql_parser.y"
     { int commit_action = CA_COMMIT;
-	  dlist *l = L();
+       dlist *l = L();
 
-	  append_int(l, SQL_PERSIST);
-	  append_list(l, (yyvsp[(3) - (5)].l));
-	  append_symbol(l, (yyvsp[(4) - (5)].sym));
-	  append_int(l, commit_action);
-	  append_string(l, NULL);
-	  append_int(l, (yyvsp[(2) - (5)].bval));
-	  append_list(l, (yyvsp[(5) - (5)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
+       append_int(l, SQL_PERSIST);
+       append_list(l, (yyvsp[(3) - (5)].l));
+       append_symbol(l, (yyvsp[(4) - (5)].sym));
+       append_int(l, commit_action);
+       append_string(l, NULL);
+       append_int(l, (yyvsp[(2) - (5)].bval));
+       append_list(l, (yyvsp[(5) - (5)].l));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
     break;
 
   case 183:
@@ -8616,73 +8616,73 @@ yyreduce:
   case 184:
 #line 1356 "src/sql/server/sql_parser.y"
     { int commit_action = CA_COMMIT, tpe = SQL_STREAM;
-	  dlist *l = L();
+       dlist *l = L();
 
-	  append_int(l, tpe);
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  append_int(l, commit_action);
-	  append_string(l, NULL);
-	  append_int(l, (yyvsp[(3) - (5)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
+       append_int(l, tpe);
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       append_int(l, commit_action);
+       append_string(l, NULL);
+       append_int(l, (yyvsp[(3) - (5)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
     break;
 
   case 185:
 #line 1367 "src/sql/server/sql_parser.y"
     { int commit_action = CA_COMMIT, tpe = SQL_MERGE_TABLE;
-	  dlist *l = L();
+       dlist *l = L();
 
-	  append_int(l, tpe);
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  append_int(l, commit_action);
-	  append_string(l, NULL);
-	  append_int(l, (yyvsp[(3) - (5)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
+       append_int(l, tpe);
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       append_int(l, commit_action);
+       append_string(l, NULL);
+       append_int(l, (yyvsp[(3) - (5)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
     break;
 
   case 186:
 #line 1378 "src/sql/server/sql_parser.y"
     { int commit_action = CA_COMMIT, tpe = SQL_REPLICA_TABLE;
-	  dlist *l = L();
+       dlist *l = L();
 
-	  append_int(l, tpe);
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  append_int(l, commit_action);
-	  append_string(l, NULL);
-	  append_int(l, (yyvsp[(3) - (5)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
+       append_int(l, tpe);
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       append_int(l, commit_action);
+       append_string(l, NULL);
+       append_int(l, (yyvsp[(3) - (5)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
     break;
 
   case 187:
 #line 1392 "src/sql/server/sql_parser.y"
     { int commit_action = CA_COMMIT, tpe = SQL_REMOTE;
-	  dlist *l = L();
+       dlist *l = L();
 
-	  append_int(l, tpe);
-	  append_list(l, (yyvsp[(4) - (7)].l));
-	  append_symbol(l, (yyvsp[(5) - (7)].sym));
-	  append_int(l, commit_action);
-	  append_string(l, (yyvsp[(7) - (7)].sval));
-	  append_int(l, (yyvsp[(3) - (7)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
+       append_int(l, tpe);
+       append_list(l, (yyvsp[(4) - (7)].l));
+       append_symbol(l, (yyvsp[(5) - (7)].sym));
+       append_int(l, commit_action);
+       append_string(l, (yyvsp[(7) - (7)].sval));
+       append_int(l, (yyvsp[(3) - (7)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
     break;
 
   case 188:
 #line 1403 "src/sql/server/sql_parser.y"
     { int commit_action = CA_COMMIT;
-	  dlist *l = L();
+       dlist *l = L();
 
-	  append_int(l, (yyvsp[(1) - (6)].i_val));
-	  append_list(l, (yyvsp[(4) - (6)].l));
-	  append_symbol(l, (yyvsp[(5) - (6)].sym));
-	  if ((yyvsp[(1) - (6)].i_val) != SQL_PERSIST)
-		commit_action = (yyvsp[(6) - (6)].i_val);
-	  append_int(l, commit_action);
-	  append_string(l, NULL);
-	  append_int(l, (yyvsp[(3) - (6)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
+       append_int(l, (yyvsp[(1) - (6)].i_val));
+       append_list(l, (yyvsp[(4) - (6)].l));
+       append_symbol(l, (yyvsp[(5) - (6)].sym));
+       if ((yyvsp[(1) - (6)].i_val) != SQL_PERSIST)
+          commit_action = (yyvsp[(6) - (6)].i_val);
+       append_int(l, commit_action);
+       append_string(l, NULL);
+       append_int(l, (yyvsp[(3) - (6)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_TABLE, l ); }
     break;
 
   case 189:
@@ -8748,8 +8748,8 @@ yyreduce:
   case 201:
 #line 1443 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_list(L(), (yyvsp[(1) - (4)].l));
-			  append_symbol((yyval.l), (yyvsp[(3) - (4)].sym)); 
-			  append_int((yyval.l), (yyvsp[(4) - (4)].i_val)); }
+                 append_symbol((yyval.l), (yyvsp[(3) - (4)].sym)); 
+                 append_int((yyval.l), (yyvsp[(4) - (4)].i_val)); }
     break;
 
   case 202:
@@ -8790,65 +8790,65 @@ yyreduce:
   case 214:
 #line 1471 "src/sql/server/sql_parser.y"
     {
-			dlist *l = L();
-			append_string(l, (yyvsp[(1) - (3)].sval));
-			append_type(l, &(yyvsp[(2) - (3)].type));
-			append_list(l, (yyvsp[(3) - (3)].l));
-			(yyval.sym) = _symbol_create_list(SQL_COLUMN, l);
-		}
+               dlist *l = L();
+               append_string(l, (yyvsp[(1) - (3)].sval));
+               append_type(l, &(yyvsp[(2) - (3)].type));
+               append_list(l, (yyvsp[(3) - (3)].l));
+               (yyval.sym) = _symbol_create_list(SQL_COLUMN, l);
+          }
     break;
 
   case 215:
 #line 1479 "src/sql/server/sql_parser.y"
     { /* SERIAL = INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY */
-			/* handle multi-statements by wrapping them in a list */
-			sql_subtype it;
-			dlist* stmts;
-			/* note: sql_next_seq_name uses sa_alloc */
-			str sn = sql_next_seq_name(m);
-			dlist *p; /* primary key */
-			/* sequence generation code */
-			dlist *l = L();
-			/* finally all the options */
-			dlist *o = L();
+               /* handle multi-statements by wrapping them in a list */
+               sql_subtype it;
+               dlist* stmts;
+               /* note: sql_next_seq_name uses sa_alloc */
+               str sn = sql_next_seq_name(m);
+               dlist *p; /* primary key */
+               /* sequence generation code */
+               dlist *l = L();
+               /* finally all the options */
+               dlist *o = L();
 
-			/* the name of the sequence */
-			dlist *seqn1 = L(), *seqn2 = L();
+               /* the name of the sequence */
+               dlist *seqn1 = L(), *seqn2 = L();
 
-			if (m->scanner.schema)
-				append_string(seqn1, m->scanner.schema);
-			append_list(l, append_string(seqn1, sn));
-			if ((yyvsp[(2) - (2)].i_val) == 1)
-				sql_find_subtype(&it, "bigint", 64, 0);
-			else
-				sql_find_subtype(&it, "int", 32, 0);
-    			append_symbol(o, _symbol_create_list(SQL_TYPE, append_type(L(),&it)));
-			append_list(l, o);
-			append_int(l, 1); /* to be dropped */
+               if (m->scanner.schema)
+                    append_string(seqn1, m->scanner.schema);
+               append_list(l, append_string(seqn1, sn));
+               if ((yyvsp[(2) - (2)].i_val) == 1)
+                    sql_find_subtype(&it, "bigint", 64, 0);
+               else
+                    sql_find_subtype(&it, "int", 32, 0);
+               append_symbol(o, _symbol_create_list(SQL_TYPE, append_type(L(),&it)));
+               append_list(l, o);
+               append_int(l, 1); /* to be dropped */
 
-			if (m->sym) {
-				stmts = m->sym->data.lval;
-			} else {
-				stmts = L();
-				m->sym = _symbol_create_list(SQL_MULSTMT, stmts);
-			}	
-			append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
+               if (m->sym) {
+                    stmts = m->sym->data.lval;
+               } else {
+                    stmts = L();
+                    m->sym = _symbol_create_list(SQL_MULSTMT, stmts);
+               }    
+               append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
 
-			l = L();
-			append_string(l, (yyvsp[(1) - (2)].sval));
-			append_type(l, &it);
-			o = L();
-			if (m->scanner.schema)
-				append_string(seqn2, m->scanner.schema);
-			append_string(seqn2, sn);
-			append_symbol(o, _symbol_create_symbol(SQL_DEFAULT, _symbol_create_list(SQL_NEXT, seqn2)));
-			p = L();
-			append_string(p, NULL);
-			append_symbol(p, _symbol_create(SQL_PRIMARY_KEY, NULL));
-			append_symbol(o, _symbol_create_list(SQL_CONSTRAINT, p));
-			append_list(l, o);
-			(yyval.sym) = _symbol_create_list(SQL_COLUMN, l);
-		}
+               l = L();
+               append_string(l, (yyvsp[(1) - (2)].sval));
+               append_type(l, &it);
+               o = L();
+               if (m->scanner.schema)
+                    append_string(seqn2, m->scanner.schema);
+               append_string(seqn2, sn);
+               append_symbol(o, _symbol_create_symbol(SQL_DEFAULT, _symbol_create_list(SQL_NEXT, seqn2)));
+               p = L();
+               append_string(p, NULL);
+               append_symbol(p, _symbol_create(SQL_PRIMARY_KEY, NULL));
+               append_symbol(o, _symbol_create_list(SQL_CONSTRAINT, p));
+               append_list(l, o);
+               (yyval.sym) = _symbol_create_list(SQL_COLUMN, l);
+          }
     break;
 
   case 216:
@@ -8869,9 +8869,9 @@ yyreduce:
   case 220:
 #line 1545 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(1) - (6)].sval) );
-	  append_list(l, (yyvsp[(5) - (6)].l) );
-	  (yyval.sym) = _symbol_create_list( SQL_COLUMN_OPTIONS, l ); }
+       append_string(l, (yyvsp[(1) - (6)].sval) );
+       append_list(l, (yyvsp[(5) - (6)].l) );
+       (yyval.sym) = _symbol_create_list( SQL_COLUMN_OPTIONS, l ); }
     break;
 
   case 221:
@@ -8897,79 +8897,79 @@ yyreduce:
   case 228:
 #line 1571 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(1) - (2)].sval) );
-	  append_symbol(l, (yyvsp[(2) - (2)].sym) );
-	  (yyval.sym) = _symbol_create_list( SQL_CONSTRAINT, l ); }
+       append_string(l, (yyvsp[(1) - (2)].sval) );
+       append_symbol(l, (yyvsp[(2) - (2)].sym) );
+       (yyval.sym) = _symbol_create_list( SQL_CONSTRAINT, l ); }
     break;
 
   case 229:
 #line 1579 "src/sql/server/sql_parser.y"
     {
-		/* handle multi-statements by wrapping them in a list */
-		sql_subtype it;
-		dlist* stmts;
-		/* note: sql_next_seq_name uses sa_alloc */
-		str sn = sql_next_seq_name(m);
-		/* sequence generation code */
-		dlist *l = L();
-		/* the name of the sequence */
-		append_list(l, append_string(L(), sn));
-		if (!(yyvsp[(5) - (5)].l))
-			(yyvsp[(5) - (5)].l) = L();
-		sql_find_subtype(&it, "int", 32, 0);
-    		append_symbol((yyvsp[(5) - (5)].l), _symbol_create_list(SQL_TYPE, append_type(L(),&it)));
+          /* handle multi-statements by wrapping them in a list */
+          sql_subtype it;
+          dlist* stmts;
+          /* note: sql_next_seq_name uses sa_alloc */
+          str sn = sql_next_seq_name(m);
+          /* sequence generation code */
+          dlist *l = L();
+          /* the name of the sequence */
+          append_list(l, append_string(L(), sn));
+          if (!(yyvsp[(5) - (5)].l))
+               (yyvsp[(5) - (5)].l) = L();
+          sql_find_subtype(&it, "int", 32, 0);
+          append_symbol((yyvsp[(5) - (5)].l), _symbol_create_list(SQL_TYPE, append_type(L(),&it)));
 
-		/* finally all the options */
-		append_list(l, (yyvsp[(5) - (5)].l));
-		append_int(l, 0); /* to be dropped */
-		(yyval.sym) = _symbol_create_symbol(SQL_DEFAULT, _symbol_create_list(SQL_NEXT, append_string(L(), sn)));
+          /* finally all the options */
+          append_list(l, (yyvsp[(5) - (5)].l));
+          append_int(l, 0); /* to be dropped */
+          (yyval.sym) = _symbol_create_symbol(SQL_DEFAULT, _symbol_create_list(SQL_NEXT, append_string(L(), sn)));
 
-		if (m->sym) {
-			stmts = m->sym->data.lval;
-		} else {
-			stmts = L();
-			m->sym = _symbol_create_list(SQL_MULSTMT, stmts);
-		}	
-		append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
-	}
+          if (m->sym) {
+               stmts = m->sym->data.lval;
+          } else {
+               stmts = L();
+               m->sym = _symbol_create_list(SQL_MULSTMT, stmts);
+          }    
+          append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
+     }
     break;
 
   case 230:
 #line 1608 "src/sql/server/sql_parser.y"
     {
-		/* handle multi-statements by wrapping them in a list */
-		sql_subtype it;
-		dlist* stmts;
-		/* note: sql_next_seq_name uses sa_alloc */
-		str sn = sql_next_seq_name(m);
-		/* sequence generation code */
-		dlist *l = L();
-		/* finally all the options */
-		dlist *o = L();
+          /* handle multi-statements by wrapping them in a list */
+          sql_subtype it;
+          dlist* stmts;
+          /* note: sql_next_seq_name uses sa_alloc */
+          str sn = sql_next_seq_name(m);
+          /* sequence generation code */
+          dlist *l = L();
+          /* finally all the options */
+          dlist *o = L();
 
-		/* the name of the sequence */
-		dlist *seqn1 = L(), *seqn2 = L();
+          /* the name of the sequence */
+          dlist *seqn1 = L(), *seqn2 = L();
 
-		if (m->scanner.schema)
-			append_string(seqn1, m->scanner.schema);
-		append_list(l, append_string(seqn1, sn));
-		sql_find_subtype(&it, "int", 32, 0);
-    		append_symbol(o, _symbol_create_list(SQL_TYPE, append_type(L(),&it)));
-		append_list(l, o);
-		append_int(l, 0); /* to be dropped */
-		if (m->scanner.schema)
-			append_string(seqn2, m->scanner.schema);
-		append_string(seqn2, sn);
-		(yyval.sym) = _symbol_create_symbol(SQL_DEFAULT, _symbol_create_list(SQL_NEXT, seqn2));
+          if (m->scanner.schema)
+               append_string(seqn1, m->scanner.schema);
+          append_list(l, append_string(seqn1, sn));
+          sql_find_subtype(&it, "int", 32, 0);
+          append_symbol(o, _symbol_create_list(SQL_TYPE, append_type(L(),&it)));
+          append_list(l, o);
+          append_int(l, 0); /* to be dropped */
+          if (m->scanner.schema)
+               append_string(seqn2, m->scanner.schema);
+          append_string(seqn2, sn);
+          (yyval.sym) = _symbol_create_symbol(SQL_DEFAULT, _symbol_create_list(SQL_NEXT, seqn2));
 
-		if (m->sym) {
-			stmts = m->sym->data.lval;
-		} else {
-			stmts = L();
-			m->sym = _symbol_create_list(SQL_MULSTMT, stmts);
-		}	
-		append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
-	}
+          if (m->sym) {
+               stmts = m->sym->data.lval;
+          } else {
+               stmts = L();
+               m->sym = _symbol_create_list(SQL_MULSTMT, stmts);
+          }    
+          append_symbol(stmts, _symbol_create_list(SQL_CREATE_SEQ, l));
+     }
     break;
 
   case 231:
@@ -8985,9 +8985,9 @@ yyreduce:
   case 233:
 #line 1653 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(1) - (2)].sval) );
-	  append_symbol(l, (yyvsp[(2) - (2)].sym) );
-	  (yyval.sym) = _symbol_create_list( SQL_CONSTRAINT, l ); }
+       append_string(l, (yyvsp[(1) - (2)].sval) );
+       append_symbol(l, (yyvsp[(2) - (2)].sym) );
+       (yyval.sym) = _symbol_create_list( SQL_CONSTRAINT, l ); }
     break;
 
   case 234:
@@ -9113,11 +9113,11 @@ yyreduce:
   case 258:
 #line 1709 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, (yyvsp[(2) - (5)].l) );
-			  append_list(l, (yyvsp[(3) - (5)].l) );
-			  append_int(l, (yyvsp[(4) - (5)].i_val) );
-			  append_int(l, (yyvsp[(5) - (5)].i_val) );
-			  (yyval.sym) = _symbol_create_list( SQL_FOREIGN_KEY, l); }
+                 append_list(l, (yyvsp[(2) - (5)].l) );
+                 append_list(l, (yyvsp[(3) - (5)].l) );
+                 append_int(l, (yyvsp[(4) - (5)].i_val) );
+                 append_int(l, (yyvsp[(5) - (5)].i_val) );
+                 (yyval.sym) = _symbol_create_list( SQL_FOREIGN_KEY, l); }
     break;
 
   case 260:
@@ -9133,12 +9133,12 @@ yyreduce:
   case 262:
 #line 1728 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, (yyvsp[(5) - (8)].l) );
-			  append_list(l, (yyvsp[(3) - (8)].l) );
-			  append_list(l, (yyvsp[(6) - (8)].l) );
-			  append_int(l, (yyvsp[(7) - (8)].i_val) );
-			  append_int(l, (yyvsp[(8) - (8)].i_val) );
-			  (yyval.sym) = _symbol_create_list( SQL_FOREIGN_KEY, l); }
+                 append_list(l, (yyvsp[(5) - (8)].l) );
+                 append_list(l, (yyvsp[(3) - (8)].l) );
+                 append_list(l, (yyvsp[(6) - (8)].l) );
+                 append_int(l, (yyvsp[(7) - (8)].i_val) );
+                 append_int(l, (yyvsp[(8) - (8)].i_val) );
+                 (yyval.sym) = _symbol_create_list( SQL_FOREIGN_KEY, l); }
     break;
 
   case 263:
@@ -9164,14 +9164,14 @@ yyreduce:
   case 267:
 #line 1756 "src/sql/server/sql_parser.y"
     {  dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (7)].l));
-	  append_list(l, (yyvsp[(4) - (7)].l));
-	  append_symbol(l, (yyvsp[(6) - (7)].sym));
-	  append_int(l, (yyvsp[(7) - (7)].bval));
-	  append_int(l, TRUE);	/* persistent view */
-	  append_int(l, (yyvsp[(1) - (7)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_VIEW, l ); 
-	}
+       append_list(l, (yyvsp[(3) - (7)].l));
+       append_list(l, (yyvsp[(4) - (7)].l));
+       append_symbol(l, (yyvsp[(6) - (7)].sym));
+       append_int(l, (yyvsp[(7) - (7)].bval));
+       append_int(l, TRUE);   /* persistent view */
+       append_int(l, (yyvsp[(1) - (7)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_VIEW, l ); 
+     }
     break;
 
   case 269:
@@ -9202,9 +9202,9 @@ yyreduce:
   case 277:
 #line 1793 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-				append_list(l, (yyvsp[(3) - (6)].l));
-				append_string(l, (yyvsp[(6) - (6)].sval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_TYPE, l ); }
+                    append_list(l, (yyvsp[(3) - (6)].l));
+                    append_string(l, (yyvsp[(6) - (6)].sval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_TYPE, l ); }
     break;
 
   case 278:
@@ -9215,209 +9215,209 @@ yyreduce:
   case 281:
 #line 1815 "src/sql/server/sql_parser.y"
     { dlist *f = L();
-				append_list(f, (yyvsp[(3) - (11)].l));
-				append_list(f, (yyvsp[(5) - (11)].l));
-				append_symbol(f, (yyvsp[(8) - (11)].sym));
-				append_list(f, (yyvsp[(11) - (11)].l));
-				append_list(f, NULL);
-				append_int(f, F_FUNC);
-				append_int(f, FUNC_LANG_MAL);
-				append_int(f, (yyvsp[(1) - (11)].bval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+                    append_list(f, (yyvsp[(3) - (11)].l));
+                    append_list(f, (yyvsp[(5) - (11)].l));
+                    append_symbol(f, (yyvsp[(8) - (11)].sym));
+                    append_list(f, (yyvsp[(11) - (11)].l));
+                    append_list(f, NULL);
+                    append_int(f, F_FUNC);
+                    append_int(f, FUNC_LANG_MAL);
+                    append_int(f, (yyvsp[(1) - (11)].bval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 282:
 #line 1829 "src/sql/server/sql_parser.y"
     { dlist *f = L();
-				append_list(f, (yyvsp[(3) - (9)].l));
-				append_list(f, (yyvsp[(5) - (9)].l));
-				append_symbol(f, (yyvsp[(8) - (9)].sym));
-				append_list(f, NULL);
-				append_list(f, (yyvsp[(9) - (9)].l));
-				append_int(f, F_FUNC);
-				append_int(f, FUNC_LANG_SQL);
-				append_int(f, (yyvsp[(1) - (9)].bval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+                    append_list(f, (yyvsp[(3) - (9)].l));
+                    append_list(f, (yyvsp[(5) - (9)].l));
+                    append_symbol(f, (yyvsp[(8) - (9)].sym));
+                    append_list(f, NULL);
+                    append_list(f, (yyvsp[(9) - (9)].l));
+                    append_int(f, F_FUNC);
+                    append_int(f, FUNC_LANG_SQL);
+                    append_int(f, (yyvsp[(1) - (9)].bval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 283:
 #line 1843 "src/sql/server/sql_parser.y"
     {
-			int lang = 0;
-			dlist *f = L();
-			char l = *(yyvsp[(10) - (11)].sval);
+               int lang = 0;
+               dlist *f = L();
+               char l = *(yyvsp[(10) - (11)].sval);
 
-			if (l == 'R' || l == 'r')
-				lang = FUNC_LANG_R;
-			else if (l == 'P' || l == 'p') {
-				// code does not get cleaner than this people
-				if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON_MAP") == 0) {
-					lang = FUNC_LANG_MAP_PY;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3_MAP") == 0) {
-					lang = FUNC_LANG_MAP_PY3;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3") == 0) {
-					lang = FUNC_LANG_PY3;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2_MAP") == 0) {
-					lang = FUNC_LANG_MAP_PY2;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2") == 0) {
-					lang = FUNC_LANG_PY2;
-				} else {
-					lang = FUNC_LANG_PY;
-				}
-			} else if (l == 'C' || l == 'c') {
-				if (strcasecmp((yyvsp[(10) - (11)].sval), "CPP") == 0) {
-					lang = FUNC_LANG_CPP;
-				} else {
-					lang = FUNC_LANG_C;
-				}
-			}
-			else if (l == 'J' || l == 'j')
-				lang = FUNC_LANG_J;
-			else {
-				char *msg = sql_message("Language name R, C, PYTHON[3], PYTHON[3]_MAP or J(avascript):expected, received '%c'", l);
-				yyerror(m, msg);
-				_DELETE(msg);
-			}
+               if (l == 'R' || l == 'r')
+                    lang = FUNC_LANG_R;
+               else if (l == 'P' || l == 'p') {
+                    // code does not get cleaner than this people
+                    if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON_MAP") == 0) {
+                         lang = FUNC_LANG_MAP_PY;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3_MAP") == 0) {
+                         lang = FUNC_LANG_MAP_PY3;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3") == 0) {
+                         lang = FUNC_LANG_PY3;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2_MAP") == 0) {
+                         lang = FUNC_LANG_MAP_PY2;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2") == 0) {
+                         lang = FUNC_LANG_PY2;
+                    } else {
+                         lang = FUNC_LANG_PY;
+                    }
+               } else if (l == 'C' || l == 'c') {
+                    if (strcasecmp((yyvsp[(10) - (11)].sval), "CPP") == 0) {
+                         lang = FUNC_LANG_CPP;
+                    } else {
+                         lang = FUNC_LANG_C;
+                    }
+               }
+               else if (l == 'J' || l == 'j')
+                    lang = FUNC_LANG_J;
+               else {
+                    char *msg = sql_message("Language name R, C, PYTHON[3], PYTHON[3]_MAP or J(avascript):expected, received '%c'", l);
+                    yyerror(m, msg);
+                    _DELETE(msg);
+               }
 
-			append_list(f, (yyvsp[(3) - (11)].l));
-			append_list(f, (yyvsp[(5) - (11)].l));
-			append_symbol(f, (yyvsp[(8) - (11)].sym));
-			append_list(f, NULL);
-			append_list(f, append_string(L(), (yyvsp[(11) - (11)].sval)));
-			append_int(f, F_FUNC);
-			append_int(f, lang);
-			append_int(f, (yyvsp[(1) - (11)].bval));
-			(yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f );
-		}
+               append_list(f, (yyvsp[(3) - (11)].l));
+               append_list(f, (yyvsp[(5) - (11)].l));
+               append_symbol(f, (yyvsp[(8) - (11)].sym));
+               append_list(f, NULL);
+               append_list(f, append_string(L(), (yyvsp[(11) - (11)].sval)));
+               append_int(f, F_FUNC);
+               append_int(f, lang);
+               append_int(f, (yyvsp[(1) - (11)].bval));
+               (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f );
+          }
     break;
 
   case 284:
 #line 1893 "src/sql/server/sql_parser.y"
     { dlist *f = L();
-				append_list(f, (yyvsp[(4) - (10)].l));
-				append_list(f, (yyvsp[(6) - (10)].l)); 
-				/* no returns - use OID */
-				append_symbol(f, NULL); 
-				append_list(f, (yyvsp[(10) - (10)].l));
-				append_list(f, NULL);
-				append_int(f, F_FILT);
-				append_int(f, FUNC_LANG_MAL);
-				append_int(f, (yyvsp[(1) - (10)].bval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+                    append_list(f, (yyvsp[(4) - (10)].l));
+                    append_list(f, (yyvsp[(6) - (10)].l)); 
+                    /* no returns - use OID */
+                    append_symbol(f, NULL); 
+                    append_list(f, (yyvsp[(10) - (10)].l));
+                    append_list(f, NULL);
+                    append_int(f, F_FILT);
+                    append_int(f, FUNC_LANG_MAL);
+                    append_int(f, (yyvsp[(1) - (10)].bval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 285:
 #line 1908 "src/sql/server/sql_parser.y"
     { dlist *f = L();
-				append_list(f, (yyvsp[(3) - (11)].l));
-				append_list(f, (yyvsp[(5) - (11)].l));
-				append_symbol(f, (yyvsp[(8) - (11)].sym));
-				append_list(f, (yyvsp[(11) - (11)].l));
-				append_list(f, NULL);
-				append_int(f, F_AGGR);
-				append_int(f, FUNC_LANG_MAL);
-				append_int(f, (yyvsp[(1) - (11)].bval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+                    append_list(f, (yyvsp[(3) - (11)].l));
+                    append_list(f, (yyvsp[(5) - (11)].l));
+                    append_symbol(f, (yyvsp[(8) - (11)].sym));
+                    append_list(f, (yyvsp[(11) - (11)].l));
+                    append_list(f, NULL);
+                    append_int(f, F_AGGR);
+                    append_int(f, FUNC_LANG_MAL);
+                    append_int(f, (yyvsp[(1) - (11)].bval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 286:
 #line 1922 "src/sql/server/sql_parser.y"
     {
-			int lang = 0;
-			dlist *f = L();
-			char l = *(yyvsp[(10) - (11)].sval);
+               int lang = 0;
+               dlist *f = L();
+               char l = *(yyvsp[(10) - (11)].sval);
 
-			if (l == 'R' || l == 'r')
-				lang = FUNC_LANG_R;
-			else if (l == 'P' || l == 'p') {
-				if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON_MAP") == 0) {
-					lang = FUNC_LANG_MAP_PY;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3_MAP") == 0) {
-					lang = FUNC_LANG_MAP_PY3;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3") == 0) {
-					lang = FUNC_LANG_PY3;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2_MAP") == 0) {
-					lang = FUNC_LANG_MAP_PY2;
-				} else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2") == 0) {
-					lang = FUNC_LANG_PY2;
-				} else {
-					lang = FUNC_LANG_PY;
-				}
-			} else if (l == 'C' || l == 'c') {
-				if (strcasecmp((yyvsp[(10) - (11)].sval), "CPP") == 0) {
-					lang = FUNC_LANG_CPP;
-				} else {
-					lang = FUNC_LANG_C;
-				}
-			}
-			else if (l == 'J' || l == 'j')
-				lang = FUNC_LANG_J;
-			else {
-				char *msg = sql_message("Language name R, C, PYTHON[3], PYTHON[3]_MAP or J(avascript):expected, received '%c'", l);
-				yyerror(m, msg);
-				_DELETE(msg);
-			}
+               if (l == 'R' || l == 'r')
+                    lang = FUNC_LANG_R;
+               else if (l == 'P' || l == 'p') {
+                    if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON_MAP") == 0) {
+                         lang = FUNC_LANG_MAP_PY;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3_MAP") == 0) {
+                         lang = FUNC_LANG_MAP_PY3;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON3") == 0) {
+                         lang = FUNC_LANG_PY3;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2_MAP") == 0) {
+                         lang = FUNC_LANG_MAP_PY2;
+                    } else if (strcasecmp((yyvsp[(10) - (11)].sval), "PYTHON2") == 0) {
+                         lang = FUNC_LANG_PY2;
+                    } else {
+                         lang = FUNC_LANG_PY;
+                    }
+               } else if (l == 'C' || l == 'c') {
+                    if (strcasecmp((yyvsp[(10) - (11)].sval), "CPP") == 0) {
+                         lang = FUNC_LANG_CPP;
+                    } else {
+                         lang = FUNC_LANG_C;
+                    }
+               }
+               else if (l == 'J' || l == 'j')
+                    lang = FUNC_LANG_J;
+               else {
+                    char *msg = sql_message("Language name R, C, PYTHON[3], PYTHON[3]_MAP or J(avascript):expected, received '%c'", l);
+                    yyerror(m, msg);
+                    _DELETE(msg);
+               }
 
-			append_list(f, (yyvsp[(3) - (11)].l));
-			append_list(f, (yyvsp[(5) - (11)].l));
-			append_symbol(f, (yyvsp[(8) - (11)].sym));
-			append_list(f, NULL);
-			append_list(f, append_string(L(), (yyvsp[(11) - (11)].sval)));
-			append_int(f, F_AGGR);
-			append_int(f, lang);
-			append_int(f, (yyvsp[(1) - (11)].bval));
-			(yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+               append_list(f, (yyvsp[(3) - (11)].l));
+               append_list(f, (yyvsp[(5) - (11)].l));
+               append_symbol(f, (yyvsp[(8) - (11)].sym));
+               append_list(f, NULL);
+               append_list(f, append_string(L(), (yyvsp[(11) - (11)].sval)));
+               append_int(f, F_AGGR);
+               append_int(f, lang);
+               append_int(f, (yyvsp[(1) - (11)].bval));
+               (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 287:
 #line 1971 "src/sql/server/sql_parser.y"
     { dlist *f = L();
-				append_list(f, (yyvsp[(3) - (9)].l));
-				append_list(f, (yyvsp[(5) - (9)].l));
-				append_symbol(f, NULL); /* no result */
-				append_list(f, (yyvsp[(9) - (9)].l));
-				append_list(f, NULL);
-				append_int(f, F_PROC);
-				append_int(f, FUNC_LANG_MAL);
-				append_int(f, (yyvsp[(1) - (9)].bval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+                    append_list(f, (yyvsp[(3) - (9)].l));
+                    append_list(f, (yyvsp[(5) - (9)].l));
+                    append_symbol(f, NULL); /* no result */
+                    append_list(f, (yyvsp[(9) - (9)].l));
+                    append_list(f, NULL);
+                    append_int(f, F_PROC);
+                    append_int(f, FUNC_LANG_MAL);
+                    append_int(f, (yyvsp[(1) - (9)].bval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 288:
 #line 1984 "src/sql/server/sql_parser.y"
     { dlist *f = L();
-				append_list(f, (yyvsp[(3) - (7)].l));
-				append_list(f, (yyvsp[(5) - (7)].l));
-				append_symbol(f, NULL); /* no result */
-				append_list(f, NULL); 
-				append_list(f, (yyvsp[(7) - (7)].l));
-				append_int(f, F_PROC);
-				append_int(f, FUNC_LANG_SQL);
-				append_int(f, (yyvsp[(1) - (7)].bval));
-			  (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+                    append_list(f, (yyvsp[(3) - (7)].l));
+                    append_list(f, (yyvsp[(5) - (7)].l));
+                    append_symbol(f, NULL); /* no result */
+                    append_list(f, NULL); 
+                    append_list(f, (yyvsp[(7) - (7)].l));
+                    append_int(f, F_PROC);
+                    append_int(f, FUNC_LANG_SQL);
+                    append_int(f, (yyvsp[(1) - (7)].bval));
+                 (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 289:
 #line 1996 "src/sql/server/sql_parser.y"
     { 
-			int lang = 0;
-			dlist *f = L();
-			char l = *(yyvsp[(8) - (9)].sval);
-			/* other languages here if we ever get to it */
-			if (l == 'P' || l == 'p') {
-				lang = FUNC_LANG_PY;
-			} else
-				yyerror(m, sql_message("Language name P(ython) expected, received '%c'", l));
+               int lang = 0;
+               dlist *f = L();
+               char l = *(yyvsp[(8) - (9)].sval);
+               /* other languages here if we ever get to it */
+               if (l == 'P' || l == 'p') {
+                    lang = FUNC_LANG_PY;
+               } else
+                    yyerror(m, sql_message("Language name P(ython) expected, received '%c'", l));
 
-			append_list(f, (yyvsp[(3) - (9)].l));
-			append_list(f, (yyvsp[(5) - (9)].l));
-			append_symbol(f, NULL);
-			append_list(f, NULL); 
-			append_list(f, append_string(L(), (yyvsp[(9) - (9)].sval)));
-			append_int(f, F_LOADER);
-			append_int(f, lang);
-			append_int(f, (yyvsp[(1) - (9)].bval));
-			(yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
+               append_list(f, (yyvsp[(3) - (9)].l));
+               append_list(f, (yyvsp[(5) - (9)].l));
+               append_symbol(f, NULL);
+               append_list(f, NULL); 
+               append_list(f, append_string(L(), (yyvsp[(9) - (9)].sval)));
+               append_int(f, F_LOADER);
+               append_int(f, lang);
+               append_int(f, (yyvsp[(1) - (9)].bval));
+               (yyval.sym) = _symbol_create_list( SQL_CREATE_FUNC, f ); }
     break;
 
   case 290:
@@ -9468,11 +9468,11 @@ yyreduce:
   case 325:
 #line 2107 "src/sql/server/sql_parser.y"
     { dlist *l = L(); 
-		  append_list( l, (yyvsp[(1) - (4)].l));
-		  append_list( l, (yyvsp[(3) - (4)].l));
-		  assert(0);
-		  (yyval.sym) = _symbol_create_list( SQL_FUNC, l);
-		}
+            append_list( l, (yyvsp[(1) - (4)].l));
+            append_list( l, (yyvsp[(3) - (4)].l));
+            assert(0);
+            (yyval.sym) = _symbol_create_list( SQL_FUNC, l);
+          }
     break;
 
   case 327:
@@ -9503,26 +9503,26 @@ yyreduce:
   case 334:
 #line 2138 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list(SQL_CASE,
-		   append_list(
-		    append_list(
-		     append_symbol(
-		      L(),(yyvsp[(2) - (6)].sym)),(yyvsp[(3) - (6)].l)),(yyvsp[(4) - (6)].l))); }
+             append_list(
+              append_list(
+               append_symbol(
+                L(),(yyvsp[(2) - (6)].sym)),(yyvsp[(3) - (6)].l)),(yyvsp[(4) - (6)].l))); }
     break;
 
   case 335:
 #line 2144 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list(SQL_CASE,
-		   append_list(
-		    append_list(
-		     L(),(yyvsp[(2) - (5)].l)),(yyvsp[(3) - (5)].l))); }
+             append_list(
+              append_list(
+               L(),(yyvsp[(2) - (5)].l)),(yyvsp[(3) - (5)].l))); }
     break;
 
   case 336:
 #line 2152 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_WHEN,
-			   append_list(
-			    append_symbol(
-			     L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].l))); }
+                  append_list(
+                   append_symbol(
+                    L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].l))); }
     break;
 
   case 337:
@@ -9538,9 +9538,9 @@ yyreduce:
   case 339:
 #line 2167 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_WHEN,
-			   append_list(
-			    append_symbol(
-			     L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].l))); }
+                  append_list(
+                   append_symbol(
+                    L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].l))); }
     break;
 
   case 340:
@@ -9566,11 +9566,11 @@ yyreduce:
   case 344:
 #line 2192 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(2) - (7)].sym));
-		  append_list(l, (yyvsp[(4) - (7)].l));
-		  append_symbol(l, (yyvsp[(5) - (7)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_IF, l);
-		}
+            append_symbol(l, (yyvsp[(2) - (7)].sym));
+            append_list(l, (yyvsp[(4) - (7)].l));
+            append_symbol(l, (yyvsp[(5) - (7)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_IF, l);
+          }
     break;
 
   case 345:
@@ -9586,28 +9586,28 @@ yyreduce:
   case 347:
 #line 2208 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(2) - (5)].sym));
-		  append_list(l, (yyvsp[(4) - (5)].l));
-		  append_symbol(l, (yyvsp[(5) - (5)].sym));
-		  { (yyval.sym) = _symbol_create_list(SQL_IF, l); }
-		}
+            append_symbol(l, (yyvsp[(2) - (5)].sym));
+            append_list(l, (yyvsp[(4) - (5)].l));
+            append_symbol(l, (yyvsp[(5) - (5)].sym));
+            { (yyval.sym) = _symbol_create_list(SQL_IF, l); }
+          }
     break;
 
   case 348:
 #line 2222 "src/sql/server/sql_parser.y"
     { dlist *l;
-		  char *label = (yyvsp[(1) - (8)].sval)?(yyvsp[(1) - (8)].sval):(yyvsp[(8) - (8)].sval);
-		  if ((yyvsp[(1) - (8)].sval) && (yyvsp[(8) - (8)].sval) && strcmp((yyvsp[(1) - (8)].sval), (yyvsp[(8) - (8)].sval)) != 0) {
-			(yyval.sym) = NULL;
-			yyerror(m, "WHILE: labels should match");
-			YYABORT;
-		  }
- 		  l = L();
-		  append_symbol(l, (yyvsp[(3) - (8)].sym)); /* condition */
-		  append_list(l, (yyvsp[(5) - (8)].l));	/* statements */
-		  append_string(l, label);
-		  (yyval.sym) = _symbol_create_list(SQL_WHILE, l);
-		}
+            char *label = (yyvsp[(1) - (8)].sval)?(yyvsp[(1) - (8)].sval):(yyvsp[(8) - (8)].sval);
+            if ((yyvsp[(1) - (8)].sval) && (yyvsp[(8) - (8)].sval) && strcmp((yyvsp[(1) - (8)].sval), (yyvsp[(8) - (8)].sval)) != 0) {
+               (yyval.sym) = NULL;
+               yyerror(m, "WHILE: labels should match");
+               YYABORT;
+            }
+            l = L();
+            append_symbol(l, (yyvsp[(3) - (8)].sym)); /* condition */
+            append_list(l, (yyvsp[(5) - (8)].l)); /* statements */
+            append_string(l, label);
+            (yyval.sym) = _symbol_create_list(SQL_WHILE, l);
+          }
     break;
 
   case 349:
@@ -9623,17 +9623,17 @@ yyreduce:
   case 353:
 #line 2249 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-				  append_string((yyval.l), (yyvsp[(1) - (2)].sval));
-			  	  append_type((yyval.l), &(yyvsp[(2) - (2)].type));
-				}
+                      append_string((yyval.l), (yyvsp[(1) - (2)].sval));
+                      append_type((yyval.l), &(yyvsp[(2) - (2)].type));
+                    }
     break;
 
   case 354:
 #line 2254 "src/sql/server/sql_parser.y"
     { 
-				  append_string((yyval.l), (yyvsp[(3) - (4)].sval));
-			  	  append_type((yyval.l), &(yyvsp[(4) - (4)].type));
-				}
+                      append_string((yyval.l), (yyvsp[(3) - (4)].sval));
+                      append_type((yyval.l), &(yyvsp[(4) - (4)].type));
+                    }
     break;
 
   case 355:
@@ -9649,9 +9649,9 @@ yyreduce:
   case 358:
 #line 2269 "src/sql/server/sql_parser.y"
     { dlist *vararg = L();
-			  append_string(vararg, "*");
-			  append_type(vararg, NULL);
-			  (yyval.l) = append_list(L(), vararg); }
+                 append_string(vararg, "*");
+                 append_type(vararg, NULL);
+                 (yyval.l) = append_list(L(), vararg); }
     break;
 
   case 359:
@@ -9662,32 +9662,32 @@ yyreduce:
   case 360:
 #line 2278 "src/sql/server/sql_parser.y"
     { dlist *p = L();
-			  append_string(p, (yyvsp[(3) - (4)].sval));
-			  append_type(p, &(yyvsp[(4) - (4)].type));
-			  (yyval.l) = append_list((yyvsp[(1) - (4)].l), p); }
+                 append_string(p, (yyvsp[(3) - (4)].sval));
+                 append_type(p, &(yyvsp[(4) - (4)].type));
+                 (yyval.l) = append_list((yyvsp[(1) - (4)].l), p); }
     break;
 
   case 361:
 #line 2283 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  dlist *p = L();
-			  append_string(p, (yyvsp[(1) - (2)].sval));
-			  append_type(p, &(yyvsp[(2) - (2)].type));
-			  (yyval.l) = append_list(l, p); }
+                 dlist *p = L();
+                 append_string(p, (yyvsp[(1) - (2)].sval));
+                 append_type(p, &(yyvsp[(2) - (2)].type));
+                 (yyval.l) = append_list(l, p); }
     break;
 
   case 362:
 #line 2333 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (9)].l));
-	  append_int(l, (yyvsp[(4) - (9)].i_val));
-	  append_symbol(l, (yyvsp[(5) - (9)].sym));
-	  append_list(l, (yyvsp[(7) - (9)].l));
-	  append_list(l, (yyvsp[(8) - (9)].l));
-	  append_list(l, (yyvsp[(9) - (9)].l));
-	  append_int(l, (yyvsp[(1) - (9)].bval));
-	  (yyval.sym) = _symbol_create_list(SQL_CREATE_TRIGGER, l); 
-	}
+       append_list(l, (yyvsp[(3) - (9)].l));
+       append_int(l, (yyvsp[(4) - (9)].i_val));
+       append_symbol(l, (yyvsp[(5) - (9)].sym));
+       append_list(l, (yyvsp[(7) - (9)].l));
+       append_list(l, (yyvsp[(8) - (9)].l));
+       append_list(l, (yyvsp[(9) - (9)].l));
+       append_int(l, (yyvsp[(1) - (9)].bval));
+       (yyval.sym) = _symbol_create_list(SQL_CREATE_TRIGGER, l); 
+     }
     break;
 
   case 363:
@@ -9768,10 +9768,10 @@ yyreduce:
   case 382:
 #line 2390 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_int((yyval.l), (yyvsp[(1) - (3)].i_val));
-	  append_symbol((yyval.l), (yyvsp[(2) - (3)].sym));
-	  append_list((yyval.l), (yyvsp[(3) - (3)].l));
-	}
+       append_int((yyval.l), (yyvsp[(1) - (3)].i_val));
+       append_symbol((yyval.l), (yyvsp[(2) - (3)].sym));
+       append_list((yyval.l), (yyvsp[(3) - (3)].l));
+     }
     break;
 
   case 383:
@@ -9817,190 +9817,190 @@ yyreduce:
   case 391:
 #line 2421 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (3)].l) );	
-	  append_list(l, (yyvsp[(3) - (3)].l) );
-	  append_int(l, F_FUNC );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(2) - (3)].l) );     
+       append_list(l, (yyvsp[(3) - (3)].l) );
+       append_int(l, F_FUNC );
+       (yyval.l) = l; }
     break;
 
   case 392:
 #line 2427 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l) );	
-	  append_list(l, (yyvsp[(4) - (4)].l) );
-	  append_int(l, F_FILT );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(3) - (4)].l) );     
+       append_list(l, (yyvsp[(4) - (4)].l) );
+       append_int(l, F_FILT );
+       (yyval.l) = l; }
     break;
 
   case 393:
 #line 2433 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (3)].l) );	
-	  append_list(l, (yyvsp[(3) - (3)].l) );
-	  append_int(l, F_AGGR );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(2) - (3)].l) );     
+       append_list(l, (yyvsp[(3) - (3)].l) );
+       append_int(l, F_AGGR );
+       (yyval.l) = l; }
     break;
 
   case 394:
 #line 2439 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (3)].l) );	
-	  append_list(l, (yyvsp[(3) - (3)].l) );
-	  append_int(l, F_PROC );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(2) - (3)].l) );     
+       append_list(l, (yyvsp[(3) - (3)].l) );
+       append_int(l, F_PROC );
+       (yyval.l) = l; }
     break;
 
   case 395:
 #line 2445 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (3)].l) );	
-	  append_list(l, (yyvsp[(3) - (3)].l) );
-	  append_int(l, F_LOADER );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(2) - (3)].l) );     
+       append_list(l, (yyvsp[(3) - (3)].l) );
+       append_int(l, F_LOADER );
+       (yyval.l) = l; }
     break;
 
   case 396:
 #line 2454 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l) );
-	  append_list(l, (yyvsp[(4) - (4)].l) );
-	  append_int(l, F_FUNC );
-	  append_int(l, (yyvsp[(2) - (4)].bval) );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(3) - (4)].l) );
+       append_list(l, (yyvsp[(4) - (4)].l) );
+       append_int(l, F_FUNC );
+       append_int(l, (yyvsp[(2) - (4)].bval) );
+       (yyval.l) = l; }
     break;
 
   case 397:
 #line 2461 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_list(l, (yyvsp[(5) - (5)].l) );
-	  append_int(l, F_FILT );
-	  append_int(l, (yyvsp[(3) - (5)].bval) );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_list(l, (yyvsp[(5) - (5)].l) );
+       append_int(l, F_FILT );
+       append_int(l, (yyvsp[(3) - (5)].bval) );
+       (yyval.l) = l; }
     break;
 
   case 398:
 #line 2468 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l) );
-	  append_list(l, (yyvsp[(4) - (4)].l) );
-	  append_int(l, F_AGGR );
-	  append_int(l, (yyvsp[(2) - (4)].bval) );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(3) - (4)].l) );
+       append_list(l, (yyvsp[(4) - (4)].l) );
+       append_int(l, F_AGGR );
+       append_int(l, (yyvsp[(2) - (4)].bval) );
+       (yyval.l) = l; }
     break;
 
   case 399:
 #line 2475 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l) );
-	  append_list(l, (yyvsp[(4) - (4)].l) );
-	  append_int(l, F_PROC );
-	  append_int(l, (yyvsp[(2) - (4)].bval) );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(3) - (4)].l) );
+       append_list(l, (yyvsp[(4) - (4)].l) );
+       append_int(l, F_PROC );
+       append_int(l, (yyvsp[(2) - (4)].bval) );
+       (yyval.l) = l; }
     break;
 
   case 400:
 #line 2482 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l) );
-	  append_list(l, (yyvsp[(4) - (4)].l) );
-	  append_int(l, F_LOADER );
-	  append_int(l, (yyvsp[(2) - (4)].bval) );
-	  (yyval.l) = l; }
+       append_list(l, (yyvsp[(3) - (4)].l) );
+       append_list(l, (yyvsp[(4) - (4)].l) );
+       append_int(l, F_LOADER );
+       append_int(l, (yyvsp[(2) - (4)].bval) );
+       (yyval.l) = l; }
     break;
 
   case 401:
 #line 2492 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  append_int(l, (yyvsp[(3) - (5)].bval) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_TABLE, l ); }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       append_int(l, (yyvsp[(3) - (5)].bval) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_TABLE, l ); }
     break;
 
   case 402:
 #line 2498 "src/sql/server/sql_parser.y"
     { dlist *l = (yyvsp[(2) - (3)].l);
-	  append_int(l, 0 ); /* not all */
-	  append_int(l, (yyvsp[(3) - (3)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
+       append_int(l, 0 ); /* not all */
+       append_int(l, (yyvsp[(3) - (3)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
     break;
 
   case 403:
 #line 2503 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_list(l, NULL );
-	  append_int(l, F_FUNC );
-	  append_int(l, FALSE );
-	  append_int(l, 1 );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_list(l, NULL );
+       append_int(l, F_FUNC );
+       append_int(l, FALSE );
+       append_int(l, 1 );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
     break;
 
   case 404:
 #line 2512 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(5) - (6)].l) );
-	  append_list(l, NULL );
-	  append_int(l, F_FILT );
-	  append_int(l, FALSE );
-	  append_int(l, 1 );
-	  append_int(l, (yyvsp[(6) - (6)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
+       append_list(l, (yyvsp[(5) - (6)].l) );
+       append_list(l, NULL );
+       append_int(l, F_FILT );
+       append_int(l, FALSE );
+       append_int(l, 1 );
+       append_int(l, (yyvsp[(6) - (6)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
     break;
 
   case 405:
 #line 2521 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_list(l, NULL );
-	  append_int(l, F_AGGR );
-	  append_int(l, FALSE );
-	  append_int(l, 1 );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_list(l, NULL );
+       append_int(l, F_AGGR );
+       append_int(l, FALSE );
+       append_int(l, 1 );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
     break;
 
   case 406:
 #line 2530 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_list(l, NULL );
-	  append_int(l, F_PROC );
-	  append_int(l, FALSE );
-	  append_int(l, 1 );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_list(l, NULL );
+       append_int(l, F_PROC );
+       append_int(l, FALSE );
+       append_int(l, 1 );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
     break;
 
   case 407:
 #line 2539 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_list(l, NULL );
-	  append_int(l, F_LOADER );
-	  append_int(l, FALSE );
-	  append_int(l, 1 );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_list(l, NULL );
+       append_int(l, F_LOADER );
+       append_int(l, FALSE );
+       append_int(l, 1 );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_FUNC, l ); }
     break;
 
   case 408:
 #line 2548 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (5)].l) );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  append_int(l, (yyvsp[(3) - (5)].bval) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_VIEW, l ); }
+       append_list(l, (yyvsp[(4) - (5)].l) );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       append_int(l, (yyvsp[(3) - (5)].bval) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_VIEW, l ); }
     break;
 
   case 409:
 #line 2554 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l) );
-	  append_int(l, (yyvsp[(4) - (4)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_TYPE, l ); }
+       append_list(l, (yyvsp[(3) - (4)].l) );
+       append_int(l, (yyvsp[(4) - (4)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_TYPE, l ); }
     break;
 
   case 410:
@@ -10021,10 +10021,10 @@ yyreduce:
   case 413:
 #line 2562 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (4)].l) );
-	  append_int(l, (yyvsp[(3) - (4)].bval) );
-	  (yyval.sym) = _symbol_create_list( SQL_DROP_TRIGGER, l );
-	}
+       append_list(l, (yyvsp[(4) - (4)].l) );
+       append_int(l, (yyvsp[(3) - (4)].bval) );
+       (yyval.sym) = _symbol_create_list( SQL_DROP_TRIGGER, l );
+     }
     break;
 
   case 414:
@@ -10045,14 +10045,14 @@ yyreduce:
   case 417:
 #line 2576 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-				  append_type(l, &(yyvsp[(1) - (1)].type) );
-				  (yyval.l)= l; }
+                      append_type(l, &(yyvsp[(1) - (1)].type) );
+                      (yyval.l)= l; }
     break;
 
   case 418:
 #line 2579 "src/sql/server/sql_parser.y"
     { append_type((yyvsp[(3) - (3)].l), &(yyvsp[(1) - (3)].type));
-				  (yyval.l) = (yyvsp[(3) - (3)].l); }
+                      (yyval.l) = (yyvsp[(3) - (3)].l); }
     break;
 
   case 419:
@@ -10073,8 +10073,8 @@ yyreduce:
   case 429:
 #line 2606 "src/sql/server/sql_parser.y"
     {
-	  (yyval.sym) = (yyvsp[(1) - (1)].sym);
-	  m->type = Q_TRANS;					}
+       (yyval.sym) = (yyvsp[(1) - (1)].sym);
+       m->type = Q_TRANS;                         }
     break;
 
   case 430:
@@ -10095,8 +10095,8 @@ yyreduce:
   case 433:
 #line 2619 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( TR_ROLLBACK,
-		   append_string(
-			append_int(L(), (yyvsp[(3) - (4)].bval)), (yyvsp[(4) - (4)].sval) )); }
+             append_string(
+               append_int(L(), (yyvsp[(3) - (4)].bval)), (yyvsp[(4) - (4)].sval) )); }
     break;
 
   case 434:
@@ -10187,77 +10187,77 @@ yyreduce:
   case 456:
 #line 2675 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (14)].l));
-	  append_list(l, (yyvsp[(5) - (14)].l));
-	  append_list(l, (yyvsp[(7) - (14)].l));
-	  append_list(l, (yyvsp[(8) - (14)].l));
-	  append_list(l, (yyvsp[(9) - (14)].l));
-	  append_list(l, (yyvsp[(2) - (14)].l));
-	  append_string(l, (yyvsp[(10) - (14)].sval));
-	  append_int(l, (yyvsp[(11) - (14)].bval));
-	  append_int(l, (yyvsp[(12) - (14)].bval));
-	  append_int(l, (yyvsp[(13) - (14)].bval));
-	  append_list(l, (yyvsp[(14) - (14)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_COPYFROM, l ); }
+       append_list(l, (yyvsp[(4) - (14)].l));
+       append_list(l, (yyvsp[(5) - (14)].l));
+       append_list(l, (yyvsp[(7) - (14)].l));
+       append_list(l, (yyvsp[(8) - (14)].l));
+       append_list(l, (yyvsp[(9) - (14)].l));
+       append_list(l, (yyvsp[(2) - (14)].l));
+       append_string(l, (yyvsp[(10) - (14)].sval));
+       append_int(l, (yyvsp[(11) - (14)].bval));
+       append_int(l, (yyvsp[(12) - (14)].bval));
+       append_int(l, (yyvsp[(13) - (14)].bval));
+       append_list(l, (yyvsp[(14) - (14)].l));
+       (yyval.sym) = _symbol_create_list( SQL_COPYFROM, l ); }
     break;
 
   case 457:
 #line 2689 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (13)].l));
-	  append_list(l, (yyvsp[(5) - (13)].l));
-	  append_list(l, NULL);
-	  append_list(l, (yyvsp[(8) - (13)].l));
-	  append_list(l, (yyvsp[(9) - (13)].l));
-	  append_list(l, (yyvsp[(2) - (13)].l));
-	  append_string(l, (yyvsp[(10) - (13)].sval));
-	  append_int(l, (yyvsp[(11) - (13)].bval));
-	  append_int(l, (yyvsp[(12) - (13)].bval));
-	  append_int(l, (yyvsp[(13) - (13)].bval));
-	  append_list(l, NULL);
-	  (yyval.sym) = _symbol_create_list( SQL_COPYFROM, l ); }
+       append_list(l, (yyvsp[(4) - (13)].l));
+       append_list(l, (yyvsp[(5) - (13)].l));
+       append_list(l, NULL);
+       append_list(l, (yyvsp[(8) - (13)].l));
+       append_list(l, (yyvsp[(9) - (13)].l));
+       append_list(l, (yyvsp[(2) - (13)].l));
+       append_string(l, (yyvsp[(10) - (13)].sval));
+       append_int(l, (yyvsp[(11) - (13)].bval));
+       append_int(l, (yyvsp[(12) - (13)].bval));
+       append_int(l, (yyvsp[(13) - (13)].bval));
+       append_list(l, NULL);
+       (yyval.sym) = _symbol_create_list( SQL_COPYFROM, l ); }
     break;
 
   case 458:
 #line 2703 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(4) - (6)].l));
-	  append_symbol(l, (yyvsp[(6) - (6)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_COPYLOADER, l ); }
+       append_list(l, (yyvsp[(4) - (6)].l));
+       append_symbol(l, (yyvsp[(6) - (6)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_COPYLOADER, l ); }
     break;
 
   case 459:
 #line 2708 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  if ((yyvsp[(2) - (9)].l) != NULL) {
-	  	yyerror(m, "COPY INTO: cannot pass number of records when using binary COPY INTO");
-		YYABORT;
-	  }
-	  append_list(l, (yyvsp[(5) - (9)].l));
-	  append_list(l, (yyvsp[(6) - (9)].l));
-	  append_list(l, (yyvsp[(8) - (9)].l));
-	  append_int(l, (yyvsp[(9) - (9)].bval));
-	  (yyval.sym) = _symbol_create_list( SQL_BINCOPYFROM, l ); }
+       if ((yyvsp[(2) - (9)].l) != NULL) {
+          yyerror(m, "COPY INTO: cannot pass number of records when using binary COPY INTO");
+          YYABORT;
+       }
+       append_list(l, (yyvsp[(5) - (9)].l));
+       append_list(l, (yyvsp[(6) - (9)].l));
+       append_list(l, (yyvsp[(8) - (9)].l));
+       append_int(l, (yyvsp[(9) - (9)].bval));
+       (yyval.sym) = _symbol_create_list( SQL_BINCOPYFROM, l ); }
     break;
 
   case 460:
 #line 2719 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(2) - (6)].sym));
-	  append_string(l, (yyvsp[(4) - (6)].sval));
-	  append_list(l, (yyvsp[(5) - (6)].l));
-	  append_string(l, (yyvsp[(6) - (6)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_COPYTO, l ); }
+       append_symbol(l, (yyvsp[(2) - (6)].sym));
+       append_string(l, (yyvsp[(4) - (6)].sval));
+       append_list(l, (yyvsp[(5) - (6)].l));
+       append_string(l, (yyvsp[(6) - (6)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_COPYTO, l ); }
     break;
 
   case 461:
 #line 2726 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(2) - (6)].sym));
-	  append_string(l, NULL);
-	  append_list(l, (yyvsp[(5) - (6)].l));
-	  append_string(l, (yyvsp[(6) - (6)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_COPYTO, l ); }
+       append_symbol(l, (yyvsp[(2) - (6)].sym));
+       append_string(l, NULL);
+       append_list(l, (yyvsp[(5) - (6)].l));
+       append_string(l, (yyvsp[(6) - (6)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_COPYTO, l ); }
     break;
 
   case 462:
@@ -10303,49 +10303,49 @@ yyreduce:
   case 470:
 #line 2761 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_string(l, (yyvsp[(1) - (1)].sval) );
-			  (yyval.l) = l; }
+                 append_string(l, (yyvsp[(1) - (1)].sval) );
+                 (yyval.l) = l; }
     break;
 
   case 471:
 #line 2765 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_string(l, (yyvsp[(1) - (2)].sval) );
-			  append_string(l, (yyvsp[(2) - (2)].sval) );
-			  (yyval.l) = l; }
+                 append_string(l, (yyvsp[(1) - (2)].sval) );
+                 append_string(l, (yyvsp[(2) - (2)].sval) );
+                 (yyval.l) = l; }
     break;
 
   case 472:
 #line 2773 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-				  append_string(l, sa_strdup(SA, "|"));
-				  append_string(l, sa_strdup(SA, "\\n"));
-				  (yyval.l) = l; }
+                      append_string(l, sa_strdup(SA, "|"));
+                      append_string(l, sa_strdup(SA, "\\n"));
+                      (yyval.l) = l; }
     break;
 
   case 473:
 #line 2778 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-				  append_string(l, (yyvsp[(3) - (3)].sval));
-				  append_string(l, sa_strdup(SA, "\\n"));
-				  (yyval.l) = l; }
+                      append_string(l, (yyvsp[(3) - (3)].sval));
+                      append_string(l, sa_strdup(SA, "\\n"));
+                      (yyval.l) = l; }
     break;
 
   case 474:
 #line 2783 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-				  append_string(l, (yyvsp[(3) - (5)].sval));
-				  append_string(l, (yyvsp[(5) - (5)].sval));
-				  (yyval.l) = l; }
+                      append_string(l, (yyvsp[(3) - (5)].sval));
+                      append_string(l, (yyvsp[(5) - (5)].sval));
+                      (yyval.l) = l; }
     break;
 
   case 475:
 #line 2788 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-				  append_string(l, (yyvsp[(3) - (7)].sval));
-				  append_string(l, (yyvsp[(5) - (7)].sval));
-				  append_string(l, sql2str((yyvsp[(7) - (7)].sval)));
-				  (yyval.l) = l; }
+                      append_string(l, (yyvsp[(3) - (7)].sval));
+                      append_string(l, (yyvsp[(5) - (7)].sval));
+                      append_string(l, sql2str((yyvsp[(7) - (7)].sval)));
+                      (yyval.l) = l; }
     break;
 
   case 476:
@@ -10446,9 +10446,9 @@ yyreduce:
   case 495:
 #line 2844 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l));
-	  append_symbol(l, (yyvsp[(4) - (4)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_DELETE, l ); }
+       append_list(l, (yyvsp[(3) - (4)].l));
+       append_symbol(l, (yyvsp[(4) - (4)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_DELETE, l ); }
     break;
 
   case 496:
@@ -10469,47 +10469,47 @@ yyreduce:
   case 499:
 #line 2858 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (5)].l) );
-	  append_int(l, (yyvsp[(4) - (5)].i_val) );
-	  append_int(l, (yyvsp[(5) - (5)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_TRUNCATE, l ); }
+       append_list(l, (yyvsp[(3) - (5)].l) );
+       append_int(l, (yyvsp[(4) - (5)].i_val) );
+       append_int(l, (yyvsp[(5) - (5)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_TRUNCATE, l ); }
     break;
 
   case 500:
 #line 2864 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (4)].l) );
-	  append_int(l, (yyvsp[(3) - (4)].i_val) );
-	  append_int(l, (yyvsp[(4) - (4)].i_val) );
-	  (yyval.sym) = _symbol_create_list( SQL_TRUNCATE, l ); }
+       append_list(l, (yyvsp[(2) - (4)].l) );
+       append_int(l, (yyvsp[(3) - (4)].i_val) );
+       append_int(l, (yyvsp[(4) - (4)].i_val) );
+       (yyval.sym) = _symbol_create_list( SQL_TRUNCATE, l ); }
     break;
 
   case 501:
 #line 2874 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(2) - (6)].l));
-	  append_list(l, (yyvsp[(4) - (6)].l));
-	  append_symbol(l, (yyvsp[(5) - (6)].sym));
-	  append_symbol(l, (yyvsp[(6) - (6)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_UPDATE, l ); }
+       append_list(l, (yyvsp[(2) - (6)].l));
+       append_list(l, (yyvsp[(4) - (6)].l));
+       append_symbol(l, (yyvsp[(5) - (6)].sym));
+       append_symbol(l, (yyvsp[(6) - (6)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_UPDATE, l ); }
     break;
 
   case 502:
 #line 2916 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (4)].l));
-	  append_list(l, NULL);
-	  append_symbol(l, (yyvsp[(4) - (4)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_INSERT, l ); }
+       append_list(l, (yyvsp[(3) - (4)].l));
+       append_list(l, NULL);
+       append_symbol(l, (yyvsp[(4) - (4)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_INSERT, l ); }
     break;
 
   case 503:
 #line 2924 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (5)].l));
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_INSERT, l ); }
+       append_list(l, (yyvsp[(3) - (5)].l));
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_INSERT, l ); }
     break;
 
   case 504:
@@ -10560,22 +10560,22 @@ yyreduce:
   case 514:
 #line 2962 "src/sql/server/sql_parser.y"
     { 
-	  if (m->emode == m_normal && m->caching) {
-		/* replace by argument */
-		atom *a = atom_general(SA, sql_bind_localtype("void"), NULL);
+       if (m->emode == m_normal && m->caching) {
+          /* replace by argument */
+          atom *a = atom_general(SA, sql_bind_localtype("void"), NULL);
 
-		if(!sql_add_arg( m, a)) {
-			char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
-			yyerror(m, msg);
-			_DELETE(msg);
-			YYABORT;
-		}
-		(yyval.sym) = _symbol_create_list( SQL_COLUMN,
-			append_int(L(), m->argc-1));
-	   } else {
-		(yyval.sym) = _symbol_create(SQL_NULL, NULL );
-	   }
-	}
+          if(!sql_add_arg( m, a)) {
+               char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
+               yyerror(m, msg);
+               _DELETE(msg);
+               YYABORT;
+          }
+          (yyval.sym) = _symbol_create_list( SQL_COLUMN,
+               append_int(L(), m->argc-1));
+        } else {
+          (yyval.sym) = _symbol_create(SQL_NULL, NULL );
+        }
+     }
     break;
 
   case 517:
@@ -10616,25 +10616,25 @@ yyreduce:
   case 526:
 #line 3014 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  append_string(l, (yyvsp[(1) - (3)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l); }
+       append_symbol(l, (yyvsp[(3) - (3)].sym));
+       append_string(l, (yyvsp[(1) - (3)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l); }
     break;
 
   case 527:
 #line 3019 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (3)].sym) );
-	  append_string(l, (yyvsp[(1) - (3)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l); }
+       append_symbol(l, (yyvsp[(3) - (3)].sym) );
+       append_string(l, (yyvsp[(1) - (3)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l); }
     break;
 
   case 528:
 #line 3024 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  append_list(l, (yyvsp[(1) - (3)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l ); }
+       append_symbol(l, (yyvsp[(3) - (3)].sym));
+       append_list(l, (yyvsp[(1) - (3)].l));
+       (yyval.sym) = _symbol_create_list( SQL_ASSIGN, l ); }
     break;
 
   case 529:
@@ -10655,42 +10655,42 @@ yyreduce:
   case 532:
 #line 3041 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (4)].sym));
-	  append_symbol(l, (yyvsp[(4) - (4)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_CROSS, l); }
+       append_symbol(l, (yyvsp[(1) - (4)].sym));
+       append_symbol(l, (yyvsp[(4) - (4)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_CROSS, l); }
     break;
 
   case 533:
 #line 3046 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (4)].sym));
-	  append_int(l, 0);
-	  append_int(l, 4);
-	  append_symbol(l, (yyvsp[(3) - (4)].sym));
-	  append_symbol(l, (yyvsp[(4) - (4)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_UNIONJOIN, l); }
+       append_symbol(l, (yyvsp[(1) - (4)].sym));
+       append_int(l, 0);
+       append_int(l, 4);
+       append_symbol(l, (yyvsp[(3) - (4)].sym));
+       append_symbol(l, (yyvsp[(4) - (4)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_UNIONJOIN, l); }
     break;
 
   case 534:
 #line 3054 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (5)].sym));
-	  append_int(l, 0);
-	  append_int(l, (yyvsp[(2) - (5)].i_val));
-	  append_symbol(l, (yyvsp[(4) - (5)].sym));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
+       append_symbol(l, (yyvsp[(1) - (5)].sym));
+       append_int(l, 0);
+       append_int(l, (yyvsp[(2) - (5)].i_val));
+       append_symbol(l, (yyvsp[(4) - (5)].sym));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
     break;
 
   case 535:
 #line 3062 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (5)].sym));
-	  append_int(l, 1);
-	  append_int(l, (yyvsp[(3) - (5)].i_val));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  append_symbol(l, NULL);
-	  (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
+       append_symbol(l, (yyvsp[(1) - (5)].sym));
+       append_int(l, 1);
+       append_int(l, (yyvsp[(3) - (5)].i_val));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       append_symbol(l, NULL);
+       (yyval.sym) = _symbol_create_list( SQL_JOIN, l); }
     break;
 
   case 536:
@@ -10746,11 +10746,11 @@ yyreduce:
   case 547:
 #line 3115 "src/sql/server/sql_parser.y"
     {
-		dlist *l = L();
-	  	append_list(l, (yyvsp[(2) - (3)].l));
-	  	append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  	(yyval.sym) = _symbol_create_list( SQL_WITH, l ); 
-	}
+          dlist *l = L();
+          append_list(l, (yyvsp[(2) - (3)].l));
+          append_symbol(l, (yyvsp[(3) - (3)].sym));
+          (yyval.sym) = _symbol_create_list( SQL_WITH, l ); 
+     }
     break;
 
   case 548:
@@ -10766,67 +10766,67 @@ yyreduce:
   case 550:
 #line 3130 "src/sql/server/sql_parser.y"
     {  dlist *l = L();
-	  append_list(l, append_string(L(), (yyvsp[(1) - (4)].sval)));
-	  append_list(l, (yyvsp[(2) - (4)].l));
-	  append_symbol(l, (yyvsp[(4) - (4)].sym));
-	  append_int(l, FALSE);	/* no with check */
-	  append_int(l, FALSE);	/* inlined view  (ie not persistent) */
-	  append_int(l, FALSE); /* no replace clause */
-	  (yyval.sym) = _symbol_create_list( SQL_CREATE_VIEW, l ); 
-	}
+       append_list(l, append_string(L(), (yyvsp[(1) - (4)].sval)));
+       append_list(l, (yyvsp[(2) - (4)].l));
+       append_symbol(l, (yyvsp[(4) - (4)].sym));
+       append_int(l, FALSE);  /* no with check */
+       append_int(l, FALSE);  /* inlined view  (ie not persistent) */
+       append_int(l, FALSE); /* no replace clause */
+       (yyval.sym) = _symbol_create_list( SQL_CREATE_VIEW, l ); 
+     }
     break;
 
   case 554:
 #line 3154 "src/sql/server/sql_parser.y"
     { (yyval.sym) = newSelectNode( SA, (yyvsp[(2) - (4)].bval), (yyvsp[(3) - (4)].l), NULL,
-		(yyvsp[(4) - (4)].l)->h->data.sym,
-		(yyvsp[(4) - (4)].l)->h->next->data.sym,
-		(yyvsp[(4) - (4)].l)->h->next->next->data.sym,
-		(yyvsp[(4) - (4)].l)->h->next->next->next->data.sym,
-		NULL, NULL, NULL, NULL, NULL);
-	}
+          (yyvsp[(4) - (4)].l)->h->data.sym,
+          (yyvsp[(4) - (4)].l)->h->next->data.sym,
+          (yyvsp[(4) - (4)].l)->h->next->next->data.sym,
+          (yyvsp[(4) - (4)].l)->h->next->next->next->data.sym,
+          NULL, NULL, NULL, NULL, NULL);
+     }
     break;
 
   case 555:
 #line 3165 "src/sql/server/sql_parser.y"
     { (yyval.sym) = newSelectNode( SA, (yyvsp[(2) - (6)].bval), (yyvsp[(3) - (6)].l), (yyvsp[(5) - (6)].l),
-		(yyvsp[(6) - (6)].l)->h->data.sym,
-		(yyvsp[(6) - (6)].l)->h->next->data.sym,
-		(yyvsp[(6) - (6)].l)->h->next->next->data.sym,
-		(yyvsp[(6) - (6)].l)->h->next->next->next->data.sym,
-		NULL, NULL, NULL, NULL, NULL);
-	}
+          (yyvsp[(6) - (6)].l)->h->data.sym,
+          (yyvsp[(6) - (6)].l)->h->next->data.sym,
+          (yyvsp[(6) - (6)].l)->h->next->next->data.sym,
+          (yyvsp[(6) - (6)].l)->h->next->next->next->data.sym,
+          NULL, NULL, NULL, NULL, NULL);
+     }
     break;
 
   case 556:
 #line 3176 "src/sql/server/sql_parser.y"
     { 
-	  (yyval.sym) = (yyvsp[(1) - (5)].sym);
-	  if ((yyvsp[(2) - (5)].sym) || (yyvsp[(3) - (5)].sym) || (yyvsp[(4) - (5)].sym) || (yyvsp[(5) - (5)].sym)) {
-	  	if ((yyvsp[(1) - (5)].sym) != NULL &&
-		    ((yyvsp[(1) - (5)].sym)->token == SQL_SELECT ||
-		     (yyvsp[(1) - (5)].sym)->token == SQL_UNION  ||
-		     (yyvsp[(1) - (5)].sym)->token == SQL_EXCEPT ||
-		     (yyvsp[(1) - (5)].sym)->token == SQL_INTERSECT)) {
-			if ((yyvsp[(1) - (5)].sym)->token == SQL_SELECT) {
-	 			SelectNode *s = (SelectNode*)(yyvsp[(1) - (5)].sym);
-	
-	  			s -> orderby = (yyvsp[(2) - (5)].sym);
-	  			s -> limit = (yyvsp[(3) - (5)].sym);
-	  			s -> offset = (yyvsp[(4) - (5)].sym);
-	  			s -> sample = (yyvsp[(5) - (5)].sym);
-			} else { /* Add extra select * from .. in case of UNION, EXCEPT, INTERSECT */
-				(yyval.sym) = newSelectNode( 
-					SA, 0, 
-					append_symbol(L(), _symbol_create_list(SQL_TABLE, append_string(append_string(L(),NULL),NULL))), NULL,
-					_symbol_create_list( SQL_FROM, append_symbol(L(), (yyvsp[(1) - (5)].sym))), NULL, NULL, NULL, (yyvsp[(2) - (5)].sym), _symbol_create_list(SQL_NAME, append_list(append_string(L(),"inner"),NULL)), (yyvsp[(3) - (5)].sym), (yyvsp[(4) - (5)].sym), (yyvsp[(5) - (5)].sym));
-			}
-	  	} else {
-			yyerror(m, "missing SELECT operator");
-			YYABORT;
-	  	}
-	 } 
-	}
+       (yyval.sym) = (yyvsp[(1) - (5)].sym);
+       if ((yyvsp[(2) - (5)].sym) || (yyvsp[(3) - (5)].sym) || (yyvsp[(4) - (5)].sym) || (yyvsp[(5) - (5)].sym)) {
+          if ((yyvsp[(1) - (5)].sym) != NULL &&
+              ((yyvsp[(1) - (5)].sym)->token == SQL_SELECT ||
+               (yyvsp[(1) - (5)].sym)->token == SQL_UNION  ||
+               (yyvsp[(1) - (5)].sym)->token == SQL_EXCEPT ||
+               (yyvsp[(1) - (5)].sym)->token == SQL_INTERSECT)) {
+               if ((yyvsp[(1) - (5)].sym)->token == SQL_SELECT) {
+                    SelectNode *s = (SelectNode*)(yyvsp[(1) - (5)].sym);
+     
+                    s -> orderby = (yyvsp[(2) - (5)].sym);
+                    s -> limit = (yyvsp[(3) - (5)].sym);
+                    s -> offset = (yyvsp[(4) - (5)].sym);
+                    s -> sample = (yyvsp[(5) - (5)].sym);
+               } else { /* Add extra select * from .. in case of UNION, EXCEPT, INTERSECT */
+                    (yyval.sym) = newSelectNode( 
+                         SA, 0, 
+                         append_symbol(L(), _symbol_create_list(SQL_TABLE, append_string(append_string(L(),NULL),NULL))), NULL,
+                         _symbol_create_list( SQL_FROM, append_symbol(L(), (yyvsp[(1) - (5)].sym))), NULL, NULL, NULL, (yyvsp[(2) - (5)].sym), _symbol_create_list(SQL_NAME, append_list(append_string(L(),"inner"),NULL)), (yyvsp[(3) - (5)].sym), (yyvsp[(4) - (5)].sym), (yyvsp[(5) - (5)].sym));
+               }
+          } else {
+               yyerror(m, "missing SELECT operator");
+               YYABORT;
+          }
+      } 
+     }
     break;
 
   case 557:
@@ -10842,31 +10842,31 @@ yyreduce:
   case 560:
 #line 3218 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (5)].sym));
-	  append_int(l, (yyvsp[(3) - (5)].bval));
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_UNION, l); }
+       append_symbol(l, (yyvsp[(1) - (5)].sym));
+       append_int(l, (yyvsp[(3) - (5)].bval));
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_UNION, l); }
     break;
 
   case 561:
 #line 3227 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (5)].sym));
-	  append_int(l, (yyvsp[(3) - (5)].bval));
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_EXCEPT, l); }
+       append_symbol(l, (yyvsp[(1) - (5)].sym));
+       append_int(l, (yyvsp[(3) - (5)].bval));
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_EXCEPT, l); }
     break;
 
   case 562:
 #line 3236 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (5)].sym));
-	  append_int(l, (yyvsp[(3) - (5)].bval));
-	  append_list(l, (yyvsp[(4) - (5)].l));
-	  append_symbol(l, (yyvsp[(5) - (5)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_INTERSECT, l); }
+       append_symbol(l, (yyvsp[(1) - (5)].sym));
+       append_int(l, (yyvsp[(3) - (5)].bval));
+       append_list(l, (yyvsp[(4) - (5)].l));
+       append_symbol(l, (yyvsp[(5) - (5)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_INTERSECT, l); }
     break;
 
   case 563:
@@ -10907,10 +10907,10 @@ yyreduce:
   case 572:
 #line 3268 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-	  append_symbol((yyval.l), (yyvsp[(1) - (4)].sym));
-	  append_symbol((yyval.l), (yyvsp[(2) - (4)].sym));
-	  append_symbol((yyval.l), (yyvsp[(3) - (4)].sym));
-	  append_symbol((yyval.l), (yyvsp[(4) - (4)].sym)); }
+       append_symbol((yyval.l), (yyvsp[(1) - (4)].sym));
+       append_symbol((yyval.l), (yyvsp[(2) - (4)].sym));
+       append_symbol((yyval.l), (yyvsp[(3) - (4)].sym));
+       append_symbol((yyval.l), (yyvsp[(4) - (4)].sym)); }
     break;
 
   case 573:
@@ -10936,69 +10936,69 @@ yyreduce:
   case 577:
 #line 3287 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_list(l, (yyvsp[(1) - (2)].l));
-		  	  	  append_symbol(l, (yyvsp[(2) - (2)].sym));
-		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
+                      append_list(l, (yyvsp[(1) - (2)].l));
+                      append_symbol(l, (yyvsp[(2) - (2)].sym));
+                      (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
     break;
 
   case 578:
 #line 3292 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_symbol(l, (yyvsp[(1) - (2)].sym));
-		  	  	  append_symbol(l, (yyvsp[(2) - (2)].sym));
-		  	  	  append_int(l, 0);
-		  		  (yyval.sym) = _symbol_create_list(SQL_TABLE, l); }
+                      append_symbol(l, (yyvsp[(1) - (2)].sym));
+                      append_symbol(l, (yyvsp[(2) - (2)].sym));
+                      append_int(l, 0);
+                      (yyval.sym) = _symbol_create_list(SQL_TABLE, l); }
     break;
 
   case 579:
 #line 3298 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_symbol(l, (yyvsp[(2) - (3)].sym));
-		  	  	  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  	  	  append_int(l, 1);
-		  		  (yyval.sym) = _symbol_create_list(SQL_TABLE, l); }
+                      append_symbol(l, (yyvsp[(2) - (3)].sym));
+                      append_symbol(l, (yyvsp[(3) - (3)].sym));
+                      append_int(l, 1);
+                      (yyval.sym) = _symbol_create_list(SQL_TABLE, l); }
     break;
 
   case 580:
 #line 3304 "src/sql/server/sql_parser.y"
     {
-				  (yyval.sym) = (yyvsp[(1) - (2)].sym);
-				  if ((yyval.sym)->token == SQL_SELECT) {
-				  	SelectNode *sn = (SelectNode*)(yyvsp[(1) - (2)].sym);
-				  	sn->name = (yyvsp[(2) - (2)].sym);
-				  } else {
-				  	append_symbol((yyvsp[(1) - (2)].sym)->data.lval, (yyvsp[(2) - (2)].sym));
-				  }
-				}
+                      (yyval.sym) = (yyvsp[(1) - (2)].sym);
+                      if ((yyval.sym)->token == SQL_SELECT) {
+                         SelectNode *sn = (SelectNode*)(yyvsp[(1) - (2)].sym);
+                         sn->name = (yyvsp[(2) - (2)].sym);
+                      } else {
+                         append_symbol((yyvsp[(1) - (2)].sym)->data.lval, (yyvsp[(2) - (2)].sym));
+                      }
+                    }
     break;
 
   case 581:
 #line 3314 "src/sql/server/sql_parser.y"
     {
-				  (yyval.sym) = (yyvsp[(2) - (3)].sym);
-				  if ((yyval.sym)->token == SQL_SELECT) {
-				  	SelectNode *sn = (SelectNode*)(yyvsp[(2) - (3)].sym);
-				  	sn->name = (yyvsp[(3) - (3)].sym);
-					sn->lateral = 1;
-				  } else {
-				  	append_symbol((yyvsp[(2) - (3)].sym)->data.lval, (yyvsp[(3) - (3)].sym));
-	  				append_int((yyvsp[(2) - (3)].sym)->data.lval, 1);
-				  }
-				}
+                      (yyval.sym) = (yyvsp[(2) - (3)].sym);
+                      if ((yyval.sym)->token == SQL_SELECT) {
+                         SelectNode *sn = (SelectNode*)(yyvsp[(2) - (3)].sym);
+                         sn->name = (yyvsp[(3) - (3)].sym);
+                         sn->lateral = 1;
+                      } else {
+                         append_symbol((yyvsp[(2) - (3)].sym)->data.lval, (yyvsp[(3) - (3)].sym));
+                         append_int((yyvsp[(2) - (3)].sym)->data.lval, 1);
+                      }
+                    }
     break;
 
   case 582:
 #line 3326 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL;
-				  yyerror(m, "subquery table reference needs alias, use AS xxx");
-				  YYABORT;
-				}
+                      yyerror(m, "subquery table reference needs alias, use AS xxx");
+                      YYABORT;
+                    }
     break;
 
   case 583:
 #line 3330 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(1) - (1)].sym);
-				  append_symbol((yyvsp[(1) - (1)].sym)->data.lval, NULL); }
+                      append_symbol((yyvsp[(1) - (1)].sym)->data.lval, NULL); }
     break;
 
   case 584:
@@ -11009,44 +11009,44 @@ yyreduce:
   case 585:
 #line 3336 "src/sql/server/sql_parser.y"
     {
-		dlist *op = L();
+          dlist *op = L();
 
- 	  	append_symbol(op, (yyvsp[(3) - (5)].sym));
-		append_symbol(op, (yyvsp[(5) - (5)].sym));
-		(yyval.sym) = _symbol_create_list(SQL_TABLE_OPERATOR, op); 
-	}
+          append_symbol(op, (yyvsp[(3) - (5)].sym));
+          append_symbol(op, (yyvsp[(5) - (5)].sym));
+          (yyval.sym) = _symbol_create_list(SQL_TABLE_OPERATOR, op); 
+     }
     break;
 
   case 586:
 #line 3347 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_string(l, (yyvsp[(2) - (5)].sval));
-		  	  	  append_list(l, (yyvsp[(4) - (5)].l));
-		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
+                      append_string(l, (yyvsp[(2) - (5)].sval));
+                      append_list(l, (yyvsp[(4) - (5)].l));
+                      (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
     break;
 
   case 587:
 #line 3352 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_string(l, (yyvsp[(2) - (2)].sval));
-		  	  	  append_list(l, NULL);
-		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
+                      append_string(l, (yyvsp[(2) - (2)].sval));
+                      append_list(l, NULL);
+                      (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
     break;
 
   case 588:
 #line 3357 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_string(l, (yyvsp[(1) - (4)].sval));
-		  	  	  append_list(l, (yyvsp[(3) - (4)].l));
-		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
+                      append_string(l, (yyvsp[(1) - (4)].sval));
+                      append_list(l, (yyvsp[(3) - (4)].l));
+                      (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
     break;
 
   case 589:
 #line 3362 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  		  append_string(l, (yyvsp[(1) - (1)].sval));
-		  	  	  append_list(l, NULL);
-		  		  (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
+                      append_string(l, (yyvsp[(1) - (1)].sval));
+                      append_list(l, NULL);
+                      (yyval.sym) = _symbol_create_list(SQL_NAME, l); }
     break;
 
   case 590:
@@ -11072,13 +11072,13 @@ yyreduce:
   case 594:
 #line 3379 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(),
-			       _symbol_create_list(SQL_COLUMN,(yyvsp[(1) - (1)].l))); }
+                      _symbol_create_list(SQL_COLUMN,(yyvsp[(1) - (1)].l))); }
     break;
 
   case 595:
 #line 3382 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol( (yyvsp[(1) - (3)].l),
-			       _symbol_create_list(SQL_COLUMN,(yyvsp[(3) - (3)].l))); }
+                      _symbol_create_list(SQL_COLUMN,(yyvsp[(3) - (3)].l))); }
     break;
 
   case 596:
@@ -11094,9 +11094,9 @@ yyreduce:
   case 598:
 #line 3394 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_OR, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_OR, l ); }
     break;
 
   case 599:
@@ -11107,9 +11107,9 @@ yyreduce:
   case 600:
 #line 3403 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_AND, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_AND, l ); }
     break;
 
   case 601:
@@ -11135,9 +11135,9 @@ yyreduce:
   case 605:
 #line 3418 "src/sql/server/sql_parser.y"
     { 
-		  	  sql_subtype *t = sql_bind_localtype("lng");
-			  (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[(2) - (2)].l_val))); 
-			}
+                 sql_subtype *t = sql_bind_localtype("lng");
+                 (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[(2) - (2)].l_val))); 
+               }
     break;
 
   case 606:
@@ -11153,9 +11153,9 @@ yyreduce:
   case 608:
 #line 3427 "src/sql/server/sql_parser.y"
     { 
-		  	  sql_subtype *t = sql_bind_localtype("lng");
-			  (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[(2) - (2)].l_val))); 
-			}
+                 sql_subtype *t = sql_bind_localtype("lng");
+                 (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[(2) - (2)].l_val))); 
+               }
     break;
 
   case 609:
@@ -11171,17 +11171,17 @@ yyreduce:
   case 611:
 #line 3436 "src/sql/server/sql_parser.y"
     {
-		  	  sql_subtype *t = sql_bind_localtype("lng");
-			  (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[(2) - (2)].l_val)));
-			}
+                 sql_subtype *t = sql_bind_localtype("lng");
+                 (yyval.sym) = _newAtomNode( atom_int(SA, t, (yyvsp[(2) - (2)].l_val)));
+               }
     break;
 
   case 612:
 #line 3440 "src/sql/server/sql_parser.y"
     {
-		  	  sql_subtype *t = sql_bind_localtype("dbl");
-			  (yyval.sym) = _newAtomNode( atom_float(SA, t, strtod((yyvsp[(2) - (2)].sval),NULL)));
-			}
+                 sql_subtype *t = sql_bind_localtype("dbl");
+                 (yyval.sym) = _newAtomNode( atom_float(SA, t, strtod((yyvsp[(2) - (2)].sval),NULL)));
+               }
     break;
 
   case 613:
@@ -11202,9 +11202,9 @@ yyreduce:
   case 616:
 #line 3455 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (2)].sym));
-	  append_int(l, (yyvsp[(2) - (2)].bval));
-	  (yyval.sym) = _symbol_create_list(SQL_COLUMN, l ); }
+       append_symbol(l, (yyvsp[(1) - (2)].sym));
+       append_int(l, (yyvsp[(2) - (2)].bval));
+       (yyval.sym) = _symbol_create_list(SQL_COLUMN, l ); }
     break;
 
   case 617:
@@ -11226,20 +11226,20 @@ yyreduce:
 #line 3482 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(2) - (2)].sym);
 
-		  if ((yyval.sym)->token == SQL_EXISTS)
-			(yyval.sym)->token = SQL_NOT_EXISTS;
-		  else if ((yyval.sym)->token == SQL_NOT_EXISTS)
-			(yyval.sym)->token = SQL_EXISTS;
-		  else if ((yyval.sym)->token == SQL_NOT_BETWEEN)
-			(yyval.sym)->token = SQL_BETWEEN;
-		  else if ((yyval.sym)->token == SQL_BETWEEN)
-			(yyval.sym)->token = SQL_NOT_BETWEEN;
-		  else if ((yyval.sym)->token == SQL_NOT_LIKE)
-			(yyval.sym)->token = SQL_LIKE;
-		  else if ((yyval.sym)->token == SQL_LIKE)
-			(yyval.sym)->token = SQL_NOT_LIKE;
-		  else
-			(yyval.sym) = _symbol_create_symbol(SQL_NOT, (yyvsp[(2) - (2)].sym)); }
+            if ((yyval.sym)->token == SQL_EXISTS)
+               (yyval.sym)->token = SQL_NOT_EXISTS;
+            else if ((yyval.sym)->token == SQL_NOT_EXISTS)
+               (yyval.sym)->token = SQL_EXISTS;
+            else if ((yyval.sym)->token == SQL_NOT_BETWEEN)
+               (yyval.sym)->token = SQL_BETWEEN;
+            else if ((yyval.sym)->token == SQL_BETWEEN)
+               (yyval.sym)->token = SQL_NOT_BETWEEN;
+            else if ((yyval.sym)->token == SQL_NOT_LIKE)
+               (yyval.sym)->token = SQL_LIKE;
+            else if ((yyval.sym)->token == SQL_LIKE)
+               (yyval.sym)->token = SQL_NOT_LIKE;
+            else
+               (yyval.sym) = _symbol_create_symbol(SQL_NOT, (yyvsp[(2) - (2)].sym)); }
     break;
 
   case 630:
@@ -11251,40 +11251,40 @@ yyreduce:
 #line 3503 "src/sql/server/sql_parser.y"
     { dlist *l = L();
 
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_string(l, (yyvsp[(2) - (3)].sval));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_string(l, (yyvsp[(2) - (3)].sval));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
     break;
 
   case 632:
 #line 3510 "src/sql/server/sql_parser.y"
     { dlist *l = L();
 
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_string(l, sa_strdup(SA, "="));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_string(l, sa_strdup(SA, "="));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
     break;
 
   case 633:
 #line 3520 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (6)].sym));
-		  append_int(l, (yyvsp[(3) - (6)].i_val));
-		  append_symbol(l, (yyvsp[(4) - (6)].sym));
-		  append_symbol(l, (yyvsp[(6) - (6)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_NOT_BETWEEN, l ); }
+            append_symbol(l, (yyvsp[(1) - (6)].sym));
+            append_int(l, (yyvsp[(3) - (6)].i_val));
+            append_symbol(l, (yyvsp[(4) - (6)].sym));
+            append_symbol(l, (yyvsp[(6) - (6)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_NOT_BETWEEN, l ); }
     break;
 
   case 634:
 #line 3527 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (6)].sym));
-		  append_int(l, (yyvsp[(3) - (6)].i_val));
-		  append_symbol(l, (yyvsp[(4) - (6)].sym));
-		  append_symbol(l, (yyvsp[(6) - (6)].sym));
-		  (yyval.sym) = _symbol_create_list(SQL_BETWEEN, l ); }
+            append_symbol(l, (yyvsp[(1) - (6)].sym));
+            append_int(l, (yyvsp[(3) - (6)].i_val));
+            append_symbol(l, (yyvsp[(4) - (6)].sym));
+            append_symbol(l, (yyvsp[(6) - (6)].sym));
+            (yyval.sym) = _symbol_create_list(SQL_BETWEEN, l ); }
     break;
 
   case 635:
@@ -11305,64 +11305,64 @@ yyreduce:
   case 638:
 #line 3543 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  append_int(l, FALSE);  /* case sensitive */
-		  append_int(l, TRUE);  /* anti */
-		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            append_int(l, FALSE);  /* case sensitive */
+            append_int(l, TRUE);  /* anti */
+            (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
     break;
 
   case 639:
 #line 3550 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  append_int(l, TRUE);  /* case insensitive */
-		  append_int(l, TRUE);  /* anti */
-		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            append_int(l, TRUE);  /* case insensitive */
+            append_int(l, TRUE);  /* anti */
+            (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
     break;
 
   case 640:
 #line 3557 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  append_int(l, FALSE);  /* case sensitive */
-		  append_int(l, FALSE);  /* anti */
-		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            append_int(l, FALSE);  /* case sensitive */
+            append_int(l, FALSE);  /* anti */
+            (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
     break;
 
   case 641:
 #line 3564 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  append_int(l, TRUE);  /* case insensitive */
-		  append_int(l, FALSE);  /* anti */
-		  (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            append_int(l, TRUE);  /* case insensitive */
+            append_int(l, FALSE);  /* anti */
+            (yyval.sym) = _symbol_create_list( SQL_LIKE, l ); }
     break;
 
   case 642:
 #line 3574 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(1) - (1)].sym));
-	  (yyval.sym) = _symbol_create_list(SQL_ESCAPE, l ); }
+       append_symbol(l, (yyvsp[(1) - (1)].sym));
+       (yyval.sym) = _symbol_create_list(SQL_ESCAPE, l ); }
     break;
 
   case 643:
 #line 3578 "src/sql/server/sql_parser.y"
     { const char *s = sql2str((yyvsp[(3) - (3)].sval));
-	  if (_strlen(s) != 1) {
-		yyerror(m, SQLSTATE(22019) "ESCAPE must be one character");
-		(yyval.sym) = NULL;
-		YYABORT;
-	  } else {
-		dlist *l = L();
-		append_symbol(l, (yyvsp[(1) - (3)].sym));
-		append_string(l, s);
-		(yyval.sym) = _symbol_create_list(SQL_ESCAPE, l);
-	  }
-	}
+       if (_strlen(s) != 1) {
+          yyerror(m, SQLSTATE(22019) "ESCAPE must be one character");
+          (yyval.sym) = NULL;
+          YYABORT;
+       } else {
+          dlist *l = L();
+          append_symbol(l, (yyvsp[(1) - (3)].sym));
+          append_string(l, s);
+          (yyval.sym) = _symbol_create_list(SQL_ESCAPE, l);
+       }
+     }
     break;
 
   case 644:
@@ -11379,34 +11379,34 @@ yyreduce:
 #line 3599 "src/sql/server/sql_parser.y"
     { dlist *l = L();
 
-		  append_symbol(l, (yyvsp[(1) - (5)].sym));
-		  append_list(l, (yyvsp[(4) - (5)].l));
-		  (yyval.sym) = _symbol_create_list(SQL_NOT_IN, l ); }
+            append_symbol(l, (yyvsp[(1) - (5)].sym));
+            append_list(l, (yyvsp[(4) - (5)].l));
+            (yyval.sym) = _symbol_create_list(SQL_NOT_IN, l ); }
     break;
 
   case 647:
 #line 3605 "src/sql/server/sql_parser.y"
     { dlist *l = L();
 
-		  append_symbol(l, (yyvsp[(1) - (5)].sym));
-		  append_list(l, (yyvsp[(4) - (5)].l));
-		  (yyval.sym) = _symbol_create_list(SQL_IN, l ); }
+            append_symbol(l, (yyvsp[(1) - (5)].sym));
+            append_list(l, (yyvsp[(4) - (5)].l));
+            (yyval.sym) = _symbol_create_list(SQL_IN, l ); }
     break;
 
   case 648:
 #line 3611 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_list(l, (yyvsp[(2) - (7)].l));
-		  append_list(l, (yyvsp[(6) - (7)].l));
-		  (yyval.sym) = _symbol_create_list(SQL_NOT_IN, l ); }
+            append_list(l, (yyvsp[(2) - (7)].l));
+            append_list(l, (yyvsp[(6) - (7)].l));
+            (yyval.sym) = _symbol_create_list(SQL_NOT_IN, l ); }
     break;
 
   case 649:
 #line 3616 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_list(l, (yyvsp[(2) - (7)].l));
-		  append_list(l, (yyvsp[(6) - (7)].l));
-		  (yyval.sym) = _symbol_create_list(SQL_IN, l ); }
+            append_list(l, (yyvsp[(2) - (7)].l));
+            append_list(l, (yyvsp[(6) - (7)].l));
+            (yyval.sym) = _symbol_create_list(SQL_IN, l ); }
     break;
 
   case 650:
@@ -11422,21 +11422,21 @@ yyreduce:
   case 652:
 #line 3632 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (4)].sym));
-		  append_string(l, (yyvsp[(2) - (4)].sval));
-		  append_symbol(l, (yyvsp[(4) - (4)].sym));
-		  append_int(l, (yyvsp[(3) - (4)].i_val));
-		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
+            append_symbol(l, (yyvsp[(1) - (4)].sym));
+            append_string(l, (yyvsp[(2) - (4)].sval));
+            append_symbol(l, (yyvsp[(4) - (4)].sym));
+            append_int(l, (yyvsp[(3) - (4)].i_val));
+            (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
     break;
 
   case 653:
 #line 3639 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_symbol(l, (yyvsp[(1) - (4)].sym));
-		  append_string(l, sa_strdup(SA, "="));
-		  append_symbol(l, (yyvsp[(4) - (4)].sym));
-		  append_int(l, (yyvsp[(3) - (4)].i_val));
-		  (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
+            append_symbol(l, (yyvsp[(1) - (4)].sym));
+            append_string(l, sa_strdup(SA, "="));
+            append_symbol(l, (yyvsp[(4) - (4)].sym));
+            append_int(l, (yyvsp[(3) - (4)].i_val));
+            (yyval.sym) = _symbol_create_list(SQL_COMPARE, l ); }
     break;
 
   case 654:
@@ -11477,10 +11477,10 @@ yyreduce:
   case 661:
 #line 3668 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_list(l, (yyvsp[(1) - (3)].l));
-		  append_list(l, (yyvsp[(2) - (3)].l));
-		  append_list(l, (yyvsp[(3) - (3)].l));
-		  (yyval.sym) = _symbol_create_list(SQL_FILTER, l ); }
+            append_list(l, (yyvsp[(1) - (3)].l));
+            append_list(l, (yyvsp[(2) - (3)].l));
+            append_list(l, (yyvsp[(3) - (3)].l));
+            (yyval.sym) = _symbol_create_list(SQL_FILTER, l ); }
     break;
 
   case 662:
@@ -11516,239 +11516,239 @@ yyreduce:
   case 669:
 #line 3696 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_add")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_add")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 670:
 #line 3703 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_sub")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_sub")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 671:
 #line 3710 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_mul")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_mul")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 672:
 #line 3717 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_div")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_div")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 673:
 #line 3724 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "mod")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "mod")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 674:
 #line 3731 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_xor")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_xor")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 675:
 #line 3738 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_and")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-			  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_and")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 676:
 #line 3745 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_overlap")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_overlap")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 677:
 #line 3752 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_overlap_or_left")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_overlap_or_left")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 678:
 #line 3759 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_overlap_or_right")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_overlap_or_right")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 679:
 #line 3766 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_overlap_or_below")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_overlap_or_below")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 680:
 #line 3773 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, append_string(L(), sa_strdup(SA, "mbr_below")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, append_string(L(), sa_strdup(SA, "mbr_below")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 681:
 #line 3779 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_overlap_or_above")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_overlap_or_above")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 682:
 #line 3786 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_above")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_above")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 683:
 #line 3793 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_distance")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_distance")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 684:
 #line 3800 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_contained")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_contained")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 685:
 #line 3807 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_or")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_or")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 686:
 #line 3814 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_contains")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_contains")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 687:
 #line 3821 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(L(), sa_strdup(SA, "mbr_equal")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(L(), sa_strdup(SA, "mbr_equal")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 688:
 #line 3828 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_not")));
-	  		  append_symbol(l, (yyvsp[(2) - (2)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "bit_not")));
+                 append_symbol(l, (yyvsp[(2) - (2)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); }
     break;
 
   case 689:
 #line 3834 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "left_shift")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "left_shift")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 690:
 #line 3841 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "right_shift")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "right_shift")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 691:
 #line 3848 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "left_shift_assign")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "left_shift_assign")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 692:
 #line 3855 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l, 
-			  	append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "right_shift_assign")));
-	  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  		  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  		  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l, 
+                    append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "right_shift_assign")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 693:
@@ -11759,26 +11759,26 @@ yyreduce:
   case 694:
 #line 3864 "src/sql/server/sql_parser.y"
     { 
- 			  (yyval.sym) = NULL;
-			  assert((yyvsp[(2) - (2)].sym)->token != SQL_COLUMN || (yyvsp[(2) - (2)].sym)->data.lval->h->type != type_lng);
-			  if ((yyvsp[(2) - (2)].sym)->token == SQL_COLUMN && (yyvsp[(2) - (2)].sym)->data.lval->h->type == type_int) {
-				atom *a = sql_bind_arg(m, (yyvsp[(2) - (2)].sym)->data.lval->h->data.i_val);
-				if (!atom_neg(a)) {
-					(yyval.sym) = (yyvsp[(2) - (2)].sym);
-				} else {
-					yyerror(m, SQLSTATE(22003) "value too large or not a number");
-					(yyval.sym) = NULL;
-					YYABORT;
-				}
-			  } 
-			  if (!(yyval.sym)) {
-				dlist *l = L();
-			  	append_list(l, 
-			  		append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_neg")));
-	  		  	append_symbol(l, (yyvsp[(2) - (2)].sym));
-	  		  	(yyval.sym) = _symbol_create_list( SQL_UNOP, l ); 
-			  }
-			}
+                 (yyval.sym) = NULL;
+                 assert((yyvsp[(2) - (2)].sym)->token != SQL_COLUMN || (yyvsp[(2) - (2)].sym)->data.lval->h->type != type_lng);
+                 if ((yyvsp[(2) - (2)].sym)->token == SQL_COLUMN && (yyvsp[(2) - (2)].sym)->data.lval->h->type == type_int) {
+                    atom *a = sql_bind_arg(m, (yyvsp[(2) - (2)].sym)->data.lval->h->data.i_val);
+                    if (!atom_neg(a)) {
+                         (yyval.sym) = (yyvsp[(2) - (2)].sym);
+                    } else {
+                         yyerror(m, SQLSTATE(22003) "value too large or not a number");
+                         (yyval.sym) = NULL;
+                         YYABORT;
+                    }
+                 } 
+                 if (!(yyval.sym)) {
+                    dlist *l = L();
+                    append_list(l, 
+                         append_string(append_string(L(), sa_strdup(SA, "sys")), sa_strdup(SA, "sql_neg")));
+                    append_symbol(l, (yyvsp[(2) - (2)].sym));
+                    (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); 
+                 }
+               }
     break;
 
   case 695:
@@ -11794,13 +11794,13 @@ yyreduce:
   case 699:
 #line 3895 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_COLUMN, 
-			  append_string(L(), sa_strdup(SA, "current_user"))); }
+                 append_string(L(), sa_strdup(SA, "current_user"))); }
     break;
 
   case 700:
 #line 3897 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_COLUMN, 
-			  append_string(L(), sa_strdup(SA, "current_role"))); }
+                 append_string(L(), sa_strdup(SA, "current_role"))); }
     break;
 
   case 702:
@@ -11816,17 +11816,17 @@ yyreduce:
   case 714:
 #line 3916 "src/sql/server/sql_parser.y"
     { 
-	  int nr = (m->params)?list_length(m->params):0;
+       int nr = (m->params)?list_length(m->params):0;
 
-	  sql_add_param(m, NULL, NULL);
-	  (yyval.sym) = _symbol_create_int( SQL_PARAMETER, nr ); 
-	}
+       sql_add_param(m, NULL, NULL);
+       (yyval.sym) = _symbol_create_int( SQL_PARAMETER, nr ); 
+     }
     break;
 
   case 715:
 #line 3986 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_RANK, 
-		append_list(append_symbol(L(), (yyvsp[(1) - (5)].sym)), (yyvsp[(4) - (5)].l))); }
+          append_list(append_symbol(L(), (yyvsp[(1) - (5)].sym)), (yyvsp[(4) - (5)].l))); }
     break;
 
   case 716:
@@ -11967,26 +11967,26 @@ yyreduce:
   case 744:
 #line 4067 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  	  append_list(l, (yyvsp[(1) - (3)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
+       append_list(l, (yyvsp[(1) - (3)].l));
+       (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
     break;
 
   case 745:
 #line 4071 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  	  append_list(l, (yyvsp[(1) - (4)].l));
-	  if (dlist_length((yyvsp[(3) - (4)].l)) == 1) {
-  	  	append_symbol(l, (yyvsp[(3) - (4)].l)->h->data.sym);
-	  	(yyval.sym) = _symbol_create_list( SQL_UNOP, l ); 
-	  } else if (dlist_length((yyvsp[(3) - (4)].l)) == 2) {
-  	  	append_symbol(l, (yyvsp[(3) - (4)].l)->h->data.sym);
-  	  	append_symbol(l, (yyvsp[(3) - (4)].l)->h->next->data.sym);
-	  	(yyval.sym) = _symbol_create_list( SQL_BINOP, l ); 
-	  } else {
-  	  	append_list(l, (yyvsp[(3) - (4)].l));
-	  	(yyval.sym) = _symbol_create_list( SQL_NOP, l ); 
-	  }
-	}
+       append_list(l, (yyvsp[(1) - (4)].l));
+       if (dlist_length((yyvsp[(3) - (4)].l)) == 1) {
+          append_symbol(l, (yyvsp[(3) - (4)].l)->h->data.sym);
+          (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); 
+       } else if (dlist_length((yyvsp[(3) - (4)].l)) == 2) {
+          append_symbol(l, (yyvsp[(3) - (4)].l)->h->data.sym);
+          append_symbol(l, (yyvsp[(3) - (4)].l)->h->next->data.sym);
+          (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); 
+       } else {
+          append_list(l, (yyvsp[(3) - (4)].l));
+          (yyval.sym) = _symbol_create_list( SQL_NOP, l ); 
+       }
+     }
     break;
 
   case 746:
@@ -11997,7 +11997,7 @@ yyreduce:
   case 747:
 #line 4099 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-					append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
+                         append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
     break;
 
   case 748:
@@ -12023,51 +12023,51 @@ yyreduce:
   case 752:
 #line 4112 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  const char *ident = datetime_field((itype)(yyvsp[(3) - (6)].i_val));
-			  append_list(l,
-  		  	  	append_string(L(), sa_strdup(SA, ident)));
-  		  	  append_symbol(l, (yyvsp[(5) - (6)].sym));
-		  	  (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); }
+                 const char *ident = datetime_field((itype)(yyvsp[(3) - (6)].i_val));
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, ident)));
+                 append_symbol(l, (yyvsp[(5) - (6)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_UNOP, l ); }
     break;
 
   case 753:
 #line 4119 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l,
-			  	append_string(L(), sa_strdup(SA, "current_date")));
-	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "current_date")));
+                 (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
     break;
 
   case 754:
 #line 4124 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l,
-			  	append_string(L(), sa_strdup(SA, "current_time")));
-	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "current_time")));
+                 (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
     break;
 
   case 755:
 #line 4129 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l,
-			  	append_string(L(), sa_strdup(SA, "current_timestamp")));
-	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "current_timestamp")));
+                 (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
     break;
 
   case 756:
 #line 4134 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l,
-			  	append_string(L(), sa_strdup(SA, "localtime")));
-	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "localtime")));
+                 (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
     break;
 
   case 757:
 #line 4139 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  append_list(l,
-			  	append_string(L(), sa_strdup(SA, "localtimestamp")));
-	  		  (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "localtimestamp")));
+                 (yyval.sym) = _symbol_create_list( SQL_OP, l ); }
     break;
 
   case 758:
@@ -12083,80 +12083,80 @@ yyreduce:
   case 760:
 #line 4152 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  dlist *ops = L();
-  		  	  append_list(l,
-				append_string(L(), sa_strdup(SA, "substring")));
-  		  	  append_symbol(ops, (yyvsp[(3) - (8)].sym));
-  		  	  append_symbol(ops, (yyvsp[(5) - (8)].sym));
-  		  	  append_symbol(ops, (yyvsp[(7) - (8)].sym));
-			  append_list(l, ops);
-		  	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
+                 dlist *ops = L();
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "substring")));
+                 append_symbol(ops, (yyvsp[(3) - (8)].sym));
+                 append_symbol(ops, (yyvsp[(5) - (8)].sym));
+                 append_symbol(ops, (yyvsp[(7) - (8)].sym));
+                 append_list(l, ops);
+                 (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
     break;
 
   case 761:
 #line 4162 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  dlist *ops = L();
-  		  	  append_list(l,
-  		  	  	append_string(L(), sa_strdup(SA, "substring")));
-  		  	  append_symbol(ops, (yyvsp[(3) - (8)].sym));
-  		  	  append_symbol(ops, (yyvsp[(5) - (8)].sym));
-  		  	  append_symbol(ops, (yyvsp[(7) - (8)].sym));
-			  append_list(l, ops);
-		  	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
+                 dlist *ops = L();
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "substring")));
+                 append_symbol(ops, (yyvsp[(3) - (8)].sym));
+                 append_symbol(ops, (yyvsp[(5) - (8)].sym));
+                 append_symbol(ops, (yyvsp[(7) - (8)].sym));
+                 append_list(l, ops);
+                 (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
     break;
 
   case 762:
 #line 4172 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  	  append_list(l,
-  		  	  	append_string(L(), sa_strdup(SA, "substring")));
-  		  	  append_symbol(l, (yyvsp[(3) - (6)].sym));
-  		  	  append_symbol(l, (yyvsp[(5) - (6)].sym));
-		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "substring")));
+                 append_symbol(l, (yyvsp[(3) - (6)].sym));
+                 append_symbol(l, (yyvsp[(5) - (6)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 763:
 #line 4179 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  	  append_list(l,
-  		  	  	append_string(L(), sa_strdup(SA, "substring")));
-  		  	  append_symbol(l, (yyvsp[(3) - (6)].sym));
-  		  	  append_symbol(l, (yyvsp[(5) - (6)].sym));
-		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "substring")));
+                 append_symbol(l, (yyvsp[(3) - (6)].sym));
+                 append_symbol(l, (yyvsp[(5) - (6)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 764:
 #line 4186 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  	  append_list(l,
-  		  	  	append_string(L(), sa_strdup(SA, "locate")));
-  		  	  append_symbol(l, (yyvsp[(3) - (6)].sym));
-  		  	  append_symbol(l, (yyvsp[(5) - (6)].sym));
-		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "locate")));
+                 append_symbol(l, (yyvsp[(3) - (6)].sym));
+                 append_symbol(l, (yyvsp[(5) - (6)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 765:
 #line 4193 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  	  append_list(l,
-  		  	  	append_string(L(), sa_strdup(SA, "concat")));
-  		  	  append_symbol(l, (yyvsp[(1) - (3)].sym));
-  		  	  append_symbol(l, (yyvsp[(3) - (3)].sym));
-		  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "concat")));
+                 append_symbol(l, (yyvsp[(1) - (3)].sym));
+                 append_symbol(l, (yyvsp[(3) - (3)].sym));
+                 (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 766:
 #line 4200 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-			  dlist *ops = L();
-  		  	  append_list(l,
-				append_string(L(), sa_strdup(SA, "splitpart")));
-  		  	  append_symbol(ops, (yyvsp[(3) - (8)].sym));
-  		  	  append_symbol(ops, (yyvsp[(5) - (8)].sym));
-  		  	  append_symbol(ops, (yyvsp[(7) - (8)].sym));
-			  append_list(l, ops);
-		  	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
+                 dlist *ops = L();
+                 append_list(l,
+                    append_string(L(), sa_strdup(SA, "splitpart")));
+                 append_symbol(ops, (yyvsp[(3) - (8)].sym));
+                 append_symbol(ops, (yyvsp[(5) - (8)].sym));
+                 append_symbol(ops, (yyvsp[(7) - (8)].sym));
+                 append_list(l, ops);
+                 (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
     break;
 
   case 767:
@@ -12172,33 +12172,33 @@ yyreduce:
   case 769:
 #line 4219 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_string(l, NULL);
-  		  append_string(l, NULL);
-  		  (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
+            append_string(l, NULL);
+            append_string(l, NULL);
+            (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
     break;
 
   case 770:
 #line 4224 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_string(l, (yyvsp[(1) - (3)].sval));
-  		  append_string(l, NULL);
-  		  (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
+            append_string(l, (yyvsp[(1) - (3)].sval));
+            append_string(l, NULL);
+            (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
     break;
 
   case 771:
 #line 4229 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_symbol(l, (yyvsp[(1) - (3)].sym));
-  		  append_string(l, NULL);
-  		  (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_string(l, NULL);
+            (yyval.sym) = _symbol_create_list( SQL_TABLE, l ); }
     break;
 
   case 772:
 #line 4234 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_symbol(l, (yyvsp[(1) - (2)].sym));
-  		  append_string(l, (yyvsp[(2) - (2)].sval));
-  		  (yyval.sym) = _symbol_create_list( SQL_COLUMN, l ); }
+            append_symbol(l, (yyvsp[(1) - (2)].sym));
+            append_string(l, (yyvsp[(2) - (2)].sval));
+            (yyval.sym) = _symbol_create_list( SQL_COLUMN, l ); }
     break;
 
   case 773:
@@ -12219,28 +12219,28 @@ yyreduce:
   case 776:
 #line 4248 "src/sql/server/sql_parser.y"
     { 
-	  if (m->emode == m_normal && m->caching) {
-		/* replace by argument */
-		AtomNode *an = (AtomNode*)(yyvsp[(1) - (1)].sym);
+       if (m->emode == m_normal && m->caching) {
+          /* replace by argument */
+          AtomNode *an = (AtomNode*)(yyvsp[(1) - (1)].sym);
 
-		if(!sql_add_arg( m, an->a)) {
-			char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
-			yyerror(m, msg);
-			_DELETE(msg);
-			YYABORT;
-		}
-		an->a = NULL;
-		/* we miss use SQL_COLUMN also for param's, maybe
-				change SQL_COLUMN to SQL_IDENT */
-		(yyval.sym) = _symbol_create_list( SQL_COLUMN,
-			append_int(L(), m->argc-1));
-	  } else {
-		AtomNode *an = (AtomNode*)(yyvsp[(1) - (1)].sym);
-		atom *a = an->a; 
-		an->a = atom_dup(SA, a); 
-		(yyval.sym) = (yyvsp[(1) - (1)].sym);
-	  }
-	}
+          if(!sql_add_arg( m, an->a)) {
+               char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
+               yyerror(m, msg);
+               _DELETE(msg);
+               YYABORT;
+          }
+          an->a = NULL;
+          /* we miss use SQL_COLUMN also for param's, maybe
+                    change SQL_COLUMN to SQL_IDENT */
+          (yyval.sym) = _symbol_create_list( SQL_COLUMN,
+               append_int(L(), m->argc-1));
+       } else {
+          AtomNode *an = (AtomNode*)(yyvsp[(1) - (1)].sym);
+          atom *a = an->a; 
+          an->a = atom_dup(SA, a); 
+          (yyval.sym) = (yyvsp[(1) - (1)].sym);
+       }
+     }
     break;
 
   case 777:
@@ -12251,7 +12251,7 @@ yyreduce:
   case 778:
 #line 4275 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-			  append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
+                 append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
     break;
 
   case 779:
@@ -12262,7 +12262,7 @@ yyreduce:
   case 780:
 #line 4281 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-			  append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
+                 append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
     break;
 
   case 781:
@@ -12273,62 +12273,62 @@ yyreduce:
   case 782:
 #line 4287 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-			  append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
+                 append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
     break;
 
   case 783:
 #line 4294 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_list(l, (yyvsp[(1) - (4)].l));
-  		  append_int(l, FALSE);
-  		  append_symbol(l, NULL);
-		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
+            append_list(l, (yyvsp[(1) - (4)].l));
+            append_int(l, FALSE);
+            append_symbol(l, NULL);
+            (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
     break;
 
   case 784:
 #line 4300 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_list(l, (yyvsp[(1) - (6)].l));
-  		  append_int(l, FALSE);
-  		  append_symbol(l, NULL);
-		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
+            append_list(l, (yyvsp[(1) - (6)].l));
+            append_int(l, FALSE);
+            append_symbol(l, NULL);
+            (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
     break;
 
   case 785:
 #line 4306 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_list(l, (yyvsp[(1) - (5)].l));
-  		  append_int(l, TRUE);
-  		  append_symbol(l, (yyvsp[(4) - (5)].sym));
-		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
+            append_list(l, (yyvsp[(1) - (5)].l));
+            append_int(l, TRUE);
+            append_symbol(l, (yyvsp[(4) - (5)].sym));
+            (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
     break;
 
   case 786:
 #line 4312 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_list(l, (yyvsp[(1) - (5)].l));
-  		  append_int(l, FALSE);
-  		  append_symbol(l, (yyvsp[(4) - (5)].sym));
-		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
+            append_list(l, (yyvsp[(1) - (5)].l));
+            append_int(l, FALSE);
+            append_symbol(l, (yyvsp[(4) - (5)].sym));
+            (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
     break;
 
   case 787:
 #line 4318 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_list(l, (yyvsp[(1) - (4)].l));
-  		  append_int(l, FALSE);
-  		  append_symbol(l, (yyvsp[(3) - (4)].sym));
-		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
+            append_list(l, (yyvsp[(1) - (4)].l));
+            append_int(l, FALSE);
+            append_symbol(l, (yyvsp[(3) - (4)].sym));
+            (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
     break;
 
   case 788:
 #line 4324 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  		  append_list(l, (yyvsp[(1) - (6)].l));
-  		  append_int(l, FALSE);
-  		  append_symbol(l, (yyvsp[(3) - (6)].sym));
-  		  append_symbol(l, (yyvsp[(5) - (6)].sym));
-		  (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
+            append_list(l, (yyvsp[(1) - (6)].l));
+            append_int(l, FALSE);
+            append_symbol(l, (yyvsp[(3) - (6)].sym));
+            append_symbol(l, (yyvsp[(5) - (6)].sym));
+            (yyval.sym) = _symbol_create_list( SQL_AGGR, l ); }
     break;
 
   case 790:
@@ -12384,19 +12384,19 @@ yyreduce:
   case 800:
 #line 4366 "src/sql/server/sql_parser.y"
     { if ((yyvsp[(3) - (3)].bval))
-				sql_find_subtype(&(yyval.type), "timetz", (yyvsp[(2) - (3)].i_val), 0); 
-			  else
-				sql_find_subtype(&(yyval.type), "time", (yyvsp[(2) - (3)].i_val), 0); 
-			}
+                    sql_find_subtype(&(yyval.type), "timetz", (yyvsp[(2) - (3)].i_val), 0); 
+                 else
+                    sql_find_subtype(&(yyval.type), "time", (yyvsp[(2) - (3)].i_val), 0); 
+               }
     break;
 
   case 801:
 #line 4372 "src/sql/server/sql_parser.y"
     { if ((yyvsp[(3) - (3)].bval))
-				sql_find_subtype(&(yyval.type), "timestamptz", (yyvsp[(2) - (3)].i_val), 0); 
-			  else
-				sql_find_subtype(&(yyval.type), "timestamp", (yyvsp[(2) - (3)].i_val), 0); 
-			}
+                    sql_find_subtype(&(yyval.type), "timestamptz", (yyvsp[(2) - (3)].i_val), 0); 
+                 else
+                    sql_find_subtype(&(yyval.type), "timestamp", (yyvsp[(2) - (3)].i_val), 0); 
+               }
     break;
 
   case 802:
@@ -12442,37 +12442,37 @@ yyreduce:
   case 812:
 #line 4400 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_int(
-			 	append_int( L(), (yyvsp[(1) - (2)].i_val)), (yyvsp[(2) - (2)].i_val)-1);  }
+                    append_int( L(), (yyvsp[(1) - (2)].i_val)), (yyvsp[(2) - (2)].i_val)-1);  }
     break;
 
   case 813:
 #line 4406 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_int(
-			 	append_int( L(), (yyvsp[(1) - (1)].i_val)), 0);  }
+                    append_int( L(), (yyvsp[(1) - (1)].i_val)), 0);  }
     break;
 
   case 814:
 #line 4409 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_int(
-			 	append_int( L(), isec), (yyvsp[(2) - (2)].i_val)-1);  }
+                    append_int( L(), isec), (yyvsp[(2) - (2)].i_val)-1);  }
     break;
 
   case 815:
 #line 4415 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_int(
-			 	append_int( L(), (yyvsp[(1) - (2)].i_val)), (yyvsp[(2) - (2)].i_val)-1);  }
+                    append_int( L(), (yyvsp[(1) - (2)].i_val)), (yyvsp[(2) - (2)].i_val)-1);  }
     break;
 
   case 816:
 #line 4418 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_int(
-			 	append_int( L(), isec), (yyvsp[(2) - (2)].i_val)-1);  }
+                    append_int( L(), isec), (yyvsp[(2) - (2)].i_val)-1);  }
     break;
 
   case 817:
 #line 4424 "src/sql/server/sql_parser.y"
     { (yyval.l) =  append_list(
-			append_list( L(), (yyvsp[(1) - (3)].l)), (yyvsp[(3) - (3)].l) ); }
+               append_list( L(), (yyvsp[(1) - (3)].l)), (yyvsp[(3) - (3)].l) ); }
     break;
 
   case 818:
@@ -12483,458 +12483,458 @@ yyreduce:
   case 819:
 #line 4431 "src/sql/server/sql_parser.y"
     {
-		int sk, ek, sp, ep;
-	  	int tpe;
+          int sk, ek, sp, ep;
+          int tpe;
 
-		(yyval.type).type = NULL;
-	  	if ( (tpe = parse_interval_qualifier( m, (yyvsp[(2) - (2)].l), &sk, &ek, &sp, &ep )) < 0){
-			yyerror(m, SQLSTATE(22006) "incorrect interval");
-			YYABORT;
-	  	} else {
-			int d = inttype2digits(sk, ek);
-			if (tpe == 0){
-				sql_find_subtype(&(yyval.type), "month_interval", d, 0);
-			} else {
-				sql_find_subtype(&(yyval.type), "sec_interval", d, 0);
-			}
-	  	}
-	}
+          (yyval.type).type = NULL;
+          if ( (tpe = parse_interval_qualifier( m, (yyvsp[(2) - (2)].l), &sk, &ek, &sp, &ep )) < 0){
+               yyerror(m, SQLSTATE(22006) "incorrect interval");
+               YYABORT;
+          } else {
+               int d = inttype2digits(sk, ek);
+               if (tpe == 0){
+                    sql_find_subtype(&(yyval.type), "month_interval", d, 0);
+               } else {
+                    sql_find_subtype(&(yyval.type), "sec_interval", d, 0);
+               }
+          }
+     }
     break;
 
   case 823:
 #line 4457 "src/sql/server/sql_parser.y"
     { const char *s = sql2str((yyvsp[(1) - (1)].sval));
-		  int len = UTF8_strlen(s);
-		  sql_subtype t;
-		  sql_find_subtype(&t, "char", len, 0 );
-		  (yyval.sym) = _newAtomNode( _atom_string(&t, s)); }
+            int len = UTF8_strlen(s);
+            sql_subtype t;
+            sql_find_subtype(&t, "char", len, 0 );
+            (yyval.sym) = _newAtomNode( _atom_string(&t, s)); }
     break;
 
   case 824:
 #line 4463 "src/sql/server/sql_parser.y"
     { int len = _strlen((yyvsp[(1) - (1)].sval)), i = 2, err = 0;
-		  char * hexa = (yyvsp[(1) - (1)].sval);
-	 	  sql_subtype t;
+            char * hexa = (yyvsp[(1) - (1)].sval);
+            sql_subtype t;
 #ifdef HAVE_HGE
-		  hge res = 0;
+            hge res = 0;
 #else
-		  lng res = 0;
+            lng res = 0;
 #endif
-		  /* skip leading '0' */
-		  while (i < len && hexa[i] == '0')
-		  	i++;
+            /* skip leading '0' */
+            while (i < len && hexa[i] == '0')
+               i++;
 
-		  /* we only support positive values that fit in a signed 128-bit type,
-		   * i.e., max. 63/127 bit => < 2^63/2^127 => < 0x800...
-		   * (leading sign (-0x...) is handled separately elsewhere)
-		   */
-		  if (len - i < MAX_HEX_DIGITS || (len - i == MAX_HEX_DIGITS && hexa[i] < '8'))
-		  	while (err == 0 && i < len)
-		  	{
-				res <<= 4;
-				if ('0'<= hexa[i] && hexa[i] <= '9')
-					res = res + (hexa[i] - '0');
-				else if ('A' <= hexa[i] && hexa[i] <= 'F')
-					res = res + (hexa[i] - 'A' + 10);
-				else if ('a' <= hexa[i] && hexa[i] <= 'f')
-					res = res + (hexa[i] - 'a' + 10);
-				else
-					err = 1;
-		  		i++;
-			}
-		  else
-			err = 1;
+            /* we only support positive values that fit in a signed 128-bit type,
+             * i.e., max. 63/127 bit => < 2^63/2^127 => < 0x800...
+             * (leading sign (-0x...) is handled separately elsewhere)
+             */
+            if (len - i < MAX_HEX_DIGITS || (len - i == MAX_HEX_DIGITS && hexa[i] < '8'))
+               while (err == 0 && i < len)
+               {
+                    res <<= 4;
+                    if ('0'<= hexa[i] && hexa[i] <= '9')
+                         res = res + (hexa[i] - '0');
+                    else if ('A' <= hexa[i] && hexa[i] <= 'F')
+                         res = res + (hexa[i] - 'A' + 10);
+                    else if ('a' <= hexa[i] && hexa[i] <= 'f')
+                         res = res + (hexa[i] - 'a' + 10);
+                    else
+                         err = 1;
+                    i++;
+               }
+            else
+               err = 1;
 
-		  if (err == 0) {
-		  	assert(res >= 0);
+            if (err == 0) {
+               assert(res >= 0);
 
-		  	/* use smallest type that can accommodate the given value */
-			if (res <= GDK_bte_max)
-				sql_find_subtype(&t, "tinyint", 8, 0 );
-			else if (res <= GDK_sht_max)
-				sql_find_subtype(&t, "smallint", 16, 0 );
-		  	else if (res <= GDK_int_max)
-				sql_find_subtype(&t, "int", 32, 0 );
-			else if (res <= GDK_lng_max)
-				sql_find_subtype(&t, "bigint", 64, 0 );
+               /* use smallest type that can accommodate the given value */
+               if (res <= GDK_bte_max)
+                    sql_find_subtype(&t, "tinyint", 8, 0 );
+               else if (res <= GDK_sht_max)
+                    sql_find_subtype(&t, "smallint", 16, 0 );
+               else if (res <= GDK_int_max)
+                    sql_find_subtype(&t, "int", 32, 0 );
+               else if (res <= GDK_lng_max)
+                    sql_find_subtype(&t, "bigint", 64, 0 );
 #ifdef HAVE_HGE
-			else if (res <= GDK_hge_max && have_hge)
-				sql_find_subtype(&t, "hugeint", 128, 0 );
+               else if (res <= GDK_hge_max && have_hge)
+                    sql_find_subtype(&t, "hugeint", 128, 0 );
 #endif
-			else
-				err = 1;
-		  }
+               else
+                    err = 1;
+            }
 
-		  if (err != 0) {
-			char *msg = sql_message(SQLSTATE(22003) "Invalid hexadecimal number or hexadecimal too large (%s)", (yyvsp[(1) - (1)].sval));
+            if (err != 0) {
+               char *msg = sql_message(SQLSTATE(22003) "Invalid hexadecimal number or hexadecimal too large (%s)", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  } else {
-			(yyval.sym) = _newAtomNode( atom_int(SA, &t, res));
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            } else {
+               (yyval.sym) = _newAtomNode( atom_int(SA, &t, res));
+            }
+          }
     break;
 
   case 825:
 #line 4528 "src/sql/server/sql_parser.y"
     { int err = 0;
-		  size_t len = sizeof(lng);
-		  lng value, *p = &value;
-		  sql_subtype t;
+            size_t len = sizeof(lng);
+            lng value, *p = &value;
+            sql_subtype t;
 
-		  if (lngFromStr((yyvsp[(1) - (1)].sval), &len, &p) < 0 || is_lng_nil(value))
-		  	err = 2;
+            if (lngFromStr((yyvsp[(1) - (1)].sval), &len, &p) < 0 || is_lng_nil(value))
+               err = 2;
 
-		  if (!err) {
-		    if ((value >= GDK_lng_min && value <= GDK_lng_max))
+            if (!err) {
+              if ((value >= GDK_lng_min && value <= GDK_lng_max))
 #if SIZEOF_OID == SIZEOF_INT
-		  	  sql_find_subtype(&t, "oid", 31, 0 );
+                 sql_find_subtype(&t, "oid", 31, 0 );
 #else
-		  	  sql_find_subtype(&t, "oid", 63, 0 );
+                 sql_find_subtype(&t, "oid", 63, 0 );
 #endif
-		    else
-			  err = 1;
-		  }
+              else
+                 err = 1;
+            }
 
-		  if (err) {
-			char *msg = sql_message(SQLSTATE(22003) "OID value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
+            if (err) {
+               char *msg = sql_message(SQLSTATE(22003) "OID value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  } else {
-		  	(yyval.sym) = _newAtomNode( atom_int(SA, &t, value));
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            } else {
+               (yyval.sym) = _newAtomNode( atom_int(SA, &t, value));
+            }
+          }
     break;
 
   case 826:
 #line 4559 "src/sql/server/sql_parser.y"
     { int digits = _strlen((yyvsp[(1) - (1)].sval)), err = 0;
 #ifdef HAVE_HGE
-		  hge value, *p = &value;
-		  size_t len = sizeof(hge);
-		  const hge one = 1;
+            hge value, *p = &value;
+            size_t len = sizeof(hge);
+            const hge one = 1;
 #else
-		  lng value, *p = &value;
-		  size_t len = sizeof(lng);
-		  const lng one = 1;
+            lng value, *p = &value;
+            size_t len = sizeof(lng);
+            const lng one = 1;
 #endif
-		  sql_subtype t;
+            sql_subtype t;
 
 #ifdef HAVE_HGE
-		  if (hgeFromStr((yyvsp[(1) - (1)].sval), &len, &p) < 0 || is_hge_nil(value))
-		  	err = 2;
+            if (hgeFromStr((yyvsp[(1) - (1)].sval), &len, &p) < 0 || is_hge_nil(value))
+               err = 2;
 #else
-		  if (lngFromStr((yyvsp[(1) - (1)].sval), &len, &p) < 0 || is_lng_nil(value))
-		  	err = 2;
+            if (lngFromStr((yyvsp[(1) - (1)].sval), &len, &p) < 0 || is_lng_nil(value))
+               err = 2;
 #endif
 
-		  /* find the most suitable data type for the given number */
-		  if (!err) {
-		    int bits = digits2bits(digits), obits = bits;
+            /* find the most suitable data type for the given number */
+            if (!err) {
+              int bits = digits2bits(digits), obits = bits;
 
-		    while (bits > 0 &&
-			   (bits == sizeof(value) * 8 ||
-			    (one << (bits - 1)) > value))
-			  bits--;
+              while (bits > 0 &&
+                  (bits == sizeof(value) * 8 ||
+                   (one << (bits - 1)) > value))
+                 bits--;
 
- 		    if (bits != obits &&
-		       (bits == 8 || bits == 16 || bits == 32 || bits == 64))
-				bits++;
-		
-		    if (value >= GDK_bte_min && value <= GDK_bte_max)
-		  	  sql_find_subtype(&t, "tinyint", bits, 0 );
-		    else if (value >= GDK_sht_min && value <= GDK_sht_max)
-		  	  sql_find_subtype(&t, "smallint", bits, 0 );
-		    else if (value >= GDK_int_min && value <= GDK_int_max)
-		  	  sql_find_subtype(&t, "int", bits, 0 );
-		    else if (value >= GDK_lng_min && value <= GDK_lng_max)
-		  	  sql_find_subtype(&t, "bigint", bits, 0 );
+              if (bits != obits &&
+                 (bits == 8 || bits == 16 || bits == 32 || bits == 64))
+                    bits++;
+          
+              if (value >= GDK_bte_min && value <= GDK_bte_max)
+                 sql_find_subtype(&t, "tinyint", bits, 0 );
+              else if (value >= GDK_sht_min && value <= GDK_sht_max)
+                 sql_find_subtype(&t, "smallint", bits, 0 );
+              else if (value >= GDK_int_min && value <= GDK_int_max)
+                 sql_find_subtype(&t, "int", bits, 0 );
+              else if (value >= GDK_lng_min && value <= GDK_lng_max)
+                 sql_find_subtype(&t, "bigint", bits, 0 );
 #ifdef HAVE_HGE
-		    else if (value >= GDK_hge_min && value <= GDK_hge_max && have_hge)
-		  	  sql_find_subtype(&t, "hugeint", bits, 0 );
+              else if (value >= GDK_hge_min && value <= GDK_hge_max && have_hge)
+                 sql_find_subtype(&t, "hugeint", bits, 0 );
 #endif
-		    else
-			  err = 1;
-		  }
+              else
+                 err = 1;
+            }
 
-		  if (err) {
-			char *msg = sql_message(SQLSTATE(22003) "integer value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
+            if (err) {
+               char *msg = sql_message(SQLSTATE(22003) "integer value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  } else {
-		  	(yyval.sym) = _newAtomNode( atom_int(SA, &t, value));
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            } else {
+               (yyval.sym) = _newAtomNode( atom_int(SA, &t, value));
+            }
+          }
     break;
 
   case 827:
 #line 4620 "src/sql/server/sql_parser.y"
     { char *s = strip_extra_zeros(sa_strdup(SA, (yyvsp[(1) - (1)].sval)));
-		  char *dot = strchr(s, '.');
-		  int digits = _strlen(s) - 1;
-		  int scale = digits - (int) (dot-s);
-		  sql_subtype t;
+            char *dot = strchr(s, '.');
+            int digits = _strlen(s) - 1;
+            int scale = digits - (int) (dot-s);
+            sql_subtype t;
 
-		  if (digits <= 0)
-			digits = 1;
-		  if (0 && digits <= MAX_DEC_DIGITS) {
-		  	double val = strtod((yyvsp[(1) - (1)].sval),NULL);
+            if (digits <= 0)
+               digits = 1;
+            if (0 && digits <= MAX_DEC_DIGITS) {
+               double val = strtod((yyvsp[(1) - (1)].sval),NULL);
 #ifdef HAVE_HGE
-		  	hge value = decimal_from_str(s, NULL);
+               hge value = decimal_from_str(s, NULL);
 #else
-		  	lng value = decimal_from_str(s, NULL);
+               lng value = decimal_from_str(s, NULL);
 #endif
 
-		  	if (*s == '+' || *s == '-')
-				digits --;
-		  	sql_find_subtype(&t, "decimal", digits, scale );
-		  	(yyval.sym) = _newAtomNode( atom_dec(SA, &t, value, val));
-		   } else {
-			char *p = (yyvsp[(1) - (1)].sval);
-			double val;
+               if (*s == '+' || *s == '-')
+                    digits --;
+               sql_find_subtype(&t, "decimal", digits, scale );
+               (yyval.sym) = _newAtomNode( atom_dec(SA, &t, value, val));
+             } else {
+               char *p = (yyvsp[(1) - (1)].sval);
+               double val;
 
-			errno = 0;
-			val = strtod((yyvsp[(1) - (1)].sval),&p);
-			if (p == (yyvsp[(1) - (1)].sval) || is_dbl_nil(val) || (errno == ERANGE && (val < -1 || val > 1))) {
-				char *msg = sql_message(SQLSTATE(22003) "Double value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
+               errno = 0;
+               val = strtod((yyvsp[(1) - (1)].sval),&p);
+               if (p == (yyvsp[(1) - (1)].sval) || is_dbl_nil(val) || (errno == ERANGE && (val < -1 || val > 1))) {
+                    char *msg = sql_message(SQLSTATE(22003) "Double value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
 
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.sym) = NULL;
-				YYABORT;
-			}
-		  	sql_find_subtype(&t, "double", 51, 0 );
-		  	(yyval.sym) = _newAtomNode(atom_float(SA, &t, val));
-		   }
-		}
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.sym) = NULL;
+                    YYABORT;
+               }
+               sql_find_subtype(&t, "double", 51, 0 );
+               (yyval.sym) = _newAtomNode(atom_float(SA, &t, val));
+             }
+          }
     break;
 
   case 828:
 #line 4659 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-  		  char *p = (yyvsp[(1) - (1)].sval);
-		  double val;
+            char *p = (yyvsp[(1) - (1)].sval);
+            double val;
 
-		  errno = 0;
- 		  val = strtod((yyvsp[(1) - (1)].sval),&p);
-		  if (p == (yyvsp[(1) - (1)].sval) || is_dbl_nil(val) || (errno == ERANGE && (val < -1 || val > 1))) {
-			char *msg = sql_message(SQLSTATE(22003) "Double value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
+            errno = 0;
+            val = strtod((yyvsp[(1) - (1)].sval),&p);
+            if (p == (yyvsp[(1) - (1)].sval) || is_dbl_nil(val) || (errno == ERANGE && (val < -1 || val > 1))) {
+               char *msg = sql_message(SQLSTATE(22003) "Double value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  }
-		  sql_find_subtype(&t, "double", 51, 0 );
-		  (yyval.sym) = _newAtomNode(atom_float(SA, &t, val)); }
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            }
+            sql_find_subtype(&t, "double", 51, 0 );
+            (yyval.sym) = _newAtomNode(atom_float(SA, &t, val)); }
     break;
 
   case 829:
 #line 4676 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  atom *a;
-		  int r;
+            atom *a;
+            int r;
 
- 		  r = sql_find_subtype(&t, "date", 0, 0 );
-		  if (!r || (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) == NULL) {
-			char *msg = sql_message(SQLSTATE(22007) "Incorrect date value (%s)", (yyvsp[(2) - (2)].sval));
+            r = sql_find_subtype(&t, "date", 0, 0 );
+            if (!r || (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) == NULL) {
+               char *msg = sql_message(SQLSTATE(22007) "Incorrect date value (%s)", (yyvsp[(2) - (2)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  } else {
-		  	(yyval.sym) = _newAtomNode(a);
-		} }
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            } else {
+               (yyval.sym) = _newAtomNode(a);
+          } }
     break;
 
   case 830:
 #line 4692 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  atom *a;
-		  int r;
+            atom *a;
+            int r;
 
-	          r = sql_find_subtype(&t, ((yyvsp[(3) - (4)].bval))?"timetz":"time", (yyvsp[(2) - (4)].i_val), 0);
-		  if (!r || (a = atom_general(SA, &t, (yyvsp[(4) - (4)].sval))) == NULL) {
-			char *msg = sql_message(SQLSTATE(22007) "Incorrect time value (%s)", (yyvsp[(4) - (4)].sval));
+               r = sql_find_subtype(&t, ((yyvsp[(3) - (4)].bval))?"timetz":"time", (yyvsp[(2) - (4)].i_val), 0);
+            if (!r || (a = atom_general(SA, &t, (yyvsp[(4) - (4)].sval))) == NULL) {
+               char *msg = sql_message(SQLSTATE(22007) "Incorrect time value (%s)", (yyvsp[(4) - (4)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  } else {
-		  	(yyval.sym) = _newAtomNode(a);
-		} }
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            } else {
+               (yyval.sym) = _newAtomNode(a);
+          } }
     break;
 
   case 831:
 #line 4708 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  atom *a;
-		  int r;
+            atom *a;
+            int r;
 
- 		  r = sql_find_subtype(&t, ((yyvsp[(3) - (4)].bval))?"timestamptz":"timestamp",(yyvsp[(2) - (4)].i_val),0);
-		  if (!r || (a = atom_general(SA, &t, (yyvsp[(4) - (4)].sval))) == NULL) {
-			char *msg = sql_message(SQLSTATE(22007) "Incorrect timestamp value (%s)", (yyvsp[(4) - (4)].sval));
+            r = sql_find_subtype(&t, ((yyvsp[(3) - (4)].bval))?"timestamptz":"timestamp",(yyvsp[(2) - (4)].i_val),0);
+            if (!r || (a = atom_general(SA, &t, (yyvsp[(4) - (4)].sval))) == NULL) {
+               char *msg = sql_message(SQLSTATE(22007) "Incorrect timestamp value (%s)", (yyvsp[(4) - (4)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sym) = NULL;
-			YYABORT;
-		  } else {
-		  	(yyval.sym) = _newAtomNode(a);
-		} }
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sym) = NULL;
+               YYABORT;
+            } else {
+               (yyval.sym) = _newAtomNode(a);
+          } }
     break;
 
   case 833:
 #line 4725 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  atom *a= 0;
-		  int r;
+            atom *a= 0;
+            int r;
 
-		  (yyval.sym) = NULL;
- 		  r = sql_find_subtype(&t, "blob", 0, 0);
-	          if (r && (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) != NULL)
-			(yyval.sym) = _newAtomNode(a);
-		  if (!(yyval.sym)) {
-			char *msg = sql_message(SQLSTATE(22M28) "incorrect blob %s", (yyvsp[(2) - (2)].sval));
+            (yyval.sym) = NULL;
+            r = sql_find_subtype(&t, "blob", 0, 0);
+               if (r && (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) != NULL)
+               (yyval.sym) = _newAtomNode(a);
+            if (!(yyval.sym)) {
+               char *msg = sql_message(SQLSTATE(22M28) "incorrect blob %s", (yyvsp[(2) - (2)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			YYABORT;
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               YYABORT;
+            }
+          }
     break;
 
   case 834:
 #line 4742 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  atom *a= 0;
-		  int r;
+            atom *a= 0;
+            int r;
 
-		  (yyval.sym) = NULL;
-		  r = sql_find_subtype(&t, (yyvsp[(1) - (2)].sval), 0, 0);
-	          if (r && (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) != NULL)
-			(yyval.sym) = _newAtomNode(a);
-		  if (!(yyval.sym)) {
-			char *msg = sql_message(SQLSTATE(22000) "incorrect %s %s", (yyvsp[(1) - (2)].sval), (yyvsp[(2) - (2)].sval));
+            (yyval.sym) = NULL;
+            r = sql_find_subtype(&t, (yyvsp[(1) - (2)].sval), 0, 0);
+               if (r && (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) != NULL)
+               (yyval.sym) = _newAtomNode(a);
+            if (!(yyval.sym)) {
+               char *msg = sql_message(SQLSTATE(22000) "incorrect %s %s", (yyvsp[(1) - (2)].sval), (yyvsp[(2) - (2)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			YYABORT;
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               YYABORT;
+            }
+          }
     break;
 
   case 835:
 #line 4759 "src/sql/server/sql_parser.y"
     { sql_subtype t; 
-		  atom *a = 0;
-		  int r;
+            atom *a = 0;
+            int r;
 
-		  (yyval.sym) = NULL;
-		  r = sql_find_subtype(&t, (yyvsp[(1) - (2)].sval), 0, 0);
-	          if (r && (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) != NULL)
-			(yyval.sym) = _newAtomNode(a);
-		  if (!(yyval.sym)) {
-			char *msg = sql_message(SQLSTATE(22000) "incorrect %s %s", (yyvsp[(1) - (2)].sval), (yyvsp[(2) - (2)].sval));
+            (yyval.sym) = NULL;
+            r = sql_find_subtype(&t, (yyvsp[(1) - (2)].sval), 0, 0);
+               if (r && (a = atom_general(SA, &t, (yyvsp[(2) - (2)].sval))) != NULL)
+               (yyval.sym) = _newAtomNode(a);
+            if (!(yyval.sym)) {
+               char *msg = sql_message(SQLSTATE(22000) "incorrect %s %s", (yyvsp[(1) - (2)].sval), (yyvsp[(2) - (2)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			YYABORT;
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               YYABORT;
+            }
+          }
     break;
 
   case 836:
 #line 4776 "src/sql/server/sql_parser.y"
     {
-		  sql_type *t = mvc_bind_type(m, (yyvsp[(1) - (2)].sval));
-		  atom *a;
+            sql_type *t = mvc_bind_type(m, (yyvsp[(1) - (2)].sval));
+            atom *a;
 
-		  (yyval.sym) = NULL;
-		  if (t) {
-		  	sql_subtype tpe;
-			sql_init_subtype(&tpe, t, 0, 0);
-			a = atom_general(SA, &tpe, (yyvsp[(2) - (2)].sval));
-			if (a)
-				(yyval.sym) = _newAtomNode(a);
-		  }
-		  if (!t || !(yyval.sym)) {
-			char *msg = sql_message(SQLSTATE(22000) "type (%s) unknown", (yyvsp[(1) - (2)].sval));
+            (yyval.sym) = NULL;
+            if (t) {
+               sql_subtype tpe;
+               sql_init_subtype(&tpe, t, 0, 0);
+               a = atom_general(SA, &tpe, (yyvsp[(2) - (2)].sval));
+               if (a)
+                    (yyval.sym) = _newAtomNode(a);
+            }
+            if (!t || !(yyval.sym)) {
+               char *msg = sql_message(SQLSTATE(22000) "type (%s) unknown", (yyvsp[(1) - (2)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			YYABORT;
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               YYABORT;
+            }
+          }
     break;
 
   case 837:
 #line 4797 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  sql_find_subtype(&t, "boolean", 0, 0 );
-		  (yyval.sym) = _newAtomNode( atom_bool(SA, &t, FALSE)); }
+            sql_find_subtype(&t, "boolean", 0, 0 );
+            (yyval.sym) = _newAtomNode( atom_bool(SA, &t, FALSE)); }
     break;
 
   case 838:
 #line 4801 "src/sql/server/sql_parser.y"
     { sql_subtype t;
-		  sql_find_subtype(&t, "boolean", 0, 0 );
-		  (yyval.sym) = _newAtomNode( atom_bool(SA, &t, TRUE)); }
+            sql_find_subtype(&t, "boolean", 0, 0 );
+            (yyval.sym) = _newAtomNode( atom_bool(SA, &t, TRUE)); }
     break;
 
   case 839:
 #line 4807 "src/sql/server/sql_parser.y"
     { 
-		sql_subtype t;
-		int sk, ek, sp, ep, tpe;
-	  	lng i = 0;
-		int r = 0;
+          sql_subtype t;
+          int sk, ek, sp, ep, tpe;
+          lng i = 0;
+          int r = 0;
 
-		(yyval.sym) = NULL;
-	  	if ( (tpe = parse_interval_qualifier( m, (yyvsp[(4) - (4)].l), &sk, &ek, &sp, &ep )) < 0){
-			yyerror(m, "incorrect interval");
-			YYABORT;
-	  	} else {
-			int d = inttype2digits(sk, ek);
-			if (tpe == 0){
-				r=sql_find_subtype(&t, "month_interval", d, 0);
-			} else {
-				r=sql_find_subtype(&t, "sec_interval", d, 0);
-			}
-	  	}
-	  	if (!r || (tpe = parse_interval( m, (yyvsp[(2) - (4)].i_val), (yyvsp[(3) - (4)].sval), sk, ek, sp, ep, &i)) < 0) { 
-			yyerror(m, "incorrect interval");
-			(yyval.sym) = NULL;
-			YYABORT;
-	  	} else {
-			/* count the number of digits in the input */
+          (yyval.sym) = NULL;
+          if ( (tpe = parse_interval_qualifier( m, (yyvsp[(4) - (4)].l), &sk, &ek, &sp, &ep )) < 0){
+               yyerror(m, "incorrect interval");
+               YYABORT;
+          } else {
+               int d = inttype2digits(sk, ek);
+               if (tpe == 0){
+                    r=sql_find_subtype(&t, "month_interval", d, 0);
+               } else {
+                    r=sql_find_subtype(&t, "sec_interval", d, 0);
+               }
+          }
+          if (!r || (tpe = parse_interval( m, (yyvsp[(2) - (4)].i_val), (yyvsp[(3) - (4)].sval), sk, ek, sp, ep, &i)) < 0) { 
+               yyerror(m, "incorrect interval");
+               (yyval.sym) = NULL;
+               YYABORT;
+          } else {
+               /* count the number of digits in the input */
 /*
-			lng cpyval = i, inlen = 1;
+               lng cpyval = i, inlen = 1;
 
-			cpyval /= qualifier2multiplier(ek);
-			while (cpyval /= 10)
-				inlen++;
-		    	if (inlen > t.digits) {
-				char *msg = sql_message(SQLSTATE(22006) "incorrect interval (" LLFMT " > %d)", inlen, t.digits);
-				yyerror(m, msg);
-				$$ = NULL;
-				YYABORT;
-			}
+               cpyval /= qualifier2multiplier(ek);
+               while (cpyval /= 10)
+                    inlen++;
+               if (inlen > t.digits) {
+                    char *msg = sql_message(SQLSTATE(22006) "incorrect interval (" LLFMT " > %d)", inlen, t.digits);
+                    yyerror(m, msg);
+                    $$ = NULL;
+                    YYABORT;
+               }
 */
-	  		(yyval.sym) = _newAtomNode( atom_int(SA, &t, i));
-	  	}
-	}
+               (yyval.sym) = _newAtomNode( atom_int(SA, &t, i));
+          }
+     }
     break;
 
   case 840:
@@ -12945,66 +12945,66 @@ yyreduce:
   case 841:
 #line 4853 "src/sql/server/sql_parser.y"
     {
-				  m->scanner.schema = (yyvsp[(1) - (3)].sval);
-				  (yyval.l) = append_string(
-					append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
+                      m->scanner.schema = (yyvsp[(1) - (3)].sval);
+                      (yyval.l) = append_string(
+                         append_string(L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
     break;
 
   case 842:
 #line 4857 "src/sql/server/sql_parser.y"
     {
-				  m->scanner.schema = (yyvsp[(1) - (5)].sval);
-				  (yyval.l) = append_string(
-					append_string(
-						append_string(L(), (yyvsp[(1) - (5)].sval)), 
-						(yyvsp[(3) - (5)].sval)), 
-					(yyvsp[(5) - (5)].sval))
-				;}
+                      m->scanner.schema = (yyvsp[(1) - (5)].sval);
+                      (yyval.l) = append_string(
+                         append_string(
+                              append_string(L(), (yyvsp[(1) - (5)].sval)), 
+                              (yyvsp[(3) - (5)].sval)), 
+                         (yyvsp[(5) - (5)].sval))
+                    ;}
     break;
 
   case 843:
 #line 4868 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-				L(), (yyvsp[(1) - (1)].sval)); }
+                    L(), (yyvsp[(1) - (1)].sval)); }
     break;
 
   case 844:
 #line 4871 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-				append_string(
-				 L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
+                    append_string(
+                     L(), (yyvsp[(1) - (3)].sval)), (yyvsp[(3) - (3)].sval));}
     break;
 
   case 845:
 #line 4876 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_string(
-				append_string(
-				 append_string(
-				  L(), (yyvsp[(1) - (5)].sval)), (yyvsp[(3) - (5)].sval)), (yyvsp[(5) - (5)].sval));}
+                    append_string(
+                     append_string(
+                      L(), (yyvsp[(1) - (5)].sval)), (yyvsp[(3) - (5)].sval)), (yyvsp[(5) - (5)].sval));}
     break;
 
   case 846:
 #line 4884 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (6)].sym));
-	  append_type(l, &(yyvsp[(5) - (6)].type));
-	  (yyval.sym) = _symbol_create_list( SQL_CAST, l ); }
+       append_symbol(l, (yyvsp[(3) - (6)].sym));
+       append_type(l, &(yyvsp[(5) - (6)].type));
+       (yyval.sym) = _symbol_create_list( SQL_CAST, l ); }
     break;
 
   case 847:
 #line 4890 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (6)].sym));
-	  append_type(l, &(yyvsp[(5) - (6)].type));
-	  (yyval.sym) = _symbol_create_list( SQL_CAST, l ); }
+       append_symbol(l, (yyvsp[(3) - (6)].sym));
+       append_type(l, &(yyvsp[(5) - (6)].type));
+       (yyval.sym) = _symbol_create_list( SQL_CAST, l ); }
     break;
 
   case 849:
 #line 4902 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list(SQL_NULLIF,
-		   append_symbol(
-		    append_symbol(
-		     L(), (yyvsp[(3) - (6)].sym)), (yyvsp[(5) - (6)].sym))); }
+             append_symbol(
+              append_symbol(
+               L(), (yyvsp[(3) - (6)].sym)), (yyvsp[(5) - (6)].sym))); }
     break;
 
   case 850:
@@ -13015,18 +13015,18 @@ yyreduce:
   case 851:
 #line 4909 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list(SQL_CASE,
-		   append_symbol(
-		    append_list(
-		     append_symbol(
-		      L(),(yyvsp[(2) - (5)].sym)),(yyvsp[(3) - (5)].l)),(yyvsp[(4) - (5)].sym))); }
+             append_symbol(
+              append_list(
+               append_symbol(
+                L(),(yyvsp[(2) - (5)].sym)),(yyvsp[(3) - (5)].l)),(yyvsp[(4) - (5)].sym))); }
     break;
 
   case 852:
 #line 4915 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list(SQL_CASE,
-		   append_symbol(
-		    append_list(
-		     L(),(yyvsp[(2) - (4)].l)),(yyvsp[(3) - (4)].sym))); }
+             append_symbol(
+              append_list(
+               L(),(yyvsp[(2) - (4)].l)),(yyvsp[(3) - (4)].sym))); }
     break;
 
   case 853:
@@ -13042,8 +13042,8 @@ yyreduce:
   case 855:
 #line 4930 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol( L(), (yyvsp[(1) - (3)].sym));
-			  (yyval.l) = append_symbol( (yyval.l), (yyvsp[(3) - (3)].sym));
-			}
+                 (yyval.l) = append_symbol( (yyval.l), (yyvsp[(3) - (3)].sym));
+               }
     break;
 
   case 856:
@@ -13054,9 +13054,9 @@ yyreduce:
   case 857:
 #line 4940 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_WHEN,
-			   append_symbol(
-			    append_symbol(
-			     L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].sym))); }
+                  append_symbol(
+                   append_symbol(
+                    L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].sym))); }
     break;
 
   case 858:
@@ -13072,9 +13072,9 @@ yyreduce:
   case 860:
 #line 4955 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_WHEN,
-			   append_symbol(
-			    append_symbol(
-			     L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].sym))); }
+                  append_symbol(
+                   append_symbol(
+                    L(), (yyvsp[(2) - (4)].sym)),(yyvsp[(4) - (4)].sym))); }
     break;
 
   case 861:
@@ -13100,45 +13100,45 @@ yyreduce:
   case 866:
 #line 4980 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = (yyvsp[(1) - (1)].i_val);
-		  if ((yyval.i_val) <= 0) {
-			(yyval.i_val) = -1;
-			yyerror(m, "Positive value greater than 0 expected");
-			YYABORT;
-		  }
-		}
+            if ((yyval.i_val) <= 0) {
+               (yyval.i_val) = -1;
+               yyerror(m, "Positive value greater than 0 expected");
+               YYABORT;
+            }
+          }
     break;
 
   case 867:
 #line 4991 "src/sql/server/sql_parser.y"
     { (yyval.l_val) = (yyvsp[(1) - (1)].l_val);
-		  if ((yyval.l_val) <= 0) {
-			(yyval.l_val) = -1;
-			yyerror(m, "Positive value greater than 0 expected");
-			YYABORT;
-		  }
-		}
+            if ((yyval.l_val) <= 0) {
+               (yyval.l_val) = -1;
+               yyerror(m, "Positive value greater than 0 expected");
+               YYABORT;
+            }
+          }
     break;
 
   case 868:
 #line 5001 "src/sql/server/sql_parser.y"
     { (yyval.l_val) = (yyvsp[(1) - (1)].l_val);
-		  if ((yyval.l_val) < 0) {
-			(yyval.l_val) = -1;
-			yyerror(m, "Positive value expected");
-			YYABORT;
-		  }
-		}
+            if ((yyval.l_val) < 0) {
+               (yyval.l_val) = -1;
+               yyerror(m, "Positive value expected");
+               YYABORT;
+            }
+          }
     break;
 
   case 869:
 #line 5011 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = (yyvsp[(1) - (1)].i_val);
-		  if ((yyval.i_val) < 0) {
-			(yyval.i_val) = -1;
-			yyerror(m, "Positive value expected");
-			YYABORT;
-		  }
-		}
+            if ((yyval.i_val) < 0) {
+               (yyval.i_val) = -1;
+               yyerror(m, "Positive value expected");
+               YYABORT;
+            }
+          }
     break;
 
   case 870:
@@ -13149,9 +13149,9 @@ yyreduce:
   case 871:
 #line 5024 "src/sql/server/sql_parser.y"
     { (yyval.type).type = NULL;
-			  yyerror(m, "CHARACTER VARYING needs a mandatory length specification");
-			  YYABORT;
-			}
+                 yyerror(m, "CHARACTER VARYING needs a mandatory length specification");
+                 YYABORT;
+               }
     break;
 
   case 872:
@@ -13172,13 +13172,13 @@ yyreduce:
   case 875:
 #line 5034 "src/sql/server/sql_parser.y"
     { sql_find_subtype(&(yyval.type), "clob", (yyvsp[(3) - (4)].i_val), 0);
-			  /* NOTE: CLOB may be called as CLOB(2K) which is equivalent
-			   *       to CLOB(2048).  Due to 'nonzero' it is not possible
-			   *       to enter this as the parser rejects it.  However it
-			   *       might be a ToDo for the future.
-			   *       See p. 125 SQL-99
-			   */
-			}
+                 /* NOTE: CLOB may be called as CLOB(2K) which is equivalent
+                  *       to CLOB(2048).  Due to 'nonzero' it is not possible
+                  *       to enter this as the parser rejects it.  However it
+                  *       might be a ToDo for the future.
+                  *       See p. 125 SQL-99
+                  */
+               }
     break;
 
   case 876:
@@ -13189,13 +13189,13 @@ yyreduce:
   case 877:
 #line 5044 "src/sql/server/sql_parser.y"
     { sql_find_subtype(&(yyval.type), "blob", (yyvsp[(3) - (4)].i_val), 0);
-			  /* NOTE: BLOB may be called as BLOB(2K) which is equivalent
-			   *       to BLOB(2048).  Due to 'nonzero' it is not possible
-			   *       to enter this as the parser rejects it.  However it
-			   *       might be a ToDo for the future.
-			   *       See p. 85 SQL-99
-			   */
-			}
+                 /* NOTE: BLOB may be called as BLOB(2K) which is equivalent
+                  *       to BLOB(2048).  Due to 'nonzero' it is not possible
+                  *       to enter this as the parser rejects it.  However it
+                  *       might be a ToDo for the future.
+                  *       See p. 85 SQL-99
+                  */
+               }
     break;
 
   case 878:
@@ -13231,38 +13231,38 @@ yyreduce:
   case 884:
 #line 5060 "src/sql/server/sql_parser.y"
     { 
-			  int d = (yyvsp[(3) - (4)].i_val);
-			  if (d > MAX_DEC_DIGITS) {
-				char *msg = sql_message(SQLSTATE(22003) "Decimal of %d digits are not supported", d);
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  } else {
-			        sql_find_subtype(&(yyval.type), "decimal", d, 0); 
-			  }
-			}
+                 int d = (yyvsp[(3) - (4)].i_val);
+                 if (d > MAX_DEC_DIGITS) {
+                    char *msg = sql_message(SQLSTATE(22003) "Decimal of %d digits are not supported", d);
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 } else {
+                       sql_find_subtype(&(yyval.type), "decimal", d, 0); 
+                 }
+               }
     break;
 
   case 885:
 #line 5073 "src/sql/server/sql_parser.y"
     { 
-			  int d = (yyvsp[(3) - (6)].i_val);
-			  int s = (yyvsp[(5) - (6)].i_val);
-			  if (s > d || d > MAX_DEC_DIGITS) {
-				char *msg = NULL;
-				if (s > d)
-					msg = sql_message(SQLSTATE(22003) "Scale (%d) should be less or equal to the precision (%d)", s, d);
-				else
-					msg = sql_message(SQLSTATE(22003) "Decimal(%d,%d) isn't supported because P=%d > %d", d, s, d, MAX_DEC_DIGITS);
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  } else {
-				sql_find_subtype(&(yyval.type), "decimal", d, s);
-			  }
-			}
+                 int d = (yyvsp[(3) - (6)].i_val);
+                 int s = (yyvsp[(5) - (6)].i_val);
+                 if (s > d || d > MAX_DEC_DIGITS) {
+                    char *msg = NULL;
+                    if (s > d)
+                         msg = sql_message(SQLSTATE(22003) "Scale (%d) should be less or equal to the precision (%d)", s, d);
+                    else
+                         msg = sql_message(SQLSTATE(22003) "Decimal(%d,%d) isn't supported because P=%d > %d", d, s, d, MAX_DEC_DIGITS);
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 } else {
+                    sql_find_subtype(&(yyval.type), "decimal", d, s);
+                 }
+               }
     break;
 
   case 886:
@@ -13273,41 +13273,41 @@ yyreduce:
   case 887:
 #line 5092 "src/sql/server/sql_parser.y"
     { if ((yyvsp[(3) - (4)].i_val) > 0 && (yyvsp[(3) - (4)].i_val) <= 24) {
-				sql_find_subtype(&(yyval.type), "real", (yyvsp[(3) - (4)].i_val), 0);
-			  } else if ((yyvsp[(3) - (4)].i_val) > 24 && (yyvsp[(3) - (4)].i_val) <= 53) {
-				sql_find_subtype(&(yyval.type), "double", (yyvsp[(3) - (4)].i_val), 0);
-			  } else {
-				char *msg = sql_message(SQLSTATE(22003) "Number of digits for FLOAT values should be between 1 and 53");
+                    sql_find_subtype(&(yyval.type), "real", (yyvsp[(3) - (4)].i_val), 0);
+                 } else if ((yyvsp[(3) - (4)].i_val) > 24 && (yyvsp[(3) - (4)].i_val) <= 53) {
+                    sql_find_subtype(&(yyval.type), "double", (yyvsp[(3) - (4)].i_val), 0);
+                 } else {
+                    char *msg = sql_message(SQLSTATE(22003) "Number of digits for FLOAT values should be between 1 and 53");
 
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  }
-			}
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 }
+               }
     break;
 
   case 888:
 #line 5106 "src/sql/server/sql_parser.y"
     { if ((yyvsp[(5) - (6)].i_val) >= (yyvsp[(3) - (6)].i_val)) {
-				char *msg = sql_message(SQLSTATE(22003) "Precision(%d) should be less than number of digits(%d)", (yyvsp[(5) - (6)].i_val), (yyvsp[(3) - (6)].i_val));
+                    char *msg = sql_message(SQLSTATE(22003) "Precision(%d) should be less than number of digits(%d)", (yyvsp[(5) - (6)].i_val), (yyvsp[(3) - (6)].i_val));
 
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  } else if ((yyvsp[(3) - (6)].i_val) > 0 && (yyvsp[(3) - (6)].i_val) <= 24) {
-				sql_find_subtype(&(yyval.type), "real", (yyvsp[(3) - (6)].i_val), (yyvsp[(5) - (6)].i_val));
-			  } else if ((yyvsp[(3) - (6)].i_val) > 24 && (yyvsp[(3) - (6)].i_val) <= 53) {
-				sql_find_subtype(&(yyval.type), "double", (yyvsp[(3) - (6)].i_val), (yyvsp[(5) - (6)].i_val));
-			  } else {
-				char *msg = sql_message(SQLSTATE(22003) "Number of digits for FLOAT values should be between 1 and 53");
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  }
-			}
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 } else if ((yyvsp[(3) - (6)].i_val) > 0 && (yyvsp[(3) - (6)].i_val) <= 24) {
+                    sql_find_subtype(&(yyval.type), "real", (yyvsp[(3) - (6)].i_val), (yyvsp[(5) - (6)].i_val));
+                 } else if ((yyvsp[(3) - (6)].i_val) > 24 && (yyvsp[(3) - (6)].i_val) <= 53) {
+                    sql_find_subtype(&(yyval.type), "double", (yyvsp[(3) - (6)].i_val), (yyvsp[(5) - (6)].i_val));
+                 } else {
+                    char *msg = sql_message(SQLSTATE(22003) "Number of digits for FLOAT values should be between 1 and 53");
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 }
+               }
     break;
 
   case 889:
@@ -13348,194 +13348,194 @@ yyreduce:
   case 898:
 #line 5137 "src/sql/server/sql_parser.y"
     { if ((yyvsp[(5) - (6)].i_val) >= (yyvsp[(3) - (6)].i_val)) {
-				char *msg = sql_message(SQLSTATE(22003) "Precision(%d) should be less than number of digits(%d)", (yyvsp[(5) - (6)].i_val), (yyvsp[(3) - (6)].i_val));
+                    char *msg = sql_message(SQLSTATE(22003) "Precision(%d) should be less than number of digits(%d)", (yyvsp[(5) - (6)].i_val), (yyvsp[(3) - (6)].i_val));
 
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  } else {
-			 	sql_find_subtype(&(yyval.type), (yyvsp[(1) - (6)].sval), (yyvsp[(3) - (6)].i_val), (yyvsp[(5) - (6)].i_val));
-			  }
-			}
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 } else {
+                    sql_find_subtype(&(yyval.type), (yyvsp[(1) - (6)].sval), (yyvsp[(3) - (6)].i_val), (yyvsp[(5) - (6)].i_val));
+                 }
+               }
     break;
 
   case 899:
 #line 5148 "src/sql/server/sql_parser.y"
     {
-			  sql_type *t = mvc_bind_type(m, (yyvsp[(1) - (1)].sval));
-			  if (!t) {
-				char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
+                 sql_type *t = mvc_bind_type(m, (yyvsp[(1) - (1)].sval));
+                 if (!t) {
+                    char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
 
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  } else {
-				sql_init_subtype(&(yyval.type), t, 0, 0);
-			  }
-			}
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 } else {
+                    sql_init_subtype(&(yyval.type), t, 0, 0);
+                 }
+               }
     break;
 
   case 900:
 #line 5163 "src/sql/server/sql_parser.y"
     {
-			  sql_type *t = mvc_bind_type(m, (yyvsp[(1) - (4)].sval));
-			  if (!t) {
-				char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (4)].sval));
+                 sql_type *t = mvc_bind_type(m, (yyvsp[(1) - (4)].sval));
+                 if (!t) {
+                    char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (4)].sval));
 
-				yyerror(m, msg);
-				_DELETE(msg);
-				(yyval.type).type = NULL;
-				YYABORT;
-			  } else {
-				sql_init_subtype(&(yyval.type), t, (yyvsp[(3) - (4)].i_val), 0);
-			  }
-			}
+                    yyerror(m, msg);
+                    _DELETE(msg);
+                    (yyval.type).type = NULL;
+                    YYABORT;
+                 } else {
+                    sql_init_subtype(&(yyval.type), t, (yyvsp[(3) - (4)].i_val), 0);
+                 }
+               }
     break;
 
   case 901:
 #line 5176 "src/sql/server/sql_parser.y"
     {
-		if (!sql_find_subtype(&(yyval.type), "geometry", 0, 0 )) {
-			yyerror(m, SQLSTATE(22000) "type (geometry) unknown");
-			(yyval.type).type = NULL;
-			YYABORT;
-		}
-	}
+          if (!sql_find_subtype(&(yyval.type), "geometry", 0, 0 )) {
+               yyerror(m, SQLSTATE(22000) "type (geometry) unknown");
+               (yyval.type).type = NULL;
+               YYABORT;
+          }
+     }
     break;
 
   case 902:
 #line 5183 "src/sql/server/sql_parser.y"
     {
-		int geoSubType = (yyvsp[(3) - (4)].i_val); 
+          int geoSubType = (yyvsp[(3) - (4)].i_val); 
 
-		if(geoSubType == 0) {
-			(yyval.type).type = NULL;
-			YYABORT;
-		} else if (!sql_find_subtype(&(yyval.type), "geometry", geoSubType, 0 )) {
-			char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (4)].sval));
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.type).type = NULL;
-			YYABORT;
-		}
-		
-	}
+          if(geoSubType == 0) {
+               (yyval.type).type = NULL;
+               YYABORT;
+          } else if (!sql_find_subtype(&(yyval.type), "geometry", geoSubType, 0 )) {
+               char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (4)].sval));
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.type).type = NULL;
+               YYABORT;
+          }
+          
+     }
     break;
 
   case 903:
 #line 5198 "src/sql/server/sql_parser.y"
     {
-		int geoSubType = (yyvsp[(3) - (6)].i_val); 
-		int srid = (yyvsp[(5) - (6)].i_val); 
+          int geoSubType = (yyvsp[(3) - (6)].i_val); 
+          int srid = (yyvsp[(5) - (6)].i_val); 
 
-		if(geoSubType == 0) {
-			(yyval.type).type = NULL;
-			YYABORT;
-		} else if (!sql_find_subtype(&(yyval.type), "geometry", geoSubType, srid )) {
-			char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (6)].sval));
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.type).type = NULL;
-			YYABORT;
-		}
-	}
+          if(geoSubType == 0) {
+               (yyval.type).type = NULL;
+               YYABORT;
+          } else if (!sql_find_subtype(&(yyval.type), "geometry", geoSubType, srid )) {
+               char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (6)].sval));
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.type).type = NULL;
+               YYABORT;
+          }
+     }
     break;
 
   case 904:
 #line 5213 "src/sql/server/sql_parser.y"
     {
-		if (!sql_find_subtype(&(yyval.type), "geometrya", 0, 0 )) {
-			yyerror(m, SQLSTATE(22000) "type (geometrya) unknown");
-			(yyval.type).type = NULL;
-			YYABORT;
-		}
-	}
+          if (!sql_find_subtype(&(yyval.type), "geometrya", 0, 0 )) {
+               yyerror(m, SQLSTATE(22000) "type (geometrya) unknown");
+               (yyval.type).type = NULL;
+               YYABORT;
+          }
+     }
     break;
 
   case 905:
 #line 5220 "src/sql/server/sql_parser.y"
     {
-	int geoSubType = find_subgeometry_type((yyvsp[(1) - (1)].sval));
+     int geoSubType = find_subgeometry_type((yyvsp[(1) - (1)].sval));
 
-	if(geoSubType == 0) {
-		char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
-		(yyval.type).type = NULL;
-		yyerror(m, msg);
-		_DELETE(msg);
-		YYABORT;
-	} else if (geoSubType == -1) {
-		char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
-		(yyval.type).type = NULL;
-		yyerror(m, msg);
-		_DELETE(msg);
-		YYABORT;
-	}  else if (!sql_find_subtype(&(yyval.type), "geometry", geoSubType, 0 )) {
-		char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
-		yyerror(m, msg);
-		_DELETE(msg);
-		(yyval.type).type = NULL;
-		YYABORT;
-	}
+     if(geoSubType == 0) {
+          char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
+          (yyval.type).type = NULL;
+          yyerror(m, msg);
+          _DELETE(msg);
+          YYABORT;
+     } else if (geoSubType == -1) {
+          char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
+          (yyval.type).type = NULL;
+          yyerror(m, msg);
+          _DELETE(msg);
+          YYABORT;
+     }  else if (!sql_find_subtype(&(yyval.type), "geometry", geoSubType, 0 )) {
+          char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
+          yyerror(m, msg);
+          _DELETE(msg);
+          (yyval.type).type = NULL;
+          YYABORT;
+     }
 }
     break;
 
   case 906:
 #line 5246 "src/sql/server/sql_parser.y"
     {
-	int subtype = find_subgeometry_type((yyvsp[(1) - (1)].sval));
-	char* geoSubType = (yyvsp[(1) - (1)].sval);
+     int subtype = find_subgeometry_type((yyvsp[(1) - (1)].sval));
+     char* geoSubType = (yyvsp[(1) - (1)].sval);
 
-	if(subtype == 0) {
-		char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", geoSubType);
-		yyerror(m, msg);
-		_DELETE(msg);
-		YYABORT;
-	} else if(subtype == -1) {
-		char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
-		yyerror(m, msg);
-		_DELETE(msg);
-		YYABORT;
-	} 
-	(yyval.i_val) = subtype;	
+     if(subtype == 0) {
+          char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", geoSubType);
+          yyerror(m, msg);
+          _DELETE(msg);
+          YYABORT;
+     } else if(subtype == -1) {
+          char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
+          yyerror(m, msg);
+          _DELETE(msg);
+          YYABORT;
+     } 
+     (yyval.i_val) = subtype; 
 }
     break;
 
   case 907:
 #line 5263 "src/sql/server/sql_parser.y"
     {
-	int subtype = find_subgeometry_type((yyvsp[(1) - (1)].sval));
-	char* geoSubType = (yyvsp[(1) - (1)].sval);
+     int subtype = find_subgeometry_type((yyvsp[(1) - (1)].sval));
+     char* geoSubType = (yyvsp[(1) - (1)].sval);
 
-	if(subtype == 0) {
-		char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", geoSubType);
-		yyerror(m, msg);
-		_DELETE(msg);
-		YYABORT;
-	} else if (subtype == -1) {
-		char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
-		yyerror(m, msg);
-		_DELETE(msg);
-		YYABORT;
-	} 
-	(yyval.i_val) = subtype;	
+     if(subtype == 0) {
+          char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", geoSubType);
+          yyerror(m, msg);
+          _DELETE(msg);
+          YYABORT;
+     } else if (subtype == -1) {
+          char *msg = sql_message(SQLSTATE(HY001) "allocation failure");
+          yyerror(m, msg);
+          _DELETE(msg);
+          YYABORT;
+     } 
+     (yyval.i_val) = subtype; 
 }
     break;
 
   case 908:
 #line 5284 "src/sql/server/sql_parser.y"
-    { 	char *t = sql_bind_alias((yyvsp[(1) - (1)].sval));
-	  	if (!t) {
-			char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
+    {     char *t = sql_bind_alias((yyvsp[(1) - (1)].sval));
+          if (!t) {
+               char *msg = sql_message(SQLSTATE(22000) "Type (%s) unknown", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.sval) = NULL;
-			YYABORT;
-		}
-		(yyval.sval) = t;
-	}
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.sval) = NULL;
+               YYABORT;
+          }
+          (yyval.sval) = t;
+     }
     break;
 
   case 909:
@@ -14036,602 +14036,597 @@ yyreduce:
   case 1011:
 #line 5428 "src/sql/server/sql_parser.y"
     {
-		  char *end = NULL, *s = (yyvsp[(1) - (1)].sval);
-		  int l = _strlen(s);
-		  // errno might be non-zero due to other people's code
-		  errno = 0;
-		  if (l <= 19) {
-		  	(yyval.l_val) = strtoll(s,&end,10);
-		  } else {
-			(yyval.l_val) = 0;
-		  }
-		  if (s+l != end || errno == ERANGE) {
-			char *msg = sql_message(SQLSTATE(22003) "Integer value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
+            char *end = NULL, *s = (yyvsp[(1) - (1)].sval);
+            int l = _strlen(s);
+            // errno might be non-zero due to other people's code
+            errno = 0;
+            if (l <= 19) {
+               (yyval.l_val) = strtoll(s,&end,10);
+            } else {
+               (yyval.l_val) = 0;
+            }
+            if (s+l != end || errno == ERANGE) {
+               char *msg = sql_message(SQLSTATE(22003) "Integer value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
 
-			errno = 0;
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.l_val) = 0;
-			YYABORT;
-		  }
-		}
+               errno = 0;
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.l_val) = 0;
+               YYABORT;
+            }
+          }
     break;
 
   case 1012:
 #line 5451 "src/sql/server/sql_parser.y"
     {
-		  char *end = NULL, *s = (yyvsp[(1) - (1)].sval);
-		  int l = _strlen(s);
-		  // errno might be non-zero due to other people's code
-		  errno = 0;
-		  if (l <= 10) {
-		  	(yyval.i_val) = strtol(s,&end,10);
-		  } else {
-			(yyval.i_val) = 0;
-		  }
-		  if (s+l != end || errno == ERANGE) {
-			char *msg = sql_message(SQLSTATE(22003) "Integer value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
+            char *end = NULL, *s = (yyvsp[(1) - (1)].sval);
+            int l = _strlen(s);
+            // errno might be non-zero due to other people's code
+            errno = 0;
+            if (l <= 10) {
+               (yyval.i_val) = strtol(s,&end,10);
+            } else {
+               (yyval.i_val) = 0;
+            }
+            if (s+l != end || errno == ERANGE) {
+               char *msg = sql_message(SQLSTATE(22003) "Integer value too large or not a number (%s)", (yyvsp[(1) - (1)].sval));
 
-			errno = 0;
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.i_val) = 0;
-			YYABORT;
-		  }
-		}
+               errno = 0;
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.i_val) = 0;
+               YYABORT;
+            }
+          }
     break;
 
   case 1013:
 #line 5471 "src/sql/server/sql_parser.y"
     {
-		  char *name = (yyvsp[(1) - (1)].sval);
-		  sql_subtype *tpe;
+            char *name = (yyvsp[(1) - (1)].sval);
+            sql_subtype *tpe;
 
-		  if (!stack_find_var(m, name)) {
-			char *msg = sql_message(SQLSTATE(22000) "Constant (%s) unknown", (yyvsp[(1) - (1)].sval));
+            if (!stack_find_var(m, name)) {
+               char *msg = sql_message(SQLSTATE(22000) "Constant (%s) unknown", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.i_val) = 0;
-			YYABORT;
-		  }
-		  tpe = stack_find_type(m, name);
-		  if (tpe->type->localtype == TYPE_lng ||
-		      tpe->type->localtype == TYPE_int ||
-		      tpe->type->localtype == TYPE_sht ||
-		      tpe->type->localtype == TYPE_bte ) {
-#ifdef HAVE_HGE
-			hge sgn = stack_get_number(m, name);
-			assert((hge) GDK_int_min <= sgn && sgn <= (hge) GDK_int_max);
-#else
-			lng sgn = stack_get_number(m, name);
-			assert((lng) GDK_int_min <= sgn && sgn <= (lng) GDK_int_max);
-#endif
-			(yyval.i_val) = (int) sgn;
-		  } else {
-			char *msg = sql_message(SQLSTATE(22000) "Constant (%s) has wrong type (number expected)", (yyvsp[(1) - (1)].sval));
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.i_val) = 0;
+               YYABORT;
+            }
+            tpe = stack_find_type(m, name);
+            if (tpe->type->localtype == TYPE_lng ||
+                tpe->type->localtype == TYPE_int ||
+                tpe->type->localtype == TYPE_sht ||
+                tpe->type->localtype == TYPE_bte ) {
+               lng sgn = stack_get_number(m, name);
+               assert((lng) GDK_int_min <= sgn && sgn <= (lng) GDK_int_max);
+               (yyval.i_val) = (int) sgn;
+            } else {
+               char *msg = sql_message(SQLSTATE(22000) "Constant (%s) has wrong type (number expected)", (yyvsp[(1) - (1)].sval));
 
-			yyerror(m, msg);
-			_DELETE(msg);
-			(yyval.i_val) = 0;
-			YYABORT;
-		  }
-		}
+               yyerror(m, msg);
+               _DELETE(msg);
+               (yyval.i_val) = 0;
+               YYABORT;
+            }
+          }
     break;
 
   case 1014:
-#line 5509 "src/sql/server/sql_parser.y"
+#line 5504 "src/sql/server/sql_parser.y"
     { (yyval.sval) = (yyvsp[(1) - (1)].sval); }
     break;
 
   case 1015:
-#line 5511 "src/sql/server/sql_parser.y"
+#line 5506 "src/sql/server/sql_parser.y"
     { char *s = strconcat((yyvsp[(1) - (2)].sval),(yyvsp[(2) - (2)].sval)); 
-	 	  (yyval.sval) = sa_strdup(SA, s);	
-		  _DELETE(s);
-		}
+            (yyval.sval) = sa_strdup(SA, s); 
+            _DELETE(s);
+          }
     break;
 
   case 1016:
-#line 5519 "src/sql/server/sql_parser.y"
+#line 5514 "src/sql/server/sql_parser.y"
     {
-		  m->emode = m_execute;
-		  (yyval.sym) = (yyvsp[(2) - (2)].sym); }
+            m->emode = m_execute;
+            (yyval.sym) = (yyvsp[(2) - (2)].sym); }
     break;
 
   case 1017:
-#line 5526 "src/sql/server/sql_parser.y"
+#line 5521 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  	  append_int(l, (yyvsp[(1) - (3)].i_val));
-  	  append_list(l, NULL);
-	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
+       append_int(l, (yyvsp[(1) - (3)].i_val));
+       append_list(l, NULL);
+       (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
     break;
 
   case 1018:
-#line 5531 "src/sql/server/sql_parser.y"
+#line 5526 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-  	  append_int(l, (yyvsp[(1) - (4)].i_val));
-  	  append_list(l, (yyvsp[(3) - (4)].l));
-	  (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
+       append_int(l, (yyvsp[(1) - (4)].i_val));
+       append_list(l, (yyvsp[(3) - (4)].l));
+       (yyval.sym) = _symbol_create_list( SQL_NOP, l ); }
     break;
 
   case 1019:
-#line 5545 "src/sql/server/sql_parser.y"
+#line 5540 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL; }
     break;
 
   case 1021:
-#line 5550 "src/sql/server/sql_parser.y"
+#line 5545 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_PATH, (yyvsp[(2) - (2)].l)); }
     break;
 
   case 1023:
-#line 5558 "src/sql/server/sql_parser.y"
+#line 5553 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (5)].sym));
-	  append_string(l, (yyvsp[(5) - (5)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_COMMENT, l );
-	}
+       append_symbol(l, (yyvsp[(3) - (5)].sym));
+       append_string(l, (yyvsp[(5) - (5)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_COMMENT, l );
+     }
     break;
 
   case 1024:
-#line 5564 "src/sql/server/sql_parser.y"
+#line 5559 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (5)].sym));
-	  append_string(l, NULL);
-	  (yyval.sym) = _symbol_create_list( SQL_COMMENT, l );
-	}
+       append_symbol(l, (yyvsp[(3) - (5)].sym));
+       append_string(l, NULL);
+       (yyval.sym) = _symbol_create_list( SQL_COMMENT, l );
+     }
     break;
 
   case 1025:
-#line 5572 "src/sql/server/sql_parser.y"
+#line 5567 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create( SQL_SCHEMA, (yyvsp[(2) - (2)].sval) ); }
     break;
 
   case 1026:
-#line 5573 "src/sql/server/sql_parser.y"
+#line 5568 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_TABLE, (yyvsp[(2) - (2)].l) ); }
     break;
 
   case 1027:
-#line 5574 "src/sql/server/sql_parser.y"
+#line 5569 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_VIEW, (yyvsp[(2) - (2)].l) ); }
     break;
 
   case 1028:
-#line 5576 "src/sql/server/sql_parser.y"
+#line 5571 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (4)].sval));
-	  append_string(l, (yyvsp[(4) - (4)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_COLUMN, l );
-	}
+       append_string(l, (yyvsp[(2) - (4)].sval));
+       append_string(l, (yyvsp[(4) - (4)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_COLUMN, l );
+     }
     break;
 
   case 1029:
-#line 5582 "src/sql/server/sql_parser.y"
+#line 5577 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (6)].sval));
-	  append_string(l, (yyvsp[(4) - (6)].sval));
-	  append_string(l, (yyvsp[(6) - (6)].sval));
-	  (yyval.sym) = _symbol_create_list( SQL_COLUMN, l );
-	}
+       append_string(l, (yyvsp[(2) - (6)].sval));
+       append_string(l, (yyvsp[(4) - (6)].sval));
+       append_string(l, (yyvsp[(6) - (6)].sval));
+       (yyval.sym) = _symbol_create_list( SQL_COLUMN, l );
+     }
     break;
 
   case 1030:
-#line 5588 "src/sql/server/sql_parser.y"
+#line 5583 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_INDEX, (yyvsp[(2) - (2)].l) ); }
     break;
 
   case 1031:
-#line 5589 "src/sql/server/sql_parser.y"
+#line 5584 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_SEQUENCE, (yyvsp[(2) - (2)].l) ); }
     break;
 
   case 1032:
-#line 5590 "src/sql/server/sql_parser.y"
+#line 5585 "src/sql/server/sql_parser.y"
     { (yyval.sym) = _symbol_create_list( SQL_ROUTINE, (yyvsp[(1) - (1)].l) ); }
     break;
 
   case 1034:
-#line 5599 "src/sql/server/sql_parser.y"
+#line 5594 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(1) - (1)].sym)); }
     break;
 
   case 1035:
-#line 5601 "src/sql/server/sql_parser.y"
+#line 5596 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol((yyvsp[(1) - (3)].l), (yyvsp[(3) - (3)].sym)); }
     break;
 
   case 1047:
-#line 5623 "src/sql/server/sql_parser.y"
+#line 5618 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (5)].sym));
-	  append_int(l, (yyvsp[(4) - (5)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLCOMMENT, l); }
+       append_symbol(l, (yyvsp[(3) - (5)].sym));
+       append_int(l, (yyvsp[(4) - (5)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLCOMMENT, l); }
     break;
 
   case 1048:
-#line 5631 "src/sql/server/sql_parser.y"
+#line 5626 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_list(l, (yyvsp[(3) - (5)].l));
-	  append_int(l, (yyvsp[(4) - (5)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLCONCAT, l); }
+       append_list(l, (yyvsp[(3) - (5)].l));
+       append_int(l, (yyvsp[(4) - (5)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLCONCAT, l); }
     break;
 
   case 1049:
-#line 5639 "src/sql/server/sql_parser.y"
+#line 5634 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (5)].sym));
-	  append_int(l, (yyvsp[(4) - (5)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLDOCUMENT, l); }
+       append_symbol(l, (yyvsp[(3) - (5)].sym));
+       append_int(l, (yyvsp[(4) - (5)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLDOCUMENT, l); }
     break;
 
   case 1050:
-#line 5649 "src/sql/server/sql_parser.y"
+#line 5644 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(4) - (7)].sval));
-	  append_list(l, (yyvsp[(5) - (7)].l));
-	  append_int(l, (yyvsp[(6) - (7)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLELEMENT, l);
-	}
+       append_string(l, (yyvsp[(4) - (7)].sval));
+       append_list(l, (yyvsp[(5) - (7)].l));
+       append_int(l, (yyvsp[(6) - (7)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLELEMENT, l);
+     }
     break;
 
   case 1051:
-#line 5659 "src/sql/server/sql_parser.y"
+#line 5654 "src/sql/server/sql_parser.y"
     { (yyval.l) = NULL; }
     break;
 
   case 1052:
-#line 5661 "src/sql/server/sql_parser.y"
+#line 5656 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(2) - (2)].sym));
-	  (yyval.l) = append_symbol((yyval.l), NULL);
-	  (yyval.l) = append_list((yyval.l), NULL); }
+       (yyval.l) = append_symbol((yyval.l), NULL);
+       (yyval.l) = append_list((yyval.l), NULL); }
     break;
 
   case 1053:
-#line 5665 "src/sql/server/sql_parser.y"
+#line 5660 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(2) - (4)].sym));
-	  (yyval.l) = append_symbol((yyval.l), (yyvsp[(4) - (4)].sym));
-	  (yyval.l) = append_list((yyval.l), NULL); }
+       (yyval.l) = append_symbol((yyval.l), (yyvsp[(4) - (4)].sym));
+       (yyval.l) = append_list((yyval.l), NULL); }
     break;
 
   case 1054:
-#line 5669 "src/sql/server/sql_parser.y"
+#line 5664 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(2) - (6)].sym));
-	  (yyval.l) = append_symbol((yyval.l), (yyvsp[(4) - (6)].sym));
-	  (yyval.l) = append_list((yyval.l), (yyvsp[(6) - (6)].l)); }
+       (yyval.l) = append_symbol((yyval.l), (yyvsp[(4) - (6)].sym));
+       (yyval.l) = append_list((yyval.l), (yyvsp[(6) - (6)].l)); }
     break;
 
   case 1055:
-#line 5673 "src/sql/server/sql_parser.y"
+#line 5668 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(2) - (4)].sym));
-	  (yyval.l) = append_symbol((yyval.l), NULL);
-	  (yyval.l) = append_list((yyval.l), (yyvsp[(4) - (4)].l)); }
+       (yyval.l) = append_symbol((yyval.l), NULL);
+       (yyval.l) = append_list((yyval.l), (yyvsp[(4) - (4)].l)); }
     break;
 
   case 1056:
-#line 5677 "src/sql/server/sql_parser.y"
+#line 5672 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), NULL);
-	  (yyval.l) = append_symbol((yyval.l), (yyvsp[(2) - (2)].sym));
-	  (yyval.l) = append_list((yyval.l), NULL); }
+       (yyval.l) = append_symbol((yyval.l), (yyvsp[(2) - (2)].sym));
+       (yyval.l) = append_list((yyval.l), NULL); }
     break;
 
   case 1057:
-#line 5681 "src/sql/server/sql_parser.y"
+#line 5676 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), NULL);
-	  (yyval.l) = append_symbol((yyval.l), (yyvsp[(2) - (4)].sym));
-	  (yyval.l) = append_list((yyval.l), (yyvsp[(4) - (4)].l)); }
+       (yyval.l) = append_symbol((yyval.l), (yyvsp[(2) - (4)].sym));
+       (yyval.l) = append_list((yyval.l), (yyvsp[(4) - (4)].l)); }
     break;
 
   case 1058:
-#line 5685 "src/sql/server/sql_parser.y"
+#line 5680 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), NULL);
-	  (yyval.l) = append_symbol((yyval.l), NULL);
-	  (yyval.l) = append_list((yyval.l), (yyvsp[(2) - (2)].l)); }
+       (yyval.l) = append_symbol((yyval.l), NULL);
+       (yyval.l) = append_list((yyval.l), (yyvsp[(2) - (2)].l)); }
     break;
 
   case 1060:
-#line 5695 "src/sql/server/sql_parser.y"
+#line 5690 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(3) - (4)].sym); }
     break;
 
   case 1061:
-#line 5699 "src/sql/server/sql_parser.y"
+#line 5694 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(1) - (1)].sym); }
     break;
 
   case 1062:
-#line 5701 "src/sql/server/sql_parser.y"
+#line 5696 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_list(l, 
-		  	append_string(L(), sa_strdup(SA, "concat")));
-	  	  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  	  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+            append_list(l, 
+               append_string(L(), sa_strdup(SA, "concat")));
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 1063:
-#line 5711 "src/sql/server/sql_parser.y"
+#line 5706 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(2) - (2)].sval));
-	  append_symbol(l, (yyvsp[(1) - (2)].sym));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
+       append_string(l, (yyvsp[(2) - (2)].sval));
+       append_symbol(l, (yyvsp[(1) - (2)].sym));
+       (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
     break;
 
   case 1064:
-#line 5718 "src/sql/server/sql_parser.y"
+#line 5713 "src/sql/server/sql_parser.y"
     { (yyval.sval) = NULL; }
     break;
 
   case 1065:
-#line 5719 "src/sql/server/sql_parser.y"
+#line 5714 "src/sql/server/sql_parser.y"
     { (yyval.sval) = (yyvsp[(2) - (2)].sval); }
     break;
 
   case 1068:
-#line 5732 "src/sql/server/sql_parser.y"
+#line 5727 "src/sql/server/sql_parser.y"
     { (yyval.l) = L();
-		  (yyval.l) = append_list((yyval.l), (yyvsp[(1) - (2)].l));
-		  (yyval.l) = append_int((yyval.l), (yyvsp[(2) - (2)].i_val)); 	}
+            (yyval.l) = append_list((yyval.l), (yyvsp[(1) - (2)].l));
+            (yyval.l) = append_int((yyval.l), (yyvsp[(2) - (2)].i_val));   }
     break;
 
   case 1069:
-#line 5739 "src/sql/server/sql_parser.y"
+#line 5734 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(1) - (1)].sym)); }
     break;
 
   case 1070:
-#line 5741 "src/sql/server/sql_parser.y"
+#line 5736 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol((yyvsp[(1) - (3)].l), (yyvsp[(3) - (3)].sym)); }
     break;
 
   case 1072:
-#line 5749 "src/sql/server/sql_parser.y"
+#line 5744 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 0; }
     break;
 
   case 1073:
-#line 5750 "src/sql/server/sql_parser.y"
+#line 5745 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = (yyvsp[(2) - (2)].i_val); }
     break;
 
   case 1074:
-#line 5754 "src/sql/server/sql_parser.y"
+#line 5749 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 0; }
     break;
 
   case 1075:
-#line 5755 "src/sql/server/sql_parser.y"
+#line 5750 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 1; }
     break;
 
   case 1076:
-#line 5756 "src/sql/server/sql_parser.y"
+#line 5751 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 2; }
     break;
 
   case 1077:
-#line 5757 "src/sql/server/sql_parser.y"
+#line 5752 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 3; }
     break;
 
   case 1078:
-#line 5758 "src/sql/server/sql_parser.y"
+#line 5753 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 4; }
     break;
 
   case 1079:
-#line 5765 "src/sql/server/sql_parser.y"
+#line 5760 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (7)].sym));
-	  append_list(l, (yyvsp[(4) - (7)].l));
-	  append_int(l, (yyvsp[(5) - (7)].i_val));
-	  append_int(l, (yyvsp[(6) - (7)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLFOREST, l);
-	}
+       append_symbol(l, (yyvsp[(3) - (7)].sym));
+       append_list(l, (yyvsp[(4) - (7)].l));
+       append_int(l, (yyvsp[(5) - (7)].i_val));
+       append_int(l, (yyvsp[(6) - (7)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLFOREST, l);
+     }
     break;
 
   case 1080:
-#line 5775 "src/sql/server/sql_parser.y"
+#line 5770 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL; }
     break;
 
   case 1081:
-#line 5776 "src/sql/server/sql_parser.y"
+#line 5771 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(1) - (2)].sym); }
     break;
 
   case 1082:
-#line 5781 "src/sql/server/sql_parser.y"
+#line 5776 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_list(L(), (yyvsp[(1) - (1)].l)); }
     break;
 
   case 1083:
-#line 5783 "src/sql/server/sql_parser.y"
+#line 5778 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_list((yyvsp[(1) - (3)].l), (yyvsp[(3) - (3)].l)); }
     break;
 
   case 1084:
-#line 5788 "src/sql/server/sql_parser.y"
+#line 5783 "src/sql/server/sql_parser.y"
     { (yyval.l) = append_symbol(L(), (yyvsp[(1) - (2)].sym));
-		  (yyval.l) = append_string((yyval.l), (yyvsp[(2) - (2)].sval)); }
+            (yyval.l) = append_string((yyval.l), (yyvsp[(2) - (2)].sval)); }
     break;
 
   case 1085:
-#line 5793 "src/sql/server/sql_parser.y"
+#line 5788 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(1) - (1)].sym); }
     break;
 
   case 1086:
-#line 5797 "src/sql/server/sql_parser.y"
+#line 5792 "src/sql/server/sql_parser.y"
     { (yyval.sval) = NULL; }
     break;
 
   case 1087:
-#line 5798 "src/sql/server/sql_parser.y"
+#line 5793 "src/sql/server/sql_parser.y"
     { (yyval.sval) = (yyvsp[(2) - (2)].sval); }
     break;
 
   case 1088:
-#line 5802 "src/sql/server/sql_parser.y"
+#line 5797 "src/sql/server/sql_parser.y"
     { (yyval.sval) = (yyvsp[(1) - (1)].sval); }
     break;
 
   case 1089:
-#line 5809 "src/sql/server/sql_parser.y"
+#line 5804 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_int(l, (yyvsp[(3) - (6)].i_val) );
-	  append_symbol(l, (yyvsp[(4) - (6)].sym));
-	  append_int(l, (yyvsp[(5) - (6)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLPARSE, l); }
+       append_int(l, (yyvsp[(3) - (6)].i_val) );
+       append_symbol(l, (yyvsp[(4) - (6)].sym));
+       append_int(l, (yyvsp[(5) - (6)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLPARSE, l); }
     break;
 
   case 1090:
-#line 5816 "src/sql/server/sql_parser.y"
+#line 5811 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 0; }
     break;
 
   case 1091:
-#line 5817 "src/sql/server/sql_parser.y"
+#line 5812 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 1; }
     break;
 
   case 1092:
-#line 5824 "src/sql/server/sql_parser.y"
+#line 5819 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_string(l, (yyvsp[(4) - (7)].sval));
-	  append_symbol(l, (yyvsp[(5) - (7)].sym));
-	  append_int(l, (yyvsp[(6) - (7)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLPI, l); }
+       append_string(l, (yyvsp[(4) - (7)].sval));
+       append_symbol(l, (yyvsp[(5) - (7)].sym));
+       append_int(l, (yyvsp[(6) - (7)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLPI, l); }
     break;
 
   case 1094:
-#line 5836 "src/sql/server/sql_parser.y"
+#line 5831 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL; }
     break;
 
   case 1095:
-#line 5838 "src/sql/server/sql_parser.y"
+#line 5833 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(2) - (2)].sym); }
     break;
 
   case 1096:
-#line 5849 "src/sql/server/sql_parser.y"
+#line 5844 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL; }
     break;
 
   case 1111:
-#line 5895 "src/sql/server/sql_parser.y"
+#line 5890 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  append_symbol(l, (yyvsp[(3) - (5)].sym));
-	  append_int(l, (yyvsp[(4) - (5)].i_val));
-	  (yyval.sym) = _symbol_create_list( SQL_XMLTEXT, l); }
+       append_symbol(l, (yyvsp[(3) - (5)].sym));
+       append_int(l, (yyvsp[(4) - (5)].i_val));
+       (yyval.sym) = _symbol_create_list( SQL_XMLTEXT, l); }
     break;
 
   case 1112:
-#line 5906 "src/sql/server/sql_parser.y"
+#line 5901 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL; }
     break;
 
   case 1114:
-#line 5911 "src/sql/server/sql_parser.y"
+#line 5906 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 2; }
     break;
 
   case 1115:
-#line 5915 "src/sql/server/sql_parser.y"
+#line 5910 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 0; }
     break;
 
   case 1116:
-#line 5916 "src/sql/server/sql_parser.y"
+#line 5911 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 1; }
     break;
 
   case 1117:
-#line 5920 "src/sql/server/sql_parser.y"
+#line 5915 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 0; }
     break;
 
   case 1118:
-#line 5921 "src/sql/server/sql_parser.y"
+#line 5916 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 0; }
     break;
 
   case 1119:
-#line 5922 "src/sql/server/sql_parser.y"
+#line 5917 "src/sql/server/sql_parser.y"
     { (yyval.i_val) = 1; }
     break;
 
   case 1120:
-#line 5937 "src/sql/server/sql_parser.y"
+#line 5932 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(3) - (4)].sym); }
     break;
 
   case 1121:
-#line 5941 "src/sql/server/sql_parser.y"
+#line 5936 "src/sql/server/sql_parser.y"
     { (yyval.sym) = (yyvsp[(1) - (1)].sym); }
     break;
 
   case 1122:
-#line 5943 "src/sql/server/sql_parser.y"
+#line 5938 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-		  append_list(l, 
-		  	append_string(L(), sa_strdup(SA, "concat")));
-	  	  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  	  append_symbol(l, (yyvsp[(3) - (3)].sym));
-	  	  (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
+            append_list(l, 
+               append_string(L(), sa_strdup(SA, "concat")));
+            append_symbol(l, (yyvsp[(1) - (3)].sym));
+            append_symbol(l, (yyvsp[(3) - (3)].sym));
+            (yyval.sym) = _symbol_create_list( SQL_BINOP, l ); }
     break;
 
   case 1127:
-#line 5966 "src/sql/server/sql_parser.y"
+#line 5961 "src/sql/server/sql_parser.y"
     { char *s = strconcat("xmlns:", (yyvsp[(3) - (3)].sval));
-				  dlist *l = L();
-	  			  append_string(l, sa_strdup(SA, s));
-				  _DELETE(s);
-	  			  append_symbol(l, (yyvsp[(1) - (3)].sym));
-	  			  (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
+                      dlist *l = L();
+                      append_string(l, sa_strdup(SA, s));
+                      _DELETE(s);
+                      append_symbol(l, (yyvsp[(1) - (3)].sym));
+                      (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
     break;
 
   case 1128:
-#line 5975 "src/sql/server/sql_parser.y"
+#line 5970 "src/sql/server/sql_parser.y"
     { dlist *l = L();
-	  			  append_string(l, sa_strdup(SA, "xmlns" ));
-	  			  append_symbol(l, (yyvsp[(2) - (2)].sym));
-	  			  (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
+                      append_string(l, sa_strdup(SA, "xmlns" ));
+                      append_symbol(l, (yyvsp[(2) - (2)].sym));
+                      (yyval.sym) = _symbol_create_list( SQL_XMLATTRIBUTE, l ); }
     break;
 
   case 1129:
-#line 5979 "src/sql/server/sql_parser.y"
+#line 5974 "src/sql/server/sql_parser.y"
     { (yyval.sym) = NULL; }
     break;
 
   case 1159:
-#line 6075 "src/sql/server/sql_parser.y"
+#line 6070 "src/sql/server/sql_parser.y"
     { 
           dlist *aggr = L();
 
           if ((yyvsp[(4) - (6)].sym)) {
-	  	if ((yyvsp[(3) - (6)].sym) != NULL && (yyvsp[(3) - (6)].sym)->token == SQL_SELECT) {
-			SelectNode *s = (SelectNode*)(yyvsp[(3) - (6)].sym);
-	
-			s->orderby = (yyvsp[(4) - (6)].sym);
-	  	} else {
-			yyerror(m, "ORDER BY: missing select operator");
-			YYABORT;
-		}
-	  }
+          if ((yyvsp[(3) - (6)].sym) != NULL && (yyvsp[(3) - (6)].sym)->token == SQL_SELECT) {
+               SelectNode *s = (SelectNode*)(yyvsp[(3) - (6)].sym);
+     
+               s->orderby = (yyvsp[(4) - (6)].sym);
+          } else {
+               yyerror(m, "ORDER BY: missing select operator");
+               YYABORT;
+          }
+       }
           append_list(aggr, append_string(append_string(L(), "sys"), "xmlagg"));
-  	  append_int(aggr, FALSE);
-	  append_symbol(aggr, (yyvsp[(3) - (6)].sym));
-	  /* int returning not used */
-	  (yyval.sym) = _symbol_create_list( SQL_AGGR, aggr);
-	}
+       append_int(aggr, FALSE);
+       append_symbol(aggr, (yyvsp[(3) - (6)].sym));
+       /* int returning not used */
+       (yyval.sym) = _symbol_create_list( SQL_AGGR, aggr);
+     }
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 14635 "src/sql/server/sql_parser.tab.c"
+#line 14630 "src/sql/server/sql_parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -14670,35 +14665,35 @@ yyerrlab:
       yyerror (m, YY_("syntax error"));
 #else
       {
-	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
-	if (yymsg_alloc < yysize && yymsg_alloc < YYSTACK_ALLOC_MAXIMUM)
-	  {
-	    YYSIZE_T yyalloc = 2 * yysize;
-	    if (! (yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM))
-	      yyalloc = YYSTACK_ALLOC_MAXIMUM;
-	    if (yymsg != yymsgbuf)
-	      YYSTACK_FREE (yymsg);
-	    yymsg = (char *) YYSTACK_ALLOC (yyalloc);
-	    if (yymsg)
-	      yymsg_alloc = yyalloc;
-	    else
-	      {
-		yymsg = yymsgbuf;
-		yymsg_alloc = sizeof yymsgbuf;
-	      }
-	  }
+     YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
+     if (yymsg_alloc < yysize && yymsg_alloc < YYSTACK_ALLOC_MAXIMUM)
+       {
+         YYSIZE_T yyalloc = 2 * yysize;
+         if (! (yysize <= yyalloc && yyalloc <= YYSTACK_ALLOC_MAXIMUM))
+           yyalloc = YYSTACK_ALLOC_MAXIMUM;
+         if (yymsg != yymsgbuf)
+           YYSTACK_FREE (yymsg);
+         yymsg = (char *) YYSTACK_ALLOC (yyalloc);
+         if (yymsg)
+           yymsg_alloc = yyalloc;
+         else
+           {
+          yymsg = yymsgbuf;
+          yymsg_alloc = sizeof yymsgbuf;
+           }
+       }
 
-	if (0 < yysize && yysize <= yymsg_alloc)
-	  {
-	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (m, yymsg);
-	  }
-	else
-	  {
-	    yyerror (m, YY_("syntax error"));
-	    if (yysize != 0)
-	      goto yyexhaustedlab;
-	  }
+     if (0 < yysize && yysize <= yymsg_alloc)
+       {
+         (void) yysyntax_error (yymsg, yystate, yychar);
+         yyerror (m, yymsg);
+       }
+     else
+       {
+         yyerror (m, YY_("syntax error"));
+         if (yysize != 0)
+           goto yyexhaustedlab;
+       }
       }
 #endif
     }
@@ -14708,20 +14703,20 @@ yyerrlab:
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse look-ahead token after an
-	 error, discard it.  */
+      error, discard it.  */
 
       if (yychar <= YYEOF)
-	{
-	  /* Return failure if at end of input.  */
-	  if (yychar == YYEOF)
-	    YYABORT;
-	}
+     {
+       /* Return failure if at end of input.  */
+       if (yychar == YYEOF)
+         YYABORT;
+     }
       else
-	{
-	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, m);
-	  yychar = YYEMPTY;
-	}
+     {
+       yydestruct ("Error: discarding",
+                yytoken, &yylval, m);
+       yychar = YYEMPTY;
+     }
     }
 
   /* Else will try to reuse look-ahead token after shifting the error
@@ -14753,29 +14748,29 @@ yyerrorlab:
 | yyerrlab1 -- common code for both syntax error and YYERROR.  |
 `-------------------------------------------------------------*/
 yyerrlab1:
-  yyerrstatus = 3;	/* Each real token shifted decrements this.  */
+  yyerrstatus = 3;  /* Each real token shifted decrements this.  */
 
   for (;;)
     {
       yyn = yypact[yystate];
       if (yyn != YYPACT_NINF)
-	{
-	  yyn += YYTERROR;
-	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-	    {
-	      yyn = yytable[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+     {
+       yyn += YYTERROR;
+       if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
+         {
+           yyn = yytable[yyn];
+           if (0 < yyn)
+          break;
+         }
+     }
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-	YYABORT;
+     YYABORT;
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, m);
+            yystos[yystate], yyvsp, m);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -14821,7 +14816,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, m);
+           yytoken, &yylval, m);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -14829,7 +14824,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, m);
+            yystos[*yyssp], yyvsp, m);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -14845,239 +14840,239 @@ yyreturn:
 }
 
 
-#line 6096 "src/sql/server/sql_parser.y"
+#line 6091 "src/sql/server/sql_parser.y"
 
 int find_subgeometry_type(char* geoSubType) {
-	int subType = 0;
-	if(strcmp(geoSubType, "point") == 0 )
-		subType = (1 << 2);
-	else if(strcmp(geoSubType, "linestring") == 0)
-		subType = (2 << 2);
-	else if(strcmp(geoSubType, "polygon") == 0)
-		subType = (4 << 2);
-	else if(strcmp(geoSubType, "multipoint") == 0)
-		subType = (5 << 2);
-	else if(strcmp(geoSubType, "multilinestring") == 0)
-		subType = (6 << 2);
-	else if(strcmp(geoSubType, "multipolygon") == 0)
-		subType = (7 << 2);
-	else if(strcmp(geoSubType, "geometrycollection") == 0)
-		subType = (8 << 2);
-	else {
-		size_t strLength = strlen(geoSubType);
-		if(strLength > 0 ) {
-			char *typeSubStr = GDKmalloc(strLength);
-			char flag = geoSubType[strLength-1]; 
+     int subType = 0;
+     if(strcmp(geoSubType, "point") == 0 )
+          subType = (1 << 2);
+     else if(strcmp(geoSubType, "linestring") == 0)
+          subType = (2 << 2);
+     else if(strcmp(geoSubType, "polygon") == 0)
+          subType = (4 << 2);
+     else if(strcmp(geoSubType, "multipoint") == 0)
+          subType = (5 << 2);
+     else if(strcmp(geoSubType, "multilinestring") == 0)
+          subType = (6 << 2);
+     else if(strcmp(geoSubType, "multipolygon") == 0)
+          subType = (7 << 2);
+     else if(strcmp(geoSubType, "geometrycollection") == 0)
+          subType = (8 << 2);
+     else {
+          size_t strLength = strlen(geoSubType);
+          if(strLength > 0 ) {
+               char *typeSubStr = GDKmalloc(strLength);
+               char flag = geoSubType[strLength-1]; 
 
-			if (typeSubStr == NULL) {
-				return -1;
-			}
-			memcpy(typeSubStr, geoSubType, strLength-1);
-			typeSubStr[strLength-1]='\0';
-			if(flag == 'z' || flag == 'm' ) {
-				subType = find_subgeometry_type(typeSubStr);
-				if (subType == -1) {
-					GDKfree(typeSubStr);
-					return -1;
-				}
-				if(flag == 'z')
-					SET_Z(subType);
-				if(flag == 'm')
-					SET_M(subType);
-			}
-			GDKfree(typeSubStr);
-		}
+               if (typeSubStr == NULL) {
+                    return -1;
+               }
+               memcpy(typeSubStr, geoSubType, strLength-1);
+               typeSubStr[strLength-1]='\0';
+               if(flag == 'z' || flag == 'm' ) {
+                    subType = find_subgeometry_type(typeSubStr);
+                    if (subType == -1) {
+                         GDKfree(typeSubStr);
+                         return -1;
+                    }
+                    if(flag == 'z')
+                         SET_Z(subType);
+                    if(flag == 'm')
+                         SET_M(subType);
+               }
+               GDKfree(typeSubStr);
+          }
 
-	}
-	return subType;	
+     }
+     return subType;     
 }
 
 char *token2string(int token)
 {
-	switch (token) {
+     switch (token) {
 #define SQL(TYPE) case SQL_##TYPE : return #TYPE
-	SQL(CREATE_SCHEMA);
-	SQL(CREATE_TABLE);
-	SQL(CREATE_VIEW);
-	SQL(CREATE_INDEX);
-	SQL(CREATE_ROLE);
-	SQL(CREATE_USER);
-	SQL(CREATE_TYPE);
-	SQL(CREATE_FUNC);
-	SQL(CREATE_SEQ);
-	SQL(CREATE_TRIGGER);
-	SQL(DROP_SCHEMA);
-	SQL(DROP_TABLE);
-	SQL(DROP_VIEW);
-	SQL(DROP_INDEX);
-	SQL(DROP_ROLE);
-	SQL(DROP_USER);
-	SQL(DROP_TYPE);
-	SQL(DROP_FUNC);
-	SQL(DROP_SEQ);
-	SQL(DROP_TRIGGER);
-	SQL(ALTER_TABLE);
-	SQL(ALTER_SEQ);
-	SQL(ALTER_USER);
-	SQL(DROP_COLUMN);
-	SQL(DROP_CONSTRAINT);
-	SQL(DROP_DEFAULT);
-	SQL(DECLARE);
-	SQL(COMMENT);
-	SQL(SET);
-	SQL(PREP);
-	SQL(NAME);
-	SQL(USER);
-	SQL(PATH);
-	SQL(CHARSET);
-	SQL(SCHEMA);
-	SQL(TABLE);
-	SQL(VIEW);
-	SQL(INDEX);
-	SQL(TYPE);
-	SQL(SEQUENCE);
-	SQL(CASE);
-	SQL(CAST);
-	SQL(RETURN);
-	SQL(IF);
-	SQL(ELSE);
-	SQL(WHILE);
-	SQL(COLUMN);
-	SQL(COLUMN_OPTIONS);
-	SQL(COALESCE);
-	SQL(CONSTRAINT);
-	SQL(CHECK);
-	SQL(DEFAULT);
-	SQL(NOT_NULL);
-	SQL(NULL);
-	SQL(NULLIF);
-	SQL(UNIQUE);
-	SQL(PRIMARY_KEY);
-	SQL(FOREIGN_KEY);
-	SQL(BEGIN);
+     SQL(CREATE_SCHEMA);
+     SQL(CREATE_TABLE);
+     SQL(CREATE_VIEW);
+     SQL(CREATE_INDEX);
+     SQL(CREATE_ROLE);
+     SQL(CREATE_USER);
+     SQL(CREATE_TYPE);
+     SQL(CREATE_FUNC);
+     SQL(CREATE_SEQ);
+     SQL(CREATE_TRIGGER);
+     SQL(DROP_SCHEMA);
+     SQL(DROP_TABLE);
+     SQL(DROP_VIEW);
+     SQL(DROP_INDEX);
+     SQL(DROP_ROLE);
+     SQL(DROP_USER);
+     SQL(DROP_TYPE);
+     SQL(DROP_FUNC);
+     SQL(DROP_SEQ);
+     SQL(DROP_TRIGGER);
+     SQL(ALTER_TABLE);
+     SQL(ALTER_SEQ);
+     SQL(ALTER_USER);
+     SQL(DROP_COLUMN);
+     SQL(DROP_CONSTRAINT);
+     SQL(DROP_DEFAULT);
+     SQL(DECLARE);
+     SQL(COMMENT);
+     SQL(SET);
+     SQL(PREP);
+     SQL(NAME);
+     SQL(USER);
+     SQL(PATH);
+     SQL(CHARSET);
+     SQL(SCHEMA);
+     SQL(TABLE);
+     SQL(VIEW);
+     SQL(INDEX);
+     SQL(TYPE);
+     SQL(SEQUENCE);
+     SQL(CASE);
+     SQL(CAST);
+     SQL(RETURN);
+     SQL(IF);
+     SQL(ELSE);
+     SQL(WHILE);
+     SQL(COLUMN);
+     SQL(COLUMN_OPTIONS);
+     SQL(COALESCE);
+     SQL(CONSTRAINT);
+     SQL(CHECK);
+     SQL(DEFAULT);
+     SQL(NOT_NULL);
+     SQL(NULL);
+     SQL(NULLIF);
+     SQL(UNIQUE);
+     SQL(PRIMARY_KEY);
+     SQL(FOREIGN_KEY);
+     SQL(BEGIN);
 #define TR(TYPE) case TR_##TYPE : return #TYPE
-	TR(COMMIT);
-	TR(ROLLBACK);
-	TR(SAVEPOINT);
-	TR(RELEASE);
-	TR(START);
-	TR(MODE);
-	SQL(INSERT);
-	SQL(DELETE);
-	SQL(UPDATE);
-	SQL(CROSS);
-	SQL(JOIN);
-	SQL(SELECT);
-	SQL(WHERE);
-	SQL(FROM);
-	SQL(UNIONJOIN);
-	SQL(UNION);
-	SQL(EXCEPT);
-	SQL(INTERSECT);
-	SQL(VALUES);
-	SQL(ASSIGN);
-	SQL(ORDERBY);
-	SQL(GROUPBY);
-	SQL(DESC);
-	SQL(AND);
-	SQL(OR);
-	SQL(NOT);
-	SQL(EXISTS);
-	SQL(NOT_EXISTS);
-	SQL(OP);
-	SQL(UNOP);
-	SQL(BINOP);
-	SQL(NOP);
-	SQL(BETWEEN);
-	SQL(NOT_BETWEEN);
-	SQL(LIKE);
-	SQL(IN);
-	SQL(NOT_IN);
-	SQL(GRANT);
-	SQL(GRANT_ROLES);
-	SQL(REVOKE);
-	SQL(REVOKE_ROLES);
-	SQL(EXECUTE);
-	SQL(PRIVILEGES);
-	SQL(ROLE);
-	SQL(PARAMETER);
-	SQL(FUNC);
-	SQL(AGGR);
-	SQL(RANK);
-	SQL(FRAME);
-	SQL(COMPARE);
-	SQL(FILTER);
-	SQL(ROUTINE);
-	SQL(TEMP_LOCAL);
-	SQL(TEMP_GLOBAL);
-	SQL(INT_VALUE);
-	SQL(ATOM);
-	SQL(USING);
-	SQL(WHEN);
-	SQL(ESCAPE);
-	SQL(COPYFROM);
-	SQL(BINCOPYFROM);
-	SQL(COPYTO);
-	SQL(EXPORT);
-	SQL(NEXT);
-	SQL(MULSTMT);
-	SQL(WITH);
-	SQL(XMLCOMMENT);
-	SQL(XMLCONCAT);
-	SQL(XMLDOCUMENT);
-	SQL(XMLELEMENT);
-	SQL(XMLATTRIBUTE);
-	SQL(XMLFOREST);
-	SQL(XMLPARSE);
-	SQL(XMLPI);
-	SQL(XMLQUERY);
-	SQL(XMLTEXT);
-	SQL(XMLVALIDATE);
-	SQL(XMLNAMESPACES);
-	}
-	return "unknown";	/* just needed for broken compilers ! */
+     TR(COMMIT);
+     TR(ROLLBACK);
+     TR(SAVEPOINT);
+     TR(RELEASE);
+     TR(START);
+     TR(MODE);
+     SQL(INSERT);
+     SQL(DELETE);
+     SQL(UPDATE);
+     SQL(CROSS);
+     SQL(JOIN);
+     SQL(SELECT);
+     SQL(WHERE);
+     SQL(FROM);
+     SQL(UNIONJOIN);
+     SQL(UNION);
+     SQL(EXCEPT);
+     SQL(INTERSECT);
+     SQL(VALUES);
+     SQL(ASSIGN);
+     SQL(ORDERBY);
+     SQL(GROUPBY);
+     SQL(DESC);
+     SQL(AND);
+     SQL(OR);
+     SQL(NOT);
+     SQL(EXISTS);
+     SQL(NOT_EXISTS);
+     SQL(OP);
+     SQL(UNOP);
+     SQL(BINOP);
+     SQL(NOP);
+     SQL(BETWEEN);
+     SQL(NOT_BETWEEN);
+     SQL(LIKE);
+     SQL(IN);
+     SQL(NOT_IN);
+     SQL(GRANT);
+     SQL(GRANT_ROLES);
+     SQL(REVOKE);
+     SQL(REVOKE_ROLES);
+     SQL(EXECUTE);
+     SQL(PRIVILEGES);
+     SQL(ROLE);
+     SQL(PARAMETER);
+     SQL(FUNC);
+     SQL(AGGR);
+     SQL(RANK);
+     SQL(FRAME);
+     SQL(COMPARE);
+     SQL(FILTER);
+     SQL(ROUTINE);
+     SQL(TEMP_LOCAL);
+     SQL(TEMP_GLOBAL);
+     SQL(INT_VALUE);
+     SQL(ATOM);
+     SQL(USING);
+     SQL(WHEN);
+     SQL(ESCAPE);
+     SQL(COPYFROM);
+     SQL(BINCOPYFROM);
+     SQL(COPYTO);
+     SQL(EXPORT);
+     SQL(NEXT);
+     SQL(MULSTMT);
+     SQL(WITH);
+     SQL(XMLCOMMENT);
+     SQL(XMLCONCAT);
+     SQL(XMLDOCUMENT);
+     SQL(XMLELEMENT);
+     SQL(XMLATTRIBUTE);
+     SQL(XMLFOREST);
+     SQL(XMLPARSE);
+     SQL(XMLPI);
+     SQL(XMLQUERY);
+     SQL(XMLTEXT);
+     SQL(XMLVALIDATE);
+     SQL(XMLNAMESPACES);
+     }
+     return "unknown";   /* just needed for broken compilers ! */
 }
 
 void *sql_error( mvc * sql, int error_code, char *format, ... )
 {
-	va_list	ap;
+     va_list   ap;
 
-	va_start (ap,format);
-	if (sql->errstr[0] == '\0')
-		vsnprintf(sql->errstr, ERRSIZE-1, _(format), ap);
-	if (!sql->session->status)
-		sql->session->status = -error_code;
-	va_end (ap);
-	return NULL;
+     va_start (ap,format);
+     if (sql->errstr[0] == '\0')
+          vsnprintf(sql->errstr, ERRSIZE-1, _(format), ap);
+     if (!sql->session->status)
+          sql->session->status = -error_code;
+     va_end (ap);
+     return NULL;
 }
 
 int sqlerror(mvc * c, const char *err)
 {
-	const char *sqlstate;
+     const char *sqlstate;
 
-	if (err && strlen(err) > 6 && err[5] == '!') {
-		/* sql state provided */
-		sqlstate = "";
-	} else {
-		/* default: Syntax error or access rule violation */
-		sqlstate = SQLSTATE(42000);
-	}
-	if (c->scanner.errstr) {
-		if (c->scanner.errstr[0] == '!'){
-			assert(0);// catch it
-			(void)sql_error(c, 4,
-					"%s%s: %s\n",
-					sqlstate, err, c->scanner.errstr + 1);
-		} else
-			(void)sql_error(c, 4,
-					"%s%s: %s in \"%.80s\"\n",
-					sqlstate, err, c->scanner.errstr,
-					QUERY(c->scanner));
-	} else
-		(void)sql_error(c, 4,
-				"%s%s in: \"%.80s\"\n",
-				sqlstate, err, QUERY(c->scanner));
-	return 1;
+     if (err && strlen(err) > 6 && err[5] == '!') {
+          /* sql state provided */
+          sqlstate = "";
+     } else {
+          /* default: Syntax error or access rule violation */
+          sqlstate = SQLSTATE(42000);
+     }
+     if (c->scanner.errstr) {
+          if (c->scanner.errstr[0] == '!'){
+               assert(0);// catch it
+               (void)sql_error(c, 4,
+                         "%s%s: %s\n",
+                         sqlstate, err, c->scanner.errstr + 1);
+          } else
+               (void)sql_error(c, 4,
+                         "%s%s: %s in \"%.80s\"\n",
+                         sqlstate, err, c->scanner.errstr,
+                         QUERY(c->scanner));
+     } else
+          (void)sql_error(c, 4,
+                    "%s%s in: \"%.80s\"\n",
+                    sqlstate, err, QUERY(c->scanner));
+     return 1;
 }
 
 

@@ -1378,22 +1378,22 @@ stmt_uselect(backend *be, stmt *op1, stmt *op2, comp_type cmptype, stmt *sub, in
 		q = pushArgument(mb, q, r);
 		switch (cmptype) {
 		case cmp_equal:
-			q = pushStr(mb, q, anti?"!=":"==");
+			q = pushStr(mb, q, "==");
 			break;
 		case cmp_notequal:
-			q = pushStr(mb, q, anti?"==":"!=");
+			q = pushStr(mb, q, "!=");
 			break;
 		case cmp_lt:
-			q = pushStr(mb, q, anti?">=":"<");
+			q = pushStr(mb, q, "<");
 			break;
 		case cmp_lte:
-			q = pushStr(mb, q, anti?">":"<=");
+			q = pushStr(mb, q, "<=");
 			break;
 		case cmp_gt:
-			q = pushStr(mb, q, anti?"<=":">");
+			q = pushStr(mb, q, ">");
 			break;
 		case cmp_gte:
-			q = pushStr(mb, q, anti?"<":">=");
+			q = pushStr(mb, q, ">=");
 			break;
 		default:
 			showException(GDKout, SQL, "sql", "SQL2MAL: error impossible select compare\n");
@@ -3183,13 +3183,19 @@ func_name(sql_allocator *sa, const char *n1, const char *n2)
 		char *ns = SA_NEW_ARRAY(sa, char, l2 + 1);
 		if(!ns)
 			return NULL;
-		snprintf(ns, l2 + 1, "%s", n2);
+		strncpy(ns, n2, l2);
+		ns[l2] = 0;
 		return ns;
 	} else {
 		char *ns = SA_NEW_ARRAY(sa, char, l1 + l2 + 2), *s = ns;
 		if(!ns)
 			return NULL;
-		snprintf(ns, l1 + l2 + 2, "%s_%s", n1, n2);
+		strncpy(ns, n1, l1);
+		ns += l1;
+		*ns++ = '_';
+		strncpy(ns, n2, l2);
+		ns += l2;
+		*ns = '\0';
 		return s;
 	}
 }
