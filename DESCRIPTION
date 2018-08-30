@@ -1,5 +1,5 @@
 Package: MonetDBLite
-Version: 0.6.0
+Version: 0.6.1
 Title: In-Process Version of 'MonetDB'
 Authors@R: c(
 	person("Hannes", "M\u00fchleisen", role = c("aut", "cre"), email = "hannes@cwi.nl", comment = c(ORCID = "0000-0001-8552-0029")),
