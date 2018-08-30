@@ -718,21 +718,19 @@
 typedef union YYSTYPE
 #line 111 "src/sql/server/sql_parser.y"
 {
-	int		i_val,bval;
-	lng		l_val,operation;
-	double		fval;
-	char *		sval;
-	symbol*		sym;
-	dlist*		l;
-	sql_subtype	type;
+     int       i_val,bval;
+     lng       l_val,operation;
+     double         fval;
+     char *         sval;
+     symbol*        sym;
+     dlist*         l;
+     sql_subtype    type;
 }
 /* Line 1529 of yacc.c.  */
 #line 731 "src/sql/server/sql_parser.tab.h"
-	YYSTYPE;
+     YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
-
-
 

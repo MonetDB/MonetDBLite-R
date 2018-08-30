@@ -217,7 +217,7 @@ create_trigger(mvc *sql, char *sname, char *tname, char *triggername, int time, 
 		if (r)
 			r = rel_optimizer(sql, r, 0);
 		if (r) {
-			list *id_l = rel_dependencies(sql, r);
+			list *id_l = rel_dependencies(sql->sa, r);
 
 			mvc_create_dependencies(sql, id_l, tri->base.id, TRIGGER_DEPENDENCY);
 		}
@@ -550,7 +550,7 @@ create_func(mvc *sql, char *sname, char *fname, sql_func *f)
 			r = rel_optimizer(sql, r, 0);
 		if (r) {
 			node *n;
-			list *id_l = rel_dependencies(sql, r);
+			list *id_l = rel_dependencies(sql->sa, r);
 
 			if (!f->vararg && f->ops) {
 				for (n = f->ops->h; n; n = n->next) {

@@ -498,7 +498,9 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 	Hash *hs = NULL;
 	BUN hb;
 	BUN maxgrps;
+#ifndef DISABLE_PARENT_HASH
 	bat parent;
+#endif
 	BUN start, end, cnt;
 	const oid *restrict cand, *candend;
 	oid maxgrp = oid_nil;	/* maximum value of g BAT (if subgrouping) */
@@ -957,10 +959,13 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 	} else if (g == NULL &&
 		   (BATcheckhash(b) ||
 		    (b->batPersistence == PERSISTENT &&
-		     BAThash(b, 0) == GDK_SUCCEED) ||
-		    ((parent = VIEWtparent(b)) != 0 &&
-		     BATcheckhash(BBPdescriptor(parent))))) {
- 		BUN lo;
+		     BAThash(b, 0) == GDK_SUCCEED)
+#ifndef DISABLE_PARENT_HASH
+		    || ((parent = VIEWtparent(b)) != 0 &&
+			BATcheckhash(BBPdescriptor(parent)))
+#endif
+		)) {
+		BUN lo;
 		/* we already have a hash table on b, or b is
 		 * persistent and we could create a hash table, or b
 		 * is a view on a bat that already has a hash table;
@@ -980,6 +985,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
 				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
 				  subsorted);
+#ifndef DISABLE_PARENT_HASH
 		if (b->thash == NULL && (parent = VIEWtparent(b)) != 0) {
 			/* b is a view on another bat (b2 for now).
 			 * calculate the bounds [lo, lo+BATcount(b))
@@ -990,6 +996,10 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 			bi = bat_iterator(b);
 			start += lo;
 			end += lo;
+		} else
+#endif
+		{
+			lo = 0;
 		}
 		hs = b->thash;
 		gn->tsorted = 1; /* be optimistic */
