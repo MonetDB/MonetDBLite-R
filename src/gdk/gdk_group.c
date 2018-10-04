@@ -483,7 +483,7 @@ pop(oid x)
 
 gdk_return
 BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
-		  BAT *b, BAT *s, BAT *g, BAT *e, BAT *h, int subsorted)
+		  BAT *b, BAT *s, BAT *g, BAT *e, BAT *h, bool subsorted)
 {
 	BAT *gn = NULL, *en = NULL, *hn = NULL;
 	int t;
@@ -543,18 +543,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 	}
 	if (b->tkey || cnt <= 1 || (g && (g->tkey || BATtdense(g)))) {
 		/* grouping is trivial: 1 element per group */
-		ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "trivial case: 1 element per group\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted);
+
 		ngrp = cnt == 0  ? 0 : cand ? s->hseqbase + (cand - (const oid *) Tloc(s, 0)) : s ? s->hseqbase + start - s->tseqbase : b->hseqbase;
 		gn = BATdense(hseqb, 0, BATcount(b));
 		if (gn == NULL)
@@ -572,7 +561,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 				en->tkey = 1;
 				en->tnil = 0;
 				en->tnonil = 1;
-				en->tdense = 0;
+				en->tseqbase = oid_nil;
 			} else {
 				en = BATdense(0, b->hseqbase + start, cnt);
 				if (en == NULL)
@@ -611,18 +600,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 		/* all values are equal */
 		if (g == NULL || (BATordered(g) && BATordered_rev(g))) {
 			/* there's only a single group: 0 */
-			ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "trivial case: single output group\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted);
+
 			ngrp = 0;
 			gn = BATconstant(hseqb, TYPE_oid, &ngrp, cnt, TRANSIENT);
 			if (gn == NULL)
@@ -652,19 +630,8 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 			 * e/h available in order to copy them,
 			 * otherwise we will need to calculate them
 			 * which we will do using the "normal" case */
-			ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "trivial case: copy input groups\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted);
-			gn = COLcopy(g, g->ttype, 0, TRANSIENT);
+
+			gn = COLcopy(g, g->ttype, false, TRANSIENT);
 			if (gn == NULL)
 				goto error;
 			if (!is_oid_nil(maxgrp)) {
@@ -675,13 +642,13 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 
 			*groups = gn;
 			if (extents) {
-				en = COLcopy(e, e->ttype, 0, TRANSIENT);
+				en = COLcopy(e, e->ttype, false, TRANSIENT);
 				if (en == NULL)
 					goto error;
 				*extents = en;
 			}
 			if (histo) {
-				hn = COLcopy(h, h->ttype, 0, TRANSIENT);
+				hn = COLcopy(h, h->ttype, false, TRANSIENT);
 				if (hn == NULL)
 					goto error;
 				*histo = hn;
@@ -756,18 +723,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 	    ((BATordered(b) || BATordered_rev(b)) &&
 	     (g == NULL || BATordered(g) || BATordered_rev(g)))) {
 		/* we only need to compare each entry with the previous */
-		ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "compare consecutive values\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted);
+
 
 		switch (t) {
 		case TYPE_bte:
@@ -814,18 +770,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 		 * last time we saw that group, so if the last time we
 		 * saw the old group of the current value is within
 		 * this range, we can reuse the new group */
-		ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "subscan old groups\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted);
+
 		/* determine how many old groups there are */
 		if (e) {
 			j = BATcount(e) + (BUN) e->hseqbase;
@@ -959,7 +904,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 	} else if (g == NULL &&
 		   (BATcheckhash(b) ||
 		    (b->batPersistence == PERSISTENT &&
-		     BAThash(b, 0) == GDK_SUCCEED)
+		     BAThash(b) == GDK_SUCCEED)
 #ifndef DISABLE_PARENT_HASH
 		    || ((parent = VIEWtparent(b)) != 0 &&
 			BATcheckhash(BBPdescriptor(parent)))
@@ -973,18 +918,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 		 * since we may have to go through long lists of
 		 * duplicates in the hash table to find an old
 		 * group */
-		ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "use existing hash table\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted);
+
 #ifndef DISABLE_PARENT_HASH
 		if (b->thash == NULL && (parent = VIEWtparent(b)) != 0) {
 			/* b is a view on another bat (b2 for now).
@@ -1033,7 +967,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 			break;
 		}
 	} else {
-		bit gc = g && (BATordered(g) || BATordered_rev(g));
+		bool gc = g != NULL && (BATordered(g) || BATordered_rev(g));
 		const char *nme;
 		BUN prb;
 		int bits;
@@ -1046,18 +980,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 		 * build an incomplete hash table on the fly--also see
 		 * BATassertProps for similar code; we also exploit if
 		 * g is clustered */
-		ALGODEBUG fprintf(stderr, "#BATgroup(b=%s#" BUNFMT "[%s],"
-				  "s=%s#" BUNFMT ","
-				  "g=%s#" BUNFMT ","
-				  "e=%s#" BUNFMT ","
-				  "h=%s#" BUNFMT ",subsorted=%d): "
-				  "create partial hash table%s\n",
-				  BATgetId(b), BATcount(b), ATOMname(b->ttype),
-				  s ? BATgetId(s) : "NULL", s ? BATcount(s) : 0,
-				  g ? BATgetId(g) : "NULL", g ? BATcount(g) : 0,
-				  e ? BATgetId(e) : "NULL", e ? BATcount(e) : 0,
-				  h ? BATgetId(h) : "NULL", h ? BATcount(h) : 0,
-				  subsorted, gc ? " (g clustered)" : "");
+
 		nme = GDKinmemory() ? ":inmemory" : BBP_physical(b->batCacheid);
 		mask = MAX(HASHmask(cnt), 1 << 16);
 		/* mask is a power of two, so pop(mask - 1) tells us
@@ -1158,7 +1081,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 			GRP_create_partial_hash_table_any();
 		}
 
-		HEAPfree(&hs->heap, 1);
+		HEAPfree(&hs->heap, true);
 		GDKfree(hs);
 	}
 	if (extents) {
@@ -1195,7 +1118,7 @@ BATgroup_internal(BAT **groups, BAT **extents, BAT **histo,
 	return GDK_SUCCEED;
   error:
 	if (hs != NULL && hs != b->thash) {
-		HEAPfree(&hs->heap, 1);
+		HEAPfree(&hs->heap, true);
 		GDKfree(hs);
 	}
 	if (gn)
@@ -1211,5 +1134,5 @@ gdk_return
 BATgroup(BAT **groups, BAT **extents, BAT **histo,
 	 BAT *b, BAT *s, BAT *g, BAT *e, BAT *h)
 {
-	return BATgroup_internal(groups, extents, histo, b, s, g, e, h, 0);
+	return BATgroup_internal(groups, extents, histo, b, s, g, e, h, false);
 }

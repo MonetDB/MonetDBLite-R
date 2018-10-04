@@ -1,6 +1,7 @@
 OPTIMIZE=$(OPT)
 ifneq ($(OPTIMIZE), true)
-	OPTFLAGS=-g -Wall -Wextra -Werror
+	OPTFLAGS=-g3 -Wall -Wextra
+	# -Werror
 	OBJDIR=build/debug
 else
 	OPTFLAGS=-O2
@@ -46,7 +47,6 @@ src/sql/scripts/16_tracelog.sql \
 src/sql/scripts/17_temporal.sql \
 src/sql/scripts/18_index.sql \
 src/sql/scripts/20_vacuum.sql \
-src/sql/scripts/21_dependency_functions.sql \
 src/sql/scripts/21_dependency_views.sql \
 src/sql/scripts/22_clients.sql \
 src/sql/scripts/25_debug.sql \
@@ -151,6 +151,7 @@ $(OBJDIR)/mal/mal/mal_module.o \
 $(OBJDIR)/mal/mal/mal_namespace.o \
 $(OBJDIR)/mal/mal/mal_parser.o \
 $(OBJDIR)/mal/mal/mal_resolve.o \
+$(OBJDIR)/mal/mal/mal_resource.o \
 $(OBJDIR)/mal/mal/mal_runtime.o \
 $(OBJDIR)/mal/mal/mal_scenario.o \
 $(OBJDIR)/mal/mal/mal_session.o \

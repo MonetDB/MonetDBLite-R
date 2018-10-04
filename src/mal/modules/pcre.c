@@ -194,7 +194,6 @@ pcre_likeselect(BAT **bnp, BAT *b, BAT *s, const char *pat, int caseignore, int 
 	bn->tsorted = 1;
 	bn->trevsorted = bn->batCount <= 1;
 	bn->tkey = 1;
-	bn->tdense = bn->batCount <= 1;
 	if (bn->batCount == 1)
 		bn->tseqbase =  * (oid *) Tloc(bn, 0);
 	*bnp = bn;
@@ -594,7 +593,6 @@ pcrejoin(BAT *r1, BAT *r2, BAT *l, BAT *r, BAT *sl, BAT *sr,
 	BUN n, nl;
 	BUN newcap;
 	oid lo, ro;
-	int rskipped = 0;	/* whether we skipped values in r */
 	char *msg = MAL_SUCCEED;
 
 	ALGODEBUG fprintf(stderr, "#pcrejoin(l=%s#" BUNFMT "[%s]%s%s,"
@@ -688,8 +686,6 @@ pcrejoin(BAT *r1, BAT *r2, BAT *l, BAT *r, BAT *sl, BAT *sr,
 				assert(BATcapacity(r1) == BATcapacity(r2));
 			}
 			if (BATcount(r1) > 0) {
-				if (lastl + 1 != lo)
-					r1->tdense = 0;
 				if (nl == 0) {
 					r2->trevsorted = 0;
 					if (lastl > lo) {
@@ -709,32 +705,14 @@ pcrejoin(BAT *r1, BAT *r2, BAT *l, BAT *r, BAT *sl, BAT *sr,
 		}
 		if (nl > 1) {
 			r2->tkey = 0;
-			r2->tdense = 0;
 			r1->trevsorted = 0;
-		} else if (nl == 0) {
-			rskipped = BATcount(r2) > 0;
-		} else if (rskipped) {
-			r2->tdense = 0;
 		}
 	}
 	assert(BATcount(r1) == BATcount(r2));
 	/* also set other bits of heap to correct value to indicate size */
 	BATsetcount(r1, BATcount(r1));
 	BATsetcount(r2, BATcount(r2));
-	if (BATcount(r1) > 0) {
-		if (r1->tdense)
-			r1->tseqbase = ((oid *) r1->theap.base)[0];
-		if (r2->tdense)
-			r2->tseqbase = ((oid *) r2->theap.base)[0];
-	}
-	ALGODEBUG fprintf(stderr, "#pcrejoin(l=%s,r=%s)=(%s#"BUNFMT"%s%s,%s#"BUNFMT"%s%s\n",
-					  BATgetId(l), BATgetId(r),
-					  BATgetId(r1), BATcount(r1),
-					  r1->tsorted ? "-sorted" : "",
-					  r1->trevsorted ? "-revsorted" : "",
-					  BATgetId(r2), BATcount(r2),
-					  r2->tsorted ? "-sorted" : "",
-					  r2->trevsorted ? "-revsorted" : "");
+
 	return MAL_SUCCEED;
 
   bailout:
@@ -770,13 +748,11 @@ PCREjoin(bat *r1, bat *r2, bat lid, bat rid, bat slid, bat srid,
 	result1->tkey = 1;
 	result1->tsorted = 1;
 	result1->trevsorted = 1;
-	result1->tdense = 1;
 	result2->tnil = 0;
 	result2->tnonil = 1;
 	result2->tkey = 1;
 	result2->tsorted = 1;
 	result2->trevsorted = 1;
-	result2->tdense = 1;
 	msg = pcrejoin(result1, result2, left, right, candleft, candright,
 					  esc, caseignore);
 	if (msg)

@@ -212,10 +212,11 @@ MCinitClientRecord(Client c, oid user, bstream *fin, stream *fout)
 	c->srcFile = NULL;
 	c->blkmode = 0;
 
-	c->fdin = fin ? fin : bstream_create(GDKin, 0);
+	c->fdin = fin ? fin : bstream_create(stream_blackhole_create(), 0);
 	if (!c->fdin) {
 		return NULL;
 	}
+
 	c->yycur = 0;
 	c->bak = NULL;
 

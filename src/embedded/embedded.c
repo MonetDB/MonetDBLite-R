@@ -524,8 +524,8 @@ GENERATE_BASE_HEADERS(monetdb_data_timestamp, timestamp);
 
 
 #define GENERATE_BAT_INPUT_BASE(tpe)                                           \
-	monetdb_column_##tpe *bat_data =                                  \
-		GDKzalloc(sizeof(monetdb_column_##tpe));                      \
+	monetdb_column_##tpe *bat_data =                                           \
+		GDKzalloc(sizeof(monetdb_column_##tpe));                               \
 	if (!bat_data) {                                                           \
 		msg = GDKstrdup("Malloc failure!");                                    \
 		goto wrapup;                                                           \
@@ -535,7 +535,7 @@ GENERATE_BASE_HEADERS(monetdb_data_timestamp, timestamp);
 	bat_data->scale = pow(10, sqltpe->scale);                                  \
 	column_result = (monetdb_column*) bat_data;
 
-#define GENERATE_BAT_INPUT(b, tpe, mtype)                                             \
+#define GENERATE_BAT_INPUT(b, tpe, mtype)                                      \
 	{                                                                          \
 		GENERATE_BAT_INPUT_BASE(tpe);                                          \
 		bat_data->count = BATcount(b);                                         \
@@ -546,19 +546,11 @@ GENERATE_BASE_HEADERS(monetdb_data_timestamp, timestamp);
 			msg = GDKstrdup("Malloc failure!");                                \
 			goto wrapup;                                                       \
 		}                                                                      \
-		if (b->tdense) {                                       \
-			size_t it = 0;                                                     \
-			tpe val = b->T.seq;                                                \
-			/* bat is dense, materialize it */                                 \
-			for (it = 0; it < bat_data->count; it++) {                         \
-				bat_data->data[it] = val++;                                    \
-			}                                                                  \
-		} else {                                                               \
-			/* bat is not dense, copy it */                                    \
-			tpe* baseptr = (tpe *)Tloc(b, 0);                                  \
-			memcpy(bat_data->data, baseptr,                                    \
-				bat_data->count * sizeof(bat_data->null_value));               \
-		}                                                                      \
+		size_t it = 0;                                                         \
+		mtype* val = (mtype*)Tloc(b, 0);                                       \
+		/* bat is dense, materialize it */                                     \
+		for (it = 0; it < bat_data->count; it++, val++)                        \
+			bat_data->data[it] = (tpe) *val;                                   \
 	}
 
 

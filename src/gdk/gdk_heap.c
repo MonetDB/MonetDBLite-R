@@ -70,7 +70,7 @@ HEAPcreatefile(int farmid, size_t *maxsz, const char *fn)
 	return base;
 }
 
-static gdk_return HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, int trunc);
+static gdk_return HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, bool trunc);
 static gdk_return HEAPsave_intern(Heap *h, const char *nme, const char *ext, const char *suffix);
 
 static char *
@@ -120,7 +120,10 @@ HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 		char *nme;
 		struct stat st;
 
-		nme = GDKfilepath(h->farmid, BATDIR, h->filename, NULL);
+		if(!(nme = GDKfilepath(h->farmid, BATDIR, h->filename, NULL))) {
+			GDKerror("HEAPalloc: malloc failure");
+			return GDK_FAIL;
+		}
 		if (stat(nme, &st) < 0) {
 			h->storage = STORE_MMAP;
 			h->base = HEAPcreatefile(NOFARM, &h->size, nme);
@@ -139,7 +142,7 @@ HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
 #endif
 				ext = decompose_filename(of);
 				h->newstorage = STORE_MMAP;
-				if (HEAPload(h, of, ext, FALSE) != GDK_SUCCEED)
+				if (HEAPload(h, of, ext, false) != GDK_SUCCEED)
 					h->base = NULL; /* superfluous */
 				/* success checked by looking at
 				 * h->base below */
@@ -174,7 +177,7 @@ HEAPalloc(Heap *h, size_t nitems, size_t itemsize)
  * first write the data to disk, free the memory, and then try to
  * memory map the saved data. */
 gdk_return
-HEAPextend(Heap *h, size_t size, int mayshare)
+HEAPextend(Heap *h, size_t size, bool mayshare)
 {
 	char nme[sizeof(h->filename)], *ext = NULL;
 	const char *failure = "None";
@@ -225,7 +228,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		Heap bak = *h;
 		int exceeds_swap = size >= 4 * GDK_mmap_pagesize && size + GDKmem_cursize() >= GDK_mem_maxsize;
 		int must_mmap = !GDKinmemory() && h->filename[0] != '\0' && (exceeds_swap || h->newstorage != STORE_MEM || size >= (h->farmid == 0 ? GDK_mmap_minsize_persistent : GDK_mmap_minsize_transient));
-		int fd;
+		int fd, existing = 0;
 
 		h->size = size;
 
@@ -242,27 +245,25 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		}
 		/* too big: convert it to a disk-based temporary heap */
 		if (!GDKinmemory() && h->filename[0] != '\0') {
-			int fd;
-
 			assert(h->storage == STORE_MEM);
 			assert(ext != NULL);
-			/* if the heap file already exists, we want to
-			 * switch to STORE_PRIV (copy-on-write memory
-			 * mapped files), but if the heap file doesn't
-			 * exist yet, the BAT is new and we can use
-			 * STORE_MMAP */
+			/* if the heap file already exists, we want to switch
+			 * to STORE_PRIV (copy-on-write memory mapped files),
+			 * but if the heap file doesn't exist yet, the BAT is
+			 * new and we can use STORE_MMAP */
 			fd = GDKfdlocate(h->farmid, nme, "rb", ext);
 			if (fd >= 0) {
+				existing = 1;
 				close(fd);
 			} else {
-				/* no pre-existing heap file, so
-				 * create a new one */
+				/* no pre-existing heap file, so create a new
+				 * one */
 				sprintf(h->filename, "%s.%s", nme, ext);
 				h->base = HEAPcreatefile(h->farmid, &h->size, h->filename);
 				if (h->base) {
 					h->newstorage = h->storage = STORE_MMAP;
 					memcpy(h->base, bak.base, bak.free);
-					HEAPfree(&bak, 0);
+					HEAPfree(&bak, false);
 					return GDK_SUCCEED;
 				}
 			}
@@ -270,7 +271,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 		fd = GDKfdlocate(h->farmid, nme, "wb", ext);
 		if (fd >= 0) {
 			close(fd);
-			h->storage = h->newstorage == STORE_MMAP && !h->forcemap && !mayshare ? STORE_PRIV : h->newstorage;
+			h->storage = h->newstorage == STORE_MMAP && existing && !h->forcemap && !mayshare ? STORE_PRIV : h->newstorage;
 			/* make sure we really MMAP */
 			if (must_mmap && h->newstorage == STORE_MEM)
 				h->storage = STORE_MMAP;
@@ -280,11 +281,11 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 			h->base = NULL;
 			/* try to allocate a memory-mapped based
 			 * heap */
-			if (HEAPload(h, nme, ext, FALSE) == GDK_SUCCEED) {
+			if (HEAPload(h, nme, ext, false) == GDK_SUCCEED) {
 				/* copy data to heap and free old
 				 * memory */
 				memcpy(h->base, bak.base, bak.free);
-				HEAPfree(&bak, 0);
+				HEAPfree(&bak, false);
 				return GDK_SUCCEED;
 			}
 			failure = "h->storage == STORE_MEM && can_map && fd >= 0 && HEAPload() != GDK_SUCCEED";
@@ -295,7 +296,7 @@ HEAPextend(Heap *h, size_t size, int mayshare)
 				goto failed;
 			}
 			/* then free memory */
-			HEAPfree(&bak, 0);
+			HEAPfree(&bak, false);
 			/* and load heap back in via memory-mapped
 			 * file */
 			if (HEAPload_intern(h, nme, ext, ".tmp", FALSE) == GDK_SUCCEED) {
@@ -338,7 +339,8 @@ HEAPshrink(Heap *h, size_t size)
 			/* don't grow */
 			return GDK_SUCCEED;
 		}
-		path = GDKfilepath(h->farmid, BATDIR, h->filename, NULL);
+		if(!(path = GDKfilepath(h->farmid, BATDIR, h->filename, NULL)))
+			return GDK_FAIL;
 		p = GDKmremap(path,
 			      h->storage == STORE_PRIV ?
 				MMAP_COPY | MMAP_READ | MMAP_WRITE :
@@ -371,7 +373,7 @@ file_exists(int farmid, const char *dir, const char *name, const char *ext)
 }
 
 gdk_return
-GDKupgradevarheap(BAT *b, var_t v, int copyall, int mayshare)
+GDKupgradevarheap(BAT *b, var_t v, int copyall, bool mayshare)
 {
 	bte shift = b->tshift;
 	unsigned short width = b->twidth;
@@ -549,6 +551,7 @@ HEAPcopy(Heap *dst, Heap *src)
 		memcpy(dst->base, src->base, src->free);
 		dst->hashash = src->hashash;
 		dst->cleanhash = src->cleanhash;
+		dst->dirty = true;
 		return GDK_SUCCEED;
 	}
 	return GDK_FAIL;
@@ -557,7 +560,7 @@ HEAPcopy(Heap *dst, Heap *src)
 /* Free the memory associated with the heap H.
  * Unlinks (removes) the associated file if the rmheap flag is set. */
 void
-HEAPfree(Heap *h, int rmheap)
+HEAPfree(Heap *h, bool rmheap)
 {
 	if (h->base) {
 		if (h->storage == STORE_MEM) {	/* plain memory */
@@ -608,7 +611,7 @@ HEAPfree(Heap *h, int rmheap)
  * previous contents.
  */
 static gdk_return
-HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, int trunc)
+HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, bool trunc)
 {
 	size_t minsize;
 	int ret = 0;
@@ -672,7 +675,7 @@ HEAPload_intern(Heap *h, const char *nme, const char *ext, const char *suffix, i
 }
 
 gdk_return
-HEAPload(Heap *h, const char *nme, const char *ext, int trunc)
+HEAPload(Heap *h, const char *nme, const char *ext, bool trunc)
 {
 	return HEAPload_intern(h, nme, ext, ".new", trunc);
 }
@@ -711,8 +714,7 @@ HEAPsave_intern(Heap *h, const char *nme, const char *ext, const char *suffix)
 	} else if (store != STORE_MEM) {
 		store = h->storage;
 	}
-
-	return GDKsave(h->farmid, nme, ext, h->base, h->free, store, TRUE);
+	return GDKsave(h->farmid, nme, ext, h->base, h->free, store, true);
 }
 
 gdk_return
@@ -736,7 +738,7 @@ HEAPdelete(Heap *h, const char *o, const char *ext)
 		return GDK_SUCCEED;
 	}
 	if (h->base)
-		HEAPfree(h, 0);	/* we will do the unlinking */
+		HEAPfree(h, false);	/* we will do the unlinking */
 	if (h->copied) {
 		return GDK_SUCCEED;
 	}
@@ -953,7 +955,7 @@ HEAP_malloc(Heap *heap, size_t nbytes)
 
 
 		/* Increase the size of the heap. */
-		if (HEAPextend(heap, newsize, FALSE) != GDK_SUCCEED)
+		if (HEAPextend(heap, newsize, false) != GDK_SUCCEED)
 			return 0;
 		heap->free = newsize;
 		hheader = HEAP_index(heap, 0, HEADER);
