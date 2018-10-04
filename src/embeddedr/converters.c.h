@@ -4,25 +4,25 @@
 
 #define BAT_TO_SXP(bat,n,tpe,retsxp,newfun,ptrfun,ctype,naval,memcopy,nacheck)\
 	do {													\
-		tpe v; BUN j;     								\
+		tpe v; BUN j;     									\
 		ctype *valptr = NULL;                               \
 		tpe* p = (tpe*) Tloc(bat, 0);                       \
-		retsxp = PROTECT(newfun(n));		    \
+		retsxp = PROTECT(newfun(n));		    			\
 		if (!retsxp) break;                                 \
 		valptr = ptrfun(retsxp);                            \
 		if (bat->tnonil && !bat->tnil) {                    \
 			if (memcopy) {									\
 				memcpy(valptr, p,                           \
-					n * sizeof(tpe));           \
+					n * sizeof(tpe));           			\
 			} else {                                        \
-				for (j = 0; j < n; j++) {\
+				for (j = 0; j < n; j++) {					\
 					valptr[j] = (ctype) p[j];               \
 				}                                           \
 			} 												\
 		} else {                                            \
 		for (j = 0; j < n; j++) {		                    \
 			v = p[j];                                       \
-			if (nacheck)							\
+			if (nacheck)									\
 				valptr[j] = naval;	                        \
 			else											\
 				valptr[j] = (ctype) v;	                    \
@@ -41,8 +41,8 @@
 		b = COLnew(0, TYPE_##tpe, cnt, TRANSIENT);						\
 		if (!b) break;                                                  \
 		b->tnil = 0; b->tnonil = 1; b->tkey = 0;						\
-		b->tsorted = 1; b->trevsorted = 1;b->tdense = 0;				\
-		p = (tpe*) Tloc(b, 0);								\
+		b->tsorted = 1; b->trevsorted = 1;								\
+		p = (tpe*) Tloc(b, 0);											\
 		for(j = 0; j < cnt; j++, p++){								    \
 			*p = (tpe) access_fun(s)[j];							    \
 			if (na_check){ b->tnil = 1; 	b->tnonil = 0; 	*p= tpe##_nil;} \
