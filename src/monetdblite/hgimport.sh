@@ -7,7 +7,7 @@ git config merge.renameLimit 999999
 # https://github.com/fingolfin/git-remote-hg
 
 git pull && \
-git pull hg branches/Mar2018
+git pull hg branches/Aug2018
 git status --porcelain | awk '{if ($1=="DU") print $2}' | xargs git rm # && \
 make init
 git rm -rf sql/test

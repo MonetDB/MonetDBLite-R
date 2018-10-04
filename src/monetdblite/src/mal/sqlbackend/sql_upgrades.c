@@ -20,6 +20,8 @@
 #endif
 #include "sql_upgrades.h"
 
+#include "rel_remote.h"
+
 #ifdef HAVE_EMBEDDED
 #define printf(fmt,...) ((void) 0)
 #endif
@@ -1295,6 +1297,7 @@ sql_update_mar2018_sp1(Client c, mvc *sql)
 	return err;		/* usually MAL_SUCCEED */
 }
 
+
 static str
 sql_replace_Mar2018_ids_view(Client c, mvc *sql)
 {
@@ -1361,6 +1364,41 @@ sql_replace_Mar2018_ids_view(Client c, mvc *sql)
 
 	printf("Running database upgrade commands:\n%s\n", buf);
 	err = SQLstatementIntern(c, &buf, "update", 1, 0, NULL);
+	GDKfree(buf);
+	return err;		/* usually MAL_SUCCEED */
+}
+
+
+static str
+sql_update_aug2018(Client c, mvc *sql)
+{
+	size_t bufsize = 1000, pos = 0;
+	char *buf, *err;
+	char *schema;
+
+	schema = stack_get_string(sql, "current_schema");
+	if ((buf = GDKmalloc(bufsize)) == NULL)
+		throw(SQL, "sql_update_aug2018", SQLSTATE(HY001) MAL_MALLOC_FAIL);
+
+	pos += snprintf(buf + pos, bufsize - pos, "set schema sys;\n");
+	pos += snprintf(buf + pos, bufsize - pos,
+			"create aggregate sys.group_concat(str string) returns string external name \"aggr\".\"str_group_concat\";\n"
+			"grant execute on aggregate sys.group_concat(string) to public;\n"
+			"create aggregate sys.group_concat(str string, sep string) returns string external name \"aggr\".\"str_group_concat\";\n"
+			"grant execute on aggregate sys.group_concat(string, string) to public;\n"
+			"insert into sys.systemfunctions (select id from sys.functions where name in ('group_concat') and schema_id = (select id from sys.schemas where name = 'sys') and id not in (select function_id from sys.systemfunctions));\n");
+
+	if (schema)
+		pos += snprintf(buf + pos, bufsize - pos, "set schema \"%s\";\n", schema);
+	pos += snprintf(buf + pos, bufsize - pos, "commit;\n");
+
+	assert(pos < bufsize);
+	printf("Running database upgrade commands:\n%s\n", buf);
+	err = SQLstatementIntern(c, &buf, "update", 1, 0, NULL);
+	if (err)
+		goto bailout;
+
+  bailout:
 	GDKfree(buf);
 	return err;		/* usually MAL_SUCCEED */
 }
@@ -1459,7 +1497,7 @@ SQLupgrades(Client c, mvc *m)
 			BAT *b = BATdescriptor(output->cols[0].b);
 			if (b) {
 				if (BATcount(b) > 0) {
-					/* yes old view definiton exists, it needs to be replaced */
+					/* yes old view definition exists, it needs to be replaced */
 					if ((err = sql_replace_Mar2018_ids_view(c, m)) != NULL) {
 						fprintf(stderr, "!%s\n", err);
 						freeException(err);
@@ -1472,4 +1510,11 @@ SQLupgrades(Client c, mvc *m)
 			res_tables_destroy(output);
 	}
 
+	sql_find_subtype(&tp, "clob", 0, 0);
+	if (sql_bind_aggr(m->sa, s, "group_concat", &tp) == NULL) {
+		if ((err = sql_update_aug2018(c, m)) != NULL) {
+			fprintf(stderr, "!%s\n", err);
+			freeException(err);
+		}
+	}
 }

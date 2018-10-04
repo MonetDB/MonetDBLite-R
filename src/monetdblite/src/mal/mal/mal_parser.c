@@ -1421,7 +1421,7 @@ parseEnd(Client cntxt)
 				if(!errors)
 					cntxt->curprg->def->errors = msg;
 				else
-					GDKfree(msg);
+					freeException(msg);
 				return 1;
 			}
 		}

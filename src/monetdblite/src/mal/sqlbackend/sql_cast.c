@@ -71,7 +71,7 @@ batnil_2_timestamp(bat *res, const bat *bid)
 	}
 	BATloop(b, p, q) {
 		timestamp r = *timestamp_nil;
-		if (BUNappend(dst, &r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, &r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.timestamp", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -108,7 +108,7 @@ batstr_2_timestamp(bat *res, const bat *bid)
 			BBPunfix(b->batCacheid);
 			return msg;
 		}
-		if (BUNappend(dst, &r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, &r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.timestamp", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -166,7 +166,7 @@ batnil_2_daytime(bat *res, const bat *bid)
 	}
 	BATloop(b, p, q) {
 		daytime r = daytime_nil;
-		if (BUNappend(dst, &r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, &r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.timestamp", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -203,7 +203,7 @@ batstr_2_daytime(bat *res, const bat *bid)
 			BBPunfix(b->batCacheid);
 			return msg;
 		}
-		if (BUNappend(dst, &r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, &r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.daytime", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -274,7 +274,7 @@ batnil_2_date(bat *res, const bat *bid)
 	}
 	BATloop(b, p, q) {
 		date r = date_nil;
-		if (BUNappend(dst, &r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, &r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.date", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -311,7 +311,7 @@ batstr_2_date(bat *res, const bat *bid)
 			BBPunfix(b->batCacheid);
 			return msg;
 		}
-		if (BUNappend(dst, &r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, &r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.date", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -380,7 +380,7 @@ batstr_2_sqlblob(bat *res, const bat *bid)
 			BBPunfix(b->batCacheid);
 			return msg;
 		}
-		if (BUNappend(dst, r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.blob", SQLSTATE(HY001) MAL_MALLOC_FAIL);
@@ -492,7 +492,7 @@ SQLbatstr_cast(Client cntxt, MalBlkPtr mb, MalStkPtr stk, InstrPtr pci)
 			BBPunfix(b->batCacheid);
 			return msg;
 		}
-		if (BUNappend(dst, r, FALSE) != GDK_SUCCEED) {
+		if (BUNappend(dst, r, false) != GDK_SUCCEED) {
 			BBPunfix(b->batCacheid);
 			BBPreclaim(dst);
 			throw(SQL, "sql.str_cast", SQLSTATE(HY001) MAL_MALLOC_FAIL);

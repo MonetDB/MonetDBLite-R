@@ -379,6 +379,7 @@ int yydebug=1;
 	column_def_opt_list
 	opt_column_def_opt_list
 	table_exp
+	with_opt_credentials
 	table_ref_commalist
 	table_element_list
 	table_opt_storage
@@ -759,7 +760,7 @@ opt_minmax:
 declare_statement:
 	declare variable_list
 		{ $$ = _symbol_create_list( SQL_DECLARE, $2); }
-    |   declare table_def { $$ = $2; }
+    |   declare table_def { $$ = $2; if ($$) $$->token = SQL_DECLARE_TABLE; }
     ;
 
 variable_list:
@@ -1342,6 +1343,7 @@ table_def:
 	  append_symbol(l, $4);
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
+	  append_list(l, NULL);
 	  append_int(l, $2);
 	  append_list(l, $5);
 	  $$ = _symbol_create_list( SQL_CREATE_TABLE, l ); }
@@ -1361,6 +1363,7 @@ table_def:
 	  append_symbol(l, $5);
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
+	  append_list(l, NULL);
 	  append_int(l, $3);
 	  $$ = _symbol_create_list( SQL_CREATE_TABLE, l ); }
  |  MERGE TABLE if_not_exists qname table_content_source 
@@ -1372,6 +1375,7 @@ table_def:
 	  append_symbol(l, $5);
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
+	  append_list(l, NULL);
 	  append_int(l, $3);
 	  $$ = _symbol_create_list( SQL_CREATE_TABLE, l ); }
  |  REPLICA TABLE if_not_exists qname table_content_source 
@@ -1383,12 +1387,13 @@ table_def:
 	  append_symbol(l, $5);
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
+	  append_list(l, NULL);
 	  append_int(l, $3);
 	  $$ = _symbol_create_list( SQL_CREATE_TABLE, l ); }
  /* mapi:monetdb://host:port/database[/schema[/table]] 
     This also allows access via monetdbd. 
     We assume the monetdb user with default password */
- |  REMOTE TABLE if_not_exists qname table_content_source ON STRING
+ |  REMOTE TABLE if_not_exists qname table_content_source ON STRING with_opt_credentials
 	{ int commit_action = CA_COMMIT, tpe = SQL_REMOTE;
 	  dlist *l = L();
 
@@ -1397,6 +1402,7 @@ table_def:
 	  append_symbol(l, $5);
 	  append_int(l, commit_action);
 	  append_string(l, $7);
+	  append_list(l, $8);
 	  append_int(l, $3);
 	  $$ = _symbol_create_list( SQL_CREATE_TABLE, l ); }
   | opt_temp TABLE if_not_exists qname table_content_source opt_on_commit 
@@ -1410,9 +1416,31 @@ table_def:
 		commit_action = $6;
 	  append_int(l, commit_action);
 	  append_string(l, NULL);
+	  append_list(l, NULL);
 	  append_int(l, $3);
 	  $$ = _symbol_create_list( SQL_CREATE_TABLE, l ); }
  ;
+
+with_opt_credentials:
+  /* empty */
+  {
+	  $$ = append_string(L(), NULL);
+	  append_int($$, SQL_PW_ENCRYPTED);
+	  append_string($$, NULL);
+  }
+  | WITH USER string opt_encrypted PASSWORD string
+  {
+	  $$ = append_string(L(), $3);
+	  append_int($$, $4);
+	  append_string($$, $6);
+  }
+  | WITH opt_encrypted PASSWORD string
+  {
+	  $$ = append_string(L(), NULL);
+	  append_int($$, $2);
+	  append_string($$, $4);
+  }
+  ;
 
 opt_temp:
     TEMPORARY		{ $$ = SQL_LOCAL_TEMP; }
@@ -6165,6 +6193,7 @@ char *token2string(int token)
 	SQL(DROP_CONSTRAINT);
 	SQL(DROP_DEFAULT);
 	SQL(DECLARE);
+	SQL(DECLARE_TABLE);
 	SQL(COMMENT);
 	SQL(SET);
 	SQL(PREP);

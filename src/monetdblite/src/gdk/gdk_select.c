@@ -52,8 +52,7 @@ virtualize(BAT *bn)
 			bn->tseqbase = 0;
 		else
 			bn->tseqbase = * (const oid *) Tloc(bn, 0);
-		bn->tdense = true;
-		HEAPfree(&bn->theap, 1);
+		HEAPfree(&bn->theap, true);
 		bn->theap.storage = bn->theap.newstorage = STORE_MEM;
 		bn->theap.size = 0;
 		bn->ttype = TYPE_void;
@@ -185,7 +184,7 @@ BAT_hashselect(BAT *b, BAT *s, BAT *bn, const void *tl, BUN maximum)
 		}
 		s = NULL;
 	}
-	if (BAThash(b, 0) != GDK_SUCCEED) {
+	if (BAThash(b) != GDK_SUCCEED) {
 		BBPreclaim(bn);
 		return NULL;
 	}
@@ -233,9 +232,8 @@ BAT_hashselect(BAT *b, BAT *s, BAT *bn, const void *tl, BUN maximum)
 		}
 	}
 	bn->tsorted = true;
-	bn->tdense = bn->trevsorted = bn->batCount <= 1;
-	if (bn->batCount == 1)
-		bn->tseqbase = *dst;
+	bn->trevsorted = bn->batCount <= 1;
+	bn->tseqbase = bn->batCount == 0 ? 0 : bn->batCount == 1 ? *dst : oid_nil;
 	return bn;
 }
 
@@ -996,9 +994,7 @@ BAT_scanselect(BAT *b, BAT *s, BAT *bn, const void *tl, const void *th,
 	bn->tsorted = true;
 	bn->trevsorted = bn->batCount <= 1;
 	bn->tkey = true;
-	bn->tdense = (bn->batCount <= 1 || bn->batCount == b->batCount);
-	if (bn->batCount == 1 || bn->batCount == b->batCount)
-		bn->tseqbase = b->hseqbase;
+	bn->tseqbase = cnt == 0 ? 0 : cnt == 1 || cnt == b->batCount ? b->hseqbase : oid_nil;
 
 	return bn;
 }
@@ -1182,7 +1178,7 @@ BAT_scanselect(BAT *b, BAT *s, BAT *bn, const void *tl, const void *th,
 
 BAT *
 BATselect(BAT *b, BAT *s, const void *tl, const void *th,
-	     int li, int hi, int anti)
+	     bool li, bool hi, bool anti)
 {
 	bool hval, lval, equi, lnil, hash;
 	int t;
@@ -1209,17 +1205,7 @@ BATselect(BAT *b, BAT *s, const void *tl, const void *th,
 	BATcheck(tl, "BATselect: tl value required", NULL);
 
 	assert(s == NULL || s->ttype == TYPE_oid || s->ttype == TYPE_void);
-	assert(hi == 0 || hi == 1);
-	assert(li == 0 || li == 1);
-	assert(anti == 0 || anti == 1);
 
-	if ((li != 0 && li != 1) ||
-	    (hi != 0 && hi != 1) ||
-	    (anti != 0 && anti != 1)) {
-		GDKerror("BATselect: invalid arguments: "
-			 "li, hi, anti must be 0 or 1\n");
-		return NULL;
-	}
 	if (s && !BATtordered(s)) {
 		GDKerror("BATselect: invalid argument: "
 			 "s must be sorted.\n");
@@ -1639,8 +1625,7 @@ BATselect(BAT *b, BAT *s, const void *tl, const void *th,
 				bn->tsorted = true;
 				bn->trevsorted = bn->batCount <= 1;
 				bn->tkey = true;
-				bn->tdense = bn->batCount <= 1;
-				bn->tseqbase = bn->tdense ? bn->batCount == 0 ? 0 : * (oid *) Tloc(bn, 0) : oid_nil;
+				bn->tseqbase = bn->batCount == 0 ? 0 : bn->batCount == 1 ? * (oid *) Tloc(bn, 0) : oid_nil;
 				bn->tnil = false;
 				bn->tnonil = true;
 				if (s) {
@@ -1664,6 +1649,7 @@ BATselect(BAT *b, BAT *s, const void *tl, const void *th,
 			}
 		}
 		return virtualize(bn);
+
 	}
 
 	/* upper limit for result size */
@@ -1857,34 +1843,34 @@ BATthetaselect(BAT *b, BAT *s, const void *val, const char *op)
 		return BATdense(0, 0, 0);
 	if (op[0] == '=' && ((op[1] == '=' && op[2] == 0) || op[1] == 0)) {
 		/* "=" or "==" */
-		return BATselect(b, s, val, NULL, 1, 1, 0);
+		return BATselect(b, s, val, NULL, true, true, false);
 	}
 	if (op[0] == '!' && op[1] == '=' && op[2] == 0) {
 		/* "!=" (equivalent to "<>") */
-		return BATselect(b, s, val, NULL, 1, 1, 1);
+		return BATselect(b, s, val, NULL, true, true, true);
 	}
 	if (op[0] == '<') {
 		if (op[1] == 0) {
 			/* "<" */
-			return BATselect(b, s, nil, val, 0, 0, 0);
+			return BATselect(b, s, nil, val, false, false, false);
 		}
 		if (op[1] == '=' && op[2] == 0) {
 			/* "<=" */
-			return BATselect(b, s, nil, val, 0, 1, 0);
+			return BATselect(b, s, nil, val, false, true, false);
 		}
 		if (op[1] == '>' && op[2] == 0) {
 			/* "<>" (equivalent to "!=") */
-			return BATselect(b, s, val, NULL, 1, 1, 1);
+			return BATselect(b, s, val, NULL, true, true, true);
 		}
 	}
 	if (op[0] == '>') {
 		if (op[1] == 0) {
 			/* ">" */
-			return BATselect(b, s, val, nil, 0, 0, 0);
+			return BATselect(b, s, val, nil, false, false, false);
 		}
 		if (op[1] == '=' && op[2] == 0) {
 			/* ">=" */
-			return BATselect(b, s, val, nil, 1, 0, 0);
+			return BATselect(b, s, val, nil, true, false, false);
 		}
 	}
 	GDKerror("BATthetaselect: unknown operator.\n");
@@ -1897,7 +1883,7 @@ BATthetaselect(BAT *b, BAT *s, const void *val, const char *op)
 #define FVALUE(s, x)	(s##vals + ((x) * s##width))
 
 gdk_return
-rangejoin(BAT *r1, BAT *r2, BAT *l, BAT *rl, BAT *rh, BAT *sl, BAT *sr, int li, int hi, BUN maxsize)
+rangejoin(BAT *r1, BAT *r2, BAT *l, BAT *rl, BAT *rh, BAT *sl, BAT *sr, bool li, bool hi, BUN maxsize)
 {
 	BUN lstart, lend, lcnt;
 	const oid *lcand, *lcandend;
@@ -1998,7 +1984,7 @@ rangejoin(BAT *r1, BAT *r2, BAT *l, BAT *rl, BAT *rh, BAT *sl, BAT *sr, int li, 
 	lh = ll + l->batCount;
 	if ((!sl || (sl && BATtdense(sl))) &&
 	    (BATcheckorderidx(l) || (VIEWtparent(l) && BATcheckorderidx(BBPquickdesc(VIEWtparent(l), 0))))) {
-		use_orderidx = 1;
+		use_orderidx = true;
 		if (VIEWtparent(l) && !BATcheckorderidx(l)) {
 			l = BBPdescriptor(VIEWtparent(l));
 		}
@@ -2656,51 +2642,53 @@ rangejoin(BAT *r1, BAT *r2, BAT *l, BAT *rl, BAT *rh, BAT *sl, BAT *sr, int li, 
 	r1->tkey = true;
 	r1->tsorted = true;
 	r1->trevsorted = true;
-	r1->tdense = true;
+	r1->tseqbase = 0;
 	r1->tnil = false;
 	r1->tnonil = true;
 	for (ncnt = 1; ncnt < cnt; ncnt++) {
 		if (dst1[ncnt - 1] == dst1[ncnt]) {
-			r1->tdense = false;
+			r1->tseqbase = oid_nil;
 			r1->tkey = false;
 		} else if (dst1[ncnt - 1] < dst1[ncnt]) {
 			r1->trevsorted = false;
 			if (dst1[ncnt - 1] + 1 != dst1[ncnt])
-				r1->tdense = false;
+				r1->tseqbase = oid_nil;
 		} else {
 			assert(sorted != 1);
 			r1->tsorted = false;
-			r1->tdense = false;
+			r1->tseqbase = oid_nil;
 			r1->tkey = false;
 		}
-		if (!(r1->trevsorted | r1->tdense | r1->tkey | ((sorted != 1) & r1->tsorted)))
+		if (!(r1->trevsorted | BATtdense(r1) | r1->tkey | ((sorted != 1) & r1->tsorted)))
 			break;
 	}
-	r1->tseqbase = 	r1->tdense ? cnt > 0 ? dst1[0] : 0 : oid_nil;
+	if (BATtdense(r1))
+		r1->tseqbase = cnt > 0 ? dst1[0] : 0;
 	r2->tkey = true;
 	r2->tsorted = true;
 	r2->trevsorted = true;
-	r2->tdense = true;
+	r2->tseqbase = 0;
 	r2->tnil = false;
 	r2->tnonil = true;
 	for (ncnt = 1; ncnt < cnt; ncnt++) {
 		if (dst2[ncnt - 1] == dst2[ncnt]) {
-			r2->tdense = false;
+			r2->tseqbase = oid_nil;
 			r2->tkey = false;
 		} else if (dst2[ncnt - 1] < dst2[ncnt]) {
 			r2->trevsorted = false;
 			if (dst2[ncnt - 1] + 1 != dst2[ncnt])
-				r2->tdense = false;
+				r2->tseqbase = oid_nil;
 		} else {
 			assert(sorted != 2);
 			r2->tsorted = false;
-			r2->tdense = false;
+			r2->tseqbase = oid_nil;
 			r2->tkey = false;
 		}
-		if (!(r2->trevsorted | r2->tdense | r2->tkey | ((sorted != 2) & r2->tsorted)))
+		if (!(r2->trevsorted | BATtdense(r2) | r2->tkey | ((sorted != 2) & r2->tsorted)))
 			break;
 	}
-	r2->tseqbase = 	r2->tdense ? cnt > 0 ? dst2[0] : 0 : oid_nil;
+	if (BATtdense(r2))
+		r2->tseqbase = cnt > 0 ? dst2[0] : 0;
 	ALGODEBUG fprintf(stderr, "#rangejoin(l=%s,rl=%s,rh=%s)="
 			  "(%s#"BUNFMT"%s%s,%s#"BUNFMT"%s%s)\n",
 			  BATgetId(l), BATgetId(rl), BATgetId(rh),

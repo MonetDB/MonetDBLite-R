@@ -40,10 +40,12 @@ malBootstrap(void)
 		return GDKstrdup("#malBootstrap:Failed to initialise client MAL module");
 	}
 	if ( (msg = defaultScenario(c)) ) {
-		return msg;
+		freeException(msg);
+		mal_exit();
 	}
 	if((msg = MSinitClientPrg(c, "user", "main")) != MAL_SUCCEED) {
-		return msg;
+		freeException(msg);
+		mal_exit();
 	}
 	if( MCinitClientThread(c) < 0){
 		return GDKstrdup("#malBootstrap:Failed to create client thread");

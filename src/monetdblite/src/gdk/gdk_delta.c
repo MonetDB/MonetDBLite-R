@@ -53,7 +53,6 @@ BATfakeCommit(BAT *b)
 {
 	if (b) {
 		BATcommit(b);
-		b->batDirty = 0;
 		b->batDirtydesc = b->theap.dirty = 0;
 		if (b->tvheap)
 			b->tvheap->dirty = 0;
@@ -77,7 +76,6 @@ BATundo(BAT *b)
 	if (b->batDirtyflushed) {
 		b->batDirtydesc = b->theap.dirty = 1;
 	} else {
-		b->batDirty = 0;
 		b->batDirtydesc = b->theap.dirty = 0;
 		if (b->tvheap)
 			b->tvheap->dirty = 0;
