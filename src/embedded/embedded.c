@@ -482,8 +482,8 @@ void monetdb_unregister_progress(monetdb_connection conn) {
 	}
 	MT_lock_set(&c->progress_lock);
 	c->progress_callback = NULL;
-	if(c->progress_data)
-		free(c->progress_data);
+	//if(c->progress_data)
+		//free(c->progress_data);
 	c->progress_data = NULL;
 	MT_lock_unset(&c->progress_lock);
 }
