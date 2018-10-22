@@ -1,13 +1,14 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison's Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
 
-   This program is free software: you can redistribute it and/or modify
+   This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,7 +16,9 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -30,356 +33,347 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_SQL_SRC_SQL_SERVER_SQL_PARSER_TAB_H_INCLUDED
-# define YY_SQL_SRC_SQL_SERVER_SQL_PARSER_TAB_H_INCLUDED
-/* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-#if YYDEBUG
-extern int sqldebug;
-#endif
-
-/* Token type.  */
+/* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
-    STRING = 258,
-    X_BODY = 259,
-    IDENT = 260,
-    aTYPE = 261,
-    ALIAS = 262,
-    AGGR = 263,
-    AGGR2 = 264,
-    RANK = 265,
-    sqlINT = 266,
-    OIDNUM = 267,
-    HEXADECIMAL = 268,
-    INTNUM = 269,
-    APPROXNUM = 270,
-    USING = 271,
-    GLOBAL = 272,
-    CAST = 273,
-    CONVERT = 274,
-    CHARACTER = 275,
-    VARYING = 276,
-    LARGE = 277,
-    OBJECT = 278,
-    VARCHAR = 279,
-    CLOB = 280,
-    sqlTEXT = 281,
-    BINARY = 282,
-    sqlBLOB = 283,
-    sqlDECIMAL = 284,
-    sqlFLOAT = 285,
-    TINYINT = 286,
-    SMALLINT = 287,
-    BIGINT = 288,
-    HUGEINT = 289,
-    sqlINTEGER = 290,
-    sqlDOUBLE = 291,
-    sqlREAL = 292,
-    PRECISION = 293,
-    PARTIAL = 294,
-    SIMPLE = 295,
-    ACTION = 296,
-    CASCADE = 297,
-    RESTRICT = 298,
-    BOOL_FALSE = 299,
-    BOOL_TRUE = 300,
-    CURRENT_DATE = 301,
-    CURRENT_TIMESTAMP = 302,
-    CURRENT_TIME = 303,
-    LOCALTIMESTAMP = 304,
-    LOCALTIME = 305,
-    LEX_ERROR = 306,
-    sqlASC = 307,
-    GEOMETRY = 308,
-    GEOMETRYSUBTYPE = 309,
-    GEOMETRYA = 310,
-    USER = 311,
-    CURRENT_USER = 312,
-    SESSION_USER = 313,
-    LOCAL = 314,
-    LOCKED = 315,
-    BEST = 316,
-    EFFORT = 317,
-    CURRENT_ROLE = 318,
-    sqlSESSION = 319,
-    sqlDELETE = 320,
-    UPDATE = 321,
-    SELECT = 322,
-    INSERT = 323,
-    LATERAL = 324,
-    LEFT = 325,
-    RIGHT = 326,
-    FULL = 327,
-    OUTER = 328,
-    NATURAL = 329,
-    CROSS = 330,
-    JOIN = 331,
-    INNER = 332,
-    COMMIT = 333,
-    ROLLBACK = 334,
-    SAVEPOINT = 335,
-    RELEASE = 336,
-    WORK = 337,
-    CHAIN = 338,
-    NO = 339,
-    PRESERVE = 340,
-    ROWS = 341,
-    START = 342,
-    TRANSACTION = 343,
-    READ = 344,
-    WRITE = 345,
-    ONLY = 346,
-    ISOLATION = 347,
-    LEVEL = 348,
-    UNCOMMITTED = 349,
-    COMMITTED = 350,
-    sqlREPEATABLE = 351,
-    SERIALIZABLE = 352,
-    DIAGNOSTICS = 353,
-    sqlSIZE = 354,
-    STORAGE = 355,
-    ASYMMETRIC = 356,
-    SYMMETRIC = 357,
-    ORDER = 358,
-    ORDERED = 359,
-    BY = 360,
-    IMPRINTS = 361,
-    EXISTS = 362,
-    ESCAPE = 363,
-    HAVING = 364,
-    sqlGROUP = 365,
-    sqlNULL = 366,
-    FROM = 367,
-    FOR = 368,
-    MATCH = 369,
-    EXTRACT = 370,
-    SEQUENCE = 371,
-    INCREMENT = 372,
-    RESTART = 373,
-    CONTINUE = 374,
-    MAXVALUE = 375,
-    MINVALUE = 376,
-    CYCLE = 377,
-    NOMAXVALUE = 378,
-    NOMINVALUE = 379,
-    NOCYCLE = 380,
-    NEXT = 381,
-    VALUE = 382,
-    CACHE = 383,
-    GENERATED = 384,
-    ALWAYS = 385,
-    IDENTITY = 386,
-    SERIAL = 387,
-    BIGSERIAL = 388,
-    AUTO_INCREMENT = 389,
-    SCOLON = 390,
-    AT = 391,
-    XMLCOMMENT = 392,
-    XMLCONCAT = 393,
-    XMLDOCUMENT = 394,
-    XMLELEMENT = 395,
-    XMLATTRIBUTES = 396,
-    XMLFOREST = 397,
-    XMLPARSE = 398,
-    STRIP = 399,
-    WHITESPACE = 400,
-    XMLPI = 401,
-    XMLQUERY = 402,
-    PASSING = 403,
-    XMLTEXT = 404,
-    NIL = 405,
-    REF = 406,
-    ABSENT = 407,
-    EMPTY = 408,
-    DOCUMENT = 409,
-    ELEMENT = 410,
-    CONTENT = 411,
-    XMLNAMESPACES = 412,
-    NAMESPACE = 413,
-    XMLVALIDATE = 414,
-    RETURNING = 415,
-    LOCATION = 416,
-    ID = 417,
-    ACCORDING = 418,
-    XMLSCHEMA = 419,
-    URI = 420,
-    XMLAGG = 421,
-    FILTER = 422,
-    UNION = 423,
-    EXCEPT = 424,
-    INTERSECT = 425,
-    CORRESPONDING = 426,
-    UNIONJOIN = 427,
-    WITH = 428,
-    DATA = 429,
-    FILTER_FUNC = 430,
-    NOT = 431,
-    ALL = 432,
-    ANY = 433,
-    NOT_BETWEEN = 434,
-    BETWEEN = 435,
-    NOT_IN = 436,
-    sqlIN = 437,
-    NOT_LIKE = 438,
-    LIKE = 439,
-    NOT_ILIKE = 440,
-    ILIKE = 441,
-    OR = 442,
-    SOME = 443,
-    AND = 444,
-    COMPARISON = 445,
-    LEFT_SHIFT = 446,
-    RIGHT_SHIFT = 447,
-    LEFT_SHIFT_ASSIGN = 448,
-    RIGHT_SHIFT_ASSIGN = 449,
-    CONCATSTRING = 450,
-    SUBSTRING = 451,
-    POSITION = 452,
-    SPLIT_PART = 453,
-    UMINUS = 454,
-    GEOM_OVERLAP = 455,
-    GEOM_OVERLAP_OR_ABOVE = 456,
-    GEOM_OVERLAP_OR_BELOW = 457,
-    GEOM_OVERLAP_OR_LEFT = 458,
-    GEOM_OVERLAP_OR_RIGHT = 459,
-    GEOM_BELOW = 460,
-    GEOM_ABOVE = 461,
-    GEOM_DIST = 462,
-    GEOM_MBR_EQUAL = 463,
-    TEMP = 464,
-    TEMPORARY = 465,
-    STREAM = 466,
-    MERGE = 467,
-    REMOTE = 468,
-    REPLICA = 469,
-    DESC = 470,
-    AUTHORIZATION = 471,
-    CHECK = 472,
-    CONSTRAINT = 473,
-    CREATE = 474,
-    COMMENT = 475,
-    TYPE = 476,
-    PROCEDURE = 477,
-    FUNCTION = 478,
-    sqlLOADER = 479,
-    AGGREGATE = 480,
-    RETURNS = 481,
-    EXTERNAL = 482,
-    sqlNAME = 483,
-    DECLARE = 484,
-    CALL = 485,
-    LANGUAGE = 486,
-    ANALYZE = 487,
-    MINMAX = 488,
-    SQL_EXPLAIN = 489,
-    SQL_PLAN = 490,
-    SQL_DEBUG = 491,
-    SQL_TRACE = 492,
-    PREP = 493,
-    PREPARE = 494,
-    EXEC = 495,
-    EXECUTE = 496,
-    DEFAULT = 497,
-    DISTINCT = 498,
-    DROP = 499,
-    TRUNCATE = 500,
-    FOREIGN = 501,
-    RENAME = 502,
-    ENCRYPTED = 503,
-    UNENCRYPTED = 504,
-    PASSWORD = 505,
-    GRANT = 506,
-    REVOKE = 507,
-    ROLE = 508,
-    ADMIN = 509,
-    INTO = 510,
-    IS = 511,
-    KEY = 512,
-    ON = 513,
-    OPTION = 514,
-    OPTIONS = 515,
-    PATH = 516,
-    PRIMARY = 517,
-    PRIVILEGES = 518,
-    PUBLIC = 519,
-    REFERENCES = 520,
-    SCHEMA = 521,
-    SET = 522,
-    AUTO_COMMIT = 523,
-    RETURN = 524,
-    ALTER = 525,
-    ADD = 526,
-    TABLE = 527,
-    COLUMN = 528,
-    TO = 529,
-    UNIQUE = 530,
-    VALUES = 531,
-    VIEW = 532,
-    WHERE = 533,
-    sqlDATE = 534,
-    TIME = 535,
-    TIMESTAMP = 536,
-    INTERVAL = 537,
-    YEAR = 538,
-    QUARTER = 539,
-    MONTH = 540,
-    WEEK = 541,
-    DAY = 542,
-    HOUR = 543,
-    MINUTE = 544,
-    SECOND = 545,
-    ZONE = 546,
-    LIMIT = 547,
-    OFFSET = 548,
-    SAMPLE = 549,
-    CASE = 550,
-    WHEN = 551,
-    THEN = 552,
-    ELSE = 553,
-    NULLIF = 554,
-    COALESCE = 555,
-    IF = 556,
-    ELSEIF = 557,
-    WHILE = 558,
-    DO = 559,
-    ATOMIC = 560,
-    BEGIN = 561,
-    END = 562,
-    COPY = 563,
-    RECORDS = 564,
-    DELIMITERS = 565,
-    STDIN = 566,
-    STDOUT = 567,
-    FWF = 568,
-    INDEX = 569,
-    REPLACE = 570,
-    AS = 571,
-    TRIGGER = 572,
-    OF = 573,
-    BEFORE = 574,
-    AFTER = 575,
-    ROW = 576,
-    STATEMENT = 577,
-    sqlNEW = 578,
-    OLD = 579,
-    EACH = 580,
-    REFERENCING = 581,
-    OVER = 582,
-    PARTITION = 583,
-    CURRENT = 584,
-    EXCLUDE = 585,
-    FOLLOWING = 586,
-    PRECEDING = 587,
-    OTHERS = 588,
-    TIES = 589,
-    RANGE = 590,
-    UNBOUNDED = 591
-  };
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     STRING = 258,
+     X_BODY = 259,
+     IDENT = 260,
+     aTYPE = 261,
+     ALIAS = 262,
+     AGGR = 263,
+     AGGR2 = 264,
+     RANK = 265,
+     sqlINT = 266,
+     OIDNUM = 267,
+     HEXADECIMAL = 268,
+     INTNUM = 269,
+     APPROXNUM = 270,
+     USING = 271,
+     GLOBAL = 272,
+     CAST = 273,
+     CONVERT = 274,
+     CHARACTER = 275,
+     VARYING = 276,
+     LARGE = 277,
+     OBJECT = 278,
+     VARCHAR = 279,
+     CLOB = 280,
+     sqlTEXT = 281,
+     BINARY = 282,
+     sqlBLOB = 283,
+     sqlDECIMAL = 284,
+     sqlFLOAT = 285,
+     TINYINT = 286,
+     SMALLINT = 287,
+     BIGINT = 288,
+     HUGEINT = 289,
+     sqlINTEGER = 290,
+     sqlDOUBLE = 291,
+     sqlREAL = 292,
+     PRECISION = 293,
+     PARTIAL = 294,
+     SIMPLE = 295,
+     ACTION = 296,
+     CASCADE = 297,
+     RESTRICT = 298,
+     BOOL_FALSE = 299,
+     BOOL_TRUE = 300,
+     CURRENT_DATE = 301,
+     CURRENT_TIMESTAMP = 302,
+     CURRENT_TIME = 303,
+     LOCALTIMESTAMP = 304,
+     LOCALTIME = 305,
+     LEX_ERROR = 306,
+     sqlASC = 307,
+     GEOMETRY = 308,
+     GEOMETRYSUBTYPE = 309,
+     GEOMETRYA = 310,
+     USER = 311,
+     CURRENT_USER = 312,
+     SESSION_USER = 313,
+     LOCAL = 314,
+     LOCKED = 315,
+     BEST = 316,
+     EFFORT = 317,
+     CURRENT_ROLE = 318,
+     sqlSESSION = 319,
+     sqlDELETE = 320,
+     UPDATE = 321,
+     SELECT = 322,
+     INSERT = 323,
+     LATERAL = 324,
+     LEFT = 325,
+     RIGHT = 326,
+     FULL = 327,
+     OUTER = 328,
+     NATURAL = 329,
+     CROSS = 330,
+     JOIN = 331,
+     INNER = 332,
+     COMMIT = 333,
+     ROLLBACK = 334,
+     SAVEPOINT = 335,
+     RELEASE = 336,
+     WORK = 337,
+     CHAIN = 338,
+     NO = 339,
+     PRESERVE = 340,
+     ROWS = 341,
+     START = 342,
+     TRANSACTION = 343,
+     READ = 344,
+     WRITE = 345,
+     ONLY = 346,
+     ISOLATION = 347,
+     LEVEL = 348,
+     UNCOMMITTED = 349,
+     COMMITTED = 350,
+     sqlREPEATABLE = 351,
+     SERIALIZABLE = 352,
+     DIAGNOSTICS = 353,
+     sqlSIZE = 354,
+     STORAGE = 355,
+     ASYMMETRIC = 356,
+     SYMMETRIC = 357,
+     ORDER = 358,
+     ORDERED = 359,
+     BY = 360,
+     IMPRINTS = 361,
+     EXISTS = 362,
+     ESCAPE = 363,
+     HAVING = 364,
+     sqlGROUP = 365,
+     sqlNULL = 366,
+     FROM = 367,
+     FOR = 368,
+     MATCH = 369,
+     EXTRACT = 370,
+     SEQUENCE = 371,
+     INCREMENT = 372,
+     RESTART = 373,
+     CONTINUE = 374,
+     MAXVALUE = 375,
+     MINVALUE = 376,
+     CYCLE = 377,
+     NOMAXVALUE = 378,
+     NOMINVALUE = 379,
+     NOCYCLE = 380,
+     NEXT = 381,
+     VALUE = 382,
+     CACHE = 383,
+     GENERATED = 384,
+     ALWAYS = 385,
+     IDENTITY = 386,
+     SERIAL = 387,
+     BIGSERIAL = 388,
+     AUTO_INCREMENT = 389,
+     SCOLON = 390,
+     AT = 391,
+     XMLCOMMENT = 392,
+     XMLCONCAT = 393,
+     XMLDOCUMENT = 394,
+     XMLELEMENT = 395,
+     XMLATTRIBUTES = 396,
+     XMLFOREST = 397,
+     XMLPARSE = 398,
+     STRIP = 399,
+     WHITESPACE = 400,
+     XMLPI = 401,
+     XMLQUERY = 402,
+     PASSING = 403,
+     XMLTEXT = 404,
+     NIL = 405,
+     REF = 406,
+     ABSENT = 407,
+     EMPTY = 408,
+     DOCUMENT = 409,
+     ELEMENT = 410,
+     CONTENT = 411,
+     XMLNAMESPACES = 412,
+     NAMESPACE = 413,
+     XMLVALIDATE = 414,
+     RETURNING = 415,
+     LOCATION = 416,
+     ID = 417,
+     ACCORDING = 418,
+     XMLSCHEMA = 419,
+     URI = 420,
+     XMLAGG = 421,
+     FILTER = 422,
+     UNIONJOIN = 423,
+     CORRESPONDING = 424,
+     INTERSECT = 425,
+     EXCEPT = 426,
+     UNION = 427,
+     DATA = 428,
+     WITH = 429,
+     FILTER_FUNC = 430,
+     NOT = 431,
+     SOME = 432,
+     OR = 433,
+     ILIKE = 434,
+     NOT_ILIKE = 435,
+     LIKE = 436,
+     NOT_LIKE = 437,
+     sqlIN = 438,
+     NOT_IN = 439,
+     BETWEEN = 440,
+     NOT_BETWEEN = 441,
+     ANY = 442,
+     ALL = 443,
+     AND = 444,
+     COMPARISON = 445,
+     SPLIT_PART = 446,
+     POSITION = 447,
+     SUBSTRING = 448,
+     CONCATSTRING = 449,
+     RIGHT_SHIFT_ASSIGN = 450,
+     LEFT_SHIFT_ASSIGN = 451,
+     RIGHT_SHIFT = 452,
+     LEFT_SHIFT = 453,
+     UMINUS = 454,
+     GEOM_OVERLAP_OR_LEFT = 455,
+     GEOM_OVERLAP_OR_BELOW = 456,
+     GEOM_OVERLAP_OR_ABOVE = 457,
+     GEOM_OVERLAP = 458,
+     GEOM_MBR_EQUAL = 459,
+     GEOM_DIST = 460,
+     GEOM_ABOVE = 461,
+     GEOM_BELOW = 462,
+     GEOM_OVERLAP_OR_RIGHT = 463,
+     TEMP = 464,
+     TEMPORARY = 465,
+     STREAM = 466,
+     MERGE = 467,
+     REMOTE = 468,
+     REPLICA = 469,
+     DESC = 470,
+     AUTHORIZATION = 471,
+     CHECK = 472,
+     CONSTRAINT = 473,
+     CREATE = 474,
+     COMMENT = 475,
+     TYPE = 476,
+     PROCEDURE = 477,
+     FUNCTION = 478,
+     sqlLOADER = 479,
+     AGGREGATE = 480,
+     RETURNS = 481,
+     EXTERNAL = 482,
+     sqlNAME = 483,
+     DECLARE = 484,
+     CALL = 485,
+     LANGUAGE = 486,
+     ANALYZE = 487,
+     MINMAX = 488,
+     SQL_EXPLAIN = 489,
+     SQL_PLAN = 490,
+     SQL_DEBUG = 491,
+     SQL_TRACE = 492,
+     PREP = 493,
+     PREPARE = 494,
+     EXEC = 495,
+     EXECUTE = 496,
+     DEFAULT = 497,
+     DISTINCT = 498,
+     DROP = 499,
+     TRUNCATE = 500,
+     FOREIGN = 501,
+     RENAME = 502,
+     ENCRYPTED = 503,
+     UNENCRYPTED = 504,
+     PASSWORD = 505,
+     GRANT = 506,
+     REVOKE = 507,
+     ROLE = 508,
+     ADMIN = 509,
+     INTO = 510,
+     IS = 511,
+     KEY = 512,
+     ON = 513,
+     OPTION = 514,
+     OPTIONS = 515,
+     PATH = 516,
+     PRIMARY = 517,
+     PRIVILEGES = 518,
+     PUBLIC = 519,
+     REFERENCES = 520,
+     SCHEMA = 521,
+     SET = 522,
+     AUTO_COMMIT = 523,
+     RETURN = 524,
+     ALTER = 525,
+     ADD = 526,
+     TABLE = 527,
+     COLUMN = 528,
+     TO = 529,
+     UNIQUE = 530,
+     VALUES = 531,
+     VIEW = 532,
+     WHERE = 533,
+     sqlDATE = 534,
+     TIME = 535,
+     TIMESTAMP = 536,
+     INTERVAL = 537,
+     YEAR = 538,
+     QUARTER = 539,
+     MONTH = 540,
+     WEEK = 541,
+     DAY = 542,
+     HOUR = 543,
+     MINUTE = 544,
+     SECOND = 545,
+     ZONE = 546,
+     LIMIT = 547,
+     OFFSET = 548,
+     SAMPLE = 549,
+     CASE = 550,
+     WHEN = 551,
+     THEN = 552,
+     ELSE = 553,
+     NULLIF = 554,
+     COALESCE = 555,
+     IF = 556,
+     ELSEIF = 557,
+     WHILE = 558,
+     DO = 559,
+     ATOMIC = 560,
+     BEGIN = 561,
+     END = 562,
+     COPY = 563,
+     RECORDS = 564,
+     DELIMITERS = 565,
+     STDIN = 566,
+     STDOUT = 567,
+     FWF = 568,
+     INDEX = 569,
+     REPLACE = 570,
+     AS = 571,
+     TRIGGER = 572,
+     OF = 573,
+     BEFORE = 574,
+     AFTER = 575,
+     ROW = 576,
+     STATEMENT = 577,
+     sqlNEW = 578,
+     OLD = 579,
+     EACH = 580,
+     REFERENCING = 581,
+     OVER = 582,
+     PARTITION = 583,
+     CURRENT = 584,
+     EXCLUDE = 585,
+     FOLLOWING = 586,
+     PRECEDING = 587,
+     OTHERS = 588,
+     TIES = 589,
+     RANGE = 590,
+     UNBOUNDED = 591
+   };
 #endif
 /* Tokens.  */
 #define STRING 258
@@ -547,47 +541,47 @@ extern int sqldebug;
 #define URI 420
 #define XMLAGG 421
 #define FILTER 422
-#define UNION 423
-#define EXCEPT 424
+#define UNIONJOIN 423
+#define CORRESPONDING 424
 #define INTERSECT 425
-#define CORRESPONDING 426
-#define UNIONJOIN 427
-#define WITH 428
-#define DATA 429
+#define EXCEPT 426
+#define UNION 427
+#define DATA 428
+#define WITH 429
 #define FILTER_FUNC 430
 #define NOT 431
-#define ALL 432
-#define ANY 433
-#define NOT_BETWEEN 434
-#define BETWEEN 435
-#define NOT_IN 436
-#define sqlIN 437
-#define NOT_LIKE 438
-#define LIKE 439
-#define NOT_ILIKE 440
-#define ILIKE 441
-#define OR 442
-#define SOME 443
+#define SOME 432
+#define OR 433
+#define ILIKE 434
+#define NOT_ILIKE 435
+#define LIKE 436
+#define NOT_LIKE 437
+#define sqlIN 438
+#define NOT_IN 439
+#define BETWEEN 440
+#define NOT_BETWEEN 441
+#define ANY 442
+#define ALL 443
 #define AND 444
 #define COMPARISON 445
-#define LEFT_SHIFT 446
-#define RIGHT_SHIFT 447
-#define LEFT_SHIFT_ASSIGN 448
-#define RIGHT_SHIFT_ASSIGN 449
-#define CONCATSTRING 450
-#define SUBSTRING 451
-#define POSITION 452
-#define SPLIT_PART 453
+#define SPLIT_PART 446
+#define POSITION 447
+#define SUBSTRING 448
+#define CONCATSTRING 449
+#define RIGHT_SHIFT_ASSIGN 450
+#define LEFT_SHIFT_ASSIGN 451
+#define RIGHT_SHIFT 452
+#define LEFT_SHIFT 453
 #define UMINUS 454
-#define GEOM_OVERLAP 455
-#define GEOM_OVERLAP_OR_ABOVE 456
-#define GEOM_OVERLAP_OR_BELOW 457
-#define GEOM_OVERLAP_OR_LEFT 458
-#define GEOM_OVERLAP_OR_RIGHT 459
-#define GEOM_BELOW 460
+#define GEOM_OVERLAP_OR_LEFT 455
+#define GEOM_OVERLAP_OR_BELOW 456
+#define GEOM_OVERLAP_OR_ABOVE 457
+#define GEOM_OVERLAP 458
+#define GEOM_MBR_EQUAL 459
+#define GEOM_DIST 460
 #define GEOM_ABOVE 461
-#define GEOM_DIST 462
-#define GEOM_MBR_EQUAL 463
+#define GEOM_BELOW 462
+#define GEOM_OVERLAP_OR_RIGHT 463
 #define TEMP 464
 #define TEMPORARY 465
 #define STREAM 466
@@ -717,13 +711,13 @@ extern int sqldebug;
 #define RANGE 590
 #define UNBOUNDED 591
 
-/* Value type.  */
+
+
+
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-union YYSTYPE
+typedef union YYSTYPE
+#line 111 "src/sql/server/sql_parser.y"
 {
-#line 111 "src/sql/server/sql_parser.y" /* yacc.c:1909  */
-
 	int		i_val,bval;
 	lng		l_val,operation;
 	double		fval;
@@ -731,17 +725,14 @@ union YYSTYPE
 	symbol*		sym;
 	dlist*		l;
 	sql_subtype	type;
-
-#line 736 "src/sql/server/sql_parser.tab.h" /* yacc.c:1909  */
-};
-
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
+}
+/* Line 1529 of yacc.c.  */
+#line 731 "src/sql/server/sql_parser.tab.h"
+	YYSTYPE;
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 
 
-int sqlparse (mvc *m);
-
-#endif /* !YY_SQL_SRC_SQL_SERVER_SQL_PARSER_TAB_H_INCLUDED  */

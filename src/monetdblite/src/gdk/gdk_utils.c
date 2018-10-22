@@ -300,11 +300,9 @@ GDKinit(str dbpath)
 	int farmid;
 	char buf[16];
 
-
 	if (dbpath) {
 		BBPaddfarm(dbpath, (1 << PERSISTENT) | (1 << TRANSIENT));
 	}
-
 
 #ifdef NEED_MT_LOCK_INIT
 	MT_lock_init(&MT_system_lock,"MT_system_lock");
