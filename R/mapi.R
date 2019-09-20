@@ -1,7 +1,7 @@
 # MAPI implementation for R
 
 PROTOCOL_v9 <- 9
-MAX_PACKET_SIZE <- 8192
+MAX_PACKET_SIZE <- 8192 - 2
 
 HASH_ALGOS <- c("md5", "sha1", "crc32", "sha256", "sha512")
 
