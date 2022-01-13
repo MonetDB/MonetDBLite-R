@@ -1,3 +1,5 @@
+This repository has been archived. Please see MonetDB/e ([code examples here](https://github.com/MonetDBSolutions/monetdbe-examples)) for the replacement project.
+
 # MonetDBLite for R
 
 [![Build Status](https://travis-ci.org/hannesmuehleisen/MonetDBLite-R.svg?branch=master)](https://travis-ci.org/hannesmuehleisen/MonetDBLite-R)
